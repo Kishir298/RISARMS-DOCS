@@ -24,7 +24,7 @@ When the authentication provider lands (v0.2 Phase 8), the following must hold:
 
 1. An **authentication provider** abstraction verifies credentials — it is the single insertion point for credential logic.
 2. Unauthenticated or failed-authentication attempts:
-   - are rejected with a defined error ([Messaging Errors](../interfaces/messaging.md#errors)),
+   - are rejected with a defined error ([Messaging Errors](../interfaces/messaging.md#4-errors)),
    - are observable (logged, evented), and
    - never partially execute the requested operation.
 3. Authentication state is per-identity and per-request, never globally shared across disagreed identities.
@@ -41,5 +41,5 @@ When the authentication provider lands (v0.2 Phase 8), the following must hold:
 
 - [Authorization](authorization.md)
 - [Security Overview](overview.md)
-- [C.O.R.E. v0.2 Phase 8](../systems/core.md#phase-8--security-integration)
+- [C.O.R.E. v0.2 Phase 8](../systems/core.md#phase-8-security-integration)
 - ADR [0006](../decisions/0006-security-architecture.md)

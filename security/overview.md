@@ -55,5 +55,5 @@ These are target properties, listed so future work has a checklist:
 - [Authentication](authentication.md)
 - [Authorization](authorization.md)
 - [Trust Boundaries](trust-boundaries.md)
-- [C.O.R.E. v0.2 Phase 8](../systems/core.md#phase-8--security-integration)
+- [C.O.R.E. v0.2 Phase 8](../systems/core.md#phase-8-security-integration)
 - ADR [0006](../decisions/0006-security-architecture.md)

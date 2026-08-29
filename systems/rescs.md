@@ -74,7 +74,7 @@ src/rescs/
 
 ## 6. Roadmap (as documented in R.E.S.C.S. itself)
 
-R.E.S.C.S. keeps its own 13-phase roadmap in `RESCS/docs/architecture.md`. Phases 1–2 (foundation; data model + storage abstraction) are marked complete; phases 3–13 are pending. C.O.R.E. adapter integration corresponds to C.O.R.E. v0.2 Phase 9 ([core.md](core.md#phase-9--rescs-adapter)).
+R.E.S.C.S. keeps its own 13-phase roadmap in `RESCS/docs/architecture.md`. Phases 1–2 (foundation; data model + storage abstraction) are marked complete; phases 3–13 are pending. C.O.R.E. adapter integration corresponds to C.O.R.E. v0.2 Phase 9 ([core.md](core.md#phase-9-rescs-adapter)).
 
 The cross-system view lives in [Development Roadmap](../development/roadmap.md).
 

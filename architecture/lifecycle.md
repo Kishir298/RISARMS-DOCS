@@ -43,7 +43,7 @@ Once integrations exist, these rules apply:
 2. **Each system owns its own lifecycle.** R.E.S.C.S., A.S.I.S., etc., start/stop themselves; C.O.R.E. coordinates, it does not micromanage their internals.
 3. **Ordering is dependency-driven.** A consumer starts after its dependencies (e.g., A.S.I.S. after C.O.R.E.; storage-using services after the R.E.S.C.S. adapter is reachable).
 4. **Failure rolls back the dependent chain.** If a component that others depend on fails, dependents are stopped/held, never left half-running.
-5. **Lifecycle is observable.** State transitions are events; health reflects lifecycle state (see [Health](../security/../systems/core.md#61-health)).
+5. **Lifecycle is observable.** State transitions are events; health reflects lifecycle state (see [Health integration](../systems/core.md#phase-6-health-integration)).
 
 ## 4. What is NOT implemented yet
 

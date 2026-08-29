@@ -29,4 +29,4 @@ Authorization answers: *"Given a proven identity, what may this actor do?"* It s
 - [Authentication](authentication.md)
 - [Security Overview](overview.md)
 - [Trust Boundaries](trust-boundaries.md)
-- [C.O.R.E. v0.2 Phase 8](../systems/core.md#phase-8--security-integration)
+- [C.O.R.E. v0.2 Phase 8](../systems/core.md#phase-8-security-integration)

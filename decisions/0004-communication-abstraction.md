@@ -10,7 +10,7 @@ Communication in C.O.R.E. is expressed against a **`Transport` abstraction**, no
 
 - Callers depend on the transport interface (send/request semantics).
 - The in-process `LocalTransport` is the concrete implementation used today.
-- Additional transports (R.E.S.C.S. adapter delivery, external-device transport) implement the same interface ([v0.2 Phase 10](../systems/core.md#phase-10--external-device-transport)).
+- Additional transports (R.E.S.C.S. adapter delivery, external-device transport) implement the same interface ([v0.2 Phase 10](../systems/core.md#phase-10-external-device-transport)).
 - Adding a transport must require implementing the interface only — no caller changes.
 
 ## Alternatives

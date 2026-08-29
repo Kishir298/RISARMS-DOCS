@@ -17,7 +17,7 @@ The ecosystem runs on these principles (established in [Architecture Overview](.
 
 ## 2. Rules for this documentation repository
 
-1. **Never describe planned functionality as implemented.** Use the status markers ([vocabulary](../architecture/overview.md#status-vocabulary)); if uncertain, mark **PLANNED** and verify.
+1. **Never describe planned functionality as implemented.** Use the status markers ([vocabulary](../architecture/overview.md#3-status-vocabulary)); if uncertain, mark **PLANNED** and verify.
 2. **Never invent APIs.** Documentation describes architectural requirements and contracts ([interfaces](../interfaces/communication.md)); concrete APIs are locked by the owning code, not by docs.
 3. **Keep the ownership table accurate.** Responsibility changes update [System Boundaries](../architecture/system-boundaries.md) first, then the owning system page.
 4. **Cross-link.** New/updated docs link to related architecture, interfaces, security, and decisions documents.

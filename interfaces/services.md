@@ -19,7 +19,7 @@ A service is a C.O.R.E.-managed unit of work that:
 
 ### Lifecycle
 - Services start/stop under the runtime's ordering rules ([Lifecycle](../architecture/lifecycle.md)).
-- A service reflects its state via health ([Health](../systems/core.md#61-health)).
+- A service reflects its state via health ([Health integration](../systems/core.md#phase-6-health-integration)).
 
 ### Invocation
 - Callers invoke through the message/service path, not by reaching into a service's internals.

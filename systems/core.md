@@ -153,7 +153,7 @@ The v0.2 build order. Phases are listed in strict order; later phases assume ear
 
 ---
 
-### Phase 1 — Runtime + application orchestration
+### Phase 1: Runtime + application orchestration
 
 - **Objective:** Make the runtime genuinely orchestrate component lifecycle: dependency-aware startup, ordered shutdown, restart, failure rollback.
 - **Why:** v0.1 declared the shapes; v0.2 must *run* them so that everything else has a reliable context to live in.
@@ -167,7 +167,7 @@ The v0.2 build order. Phases are listed in strict order; later phases assume ear
 - **Must NOT implement yet:** Network transports, R.E.S.C.S. connectivity, authentication providers.
 - **Current state:** Core runtime orchestration and lifecycle states are implemented and tested. Treat outstanding items as hardening.
 
-### Phase 2 — Communication + transport abstraction
+### Phase 2: Communication + transport abstraction
 
 - **Objective:** Abstract *how* messages are delivered so callers depend on a `Transport` interface, not a concrete mechanism.
 - **Why:** The ecosystem requires local, network and future transports; everything upstream (routing, services, adapters) must be transport-agnostic.
@@ -181,7 +181,7 @@ The v0.2 build order. Phases are listed in strict order; later phases assume ear
 - **Must NOT implement yet:** Any *specific* network protocol.
 - **Current state:** `Transport` abstraction, `LocalTransport`, `MessageSerializer` and `LocalCommunication` alias are implemented and tested. Network transport is intentionally out of scope (Phase 10).
 
-### Phase 3 — Routing + service execution
+### Phase 3: Routing + service execution
 
 - **Objective:** Connect the message path all the way to service operations: `Message → Router → endpoint → ServiceDispatcher → ServiceManager.execute → operation handler → response`.
 - **Why:** This is the behavioral core of C.O.R.E. — requests in, responses out.
@@ -195,7 +195,7 @@ The v0.2 build order. Phases are listed in strict order; later phases assume ear
 - **Must NOT implement yet:** Cross-system routing, external protocols.
 - **Current state:** The router→service flow is implemented and tested end to end.
 
-### Phase 4 — Resource + organization integration
+### Phase 4: Resource + organization integration
 
 - **Objective:** Make the resource registry and organization engine operational: resources register, discover, categorize and are observable.
 - **Why:** Resources are the assets C.O.R.E. manages; organization is how they are navigated.
@@ -209,7 +209,7 @@ The v0.2 build order. Phases are listed in strict order; later phases assume ear
 - **Must NOT implement yet:** R.E.S.C.S. object mapping (its resource model is separate), device enumeration.
 - **Current state:** Registry/engine logic and their integration are implemented; the application-level initialization stubs are the known gap.
 
-### Phase 5 — Event-driven integration
+### Phase 5: Event-driven integration
 
 - **Objective:** Propagate lifecycle/state changes across subsystems through the event bus, so components react instead of being wired to each other.
 - **Why:** Reduces coupling and makes the system observable.
@@ -223,7 +223,7 @@ The v0.2 build order. Phases are listed in strict order; later phases assume ear
 - **Must NOT implement yet:** Distributed/queue-based event delivery.
 - **Current state:** Event-driven lifecycle and event emission across subsystems (including security-bus bridge) are implemented and tested.
 
-### Phase 6 — Health integration
+### Phase 6: Health integration
 
 - **Objective:** Aggregate real per-subsystem health into an overall application state, with change callbacks and event emission.
 - **Why:** The ecosystem must know when a piece of it is degraded, not just up/down.
@@ -237,7 +237,7 @@ The v0.2 build order. Phases are listed in strict order; later phases assume ear
 - **Must NOT implement yet:** External health endpoints (R.E.S.C.S. exposes its own), alerting.
 - **Current state:** Stateful health monitoring with event emission is implemented and tested.
 
-### Phase 7 — Configuration drives runtime
+### Phase 7: Configuration drives runtime
 
 - **Objective:** Runtime behavior (logging level, transport choice/network flag, service registration, timeouts) is driven by the loaded configuration, not hard-coded.
 - **Why:** v0.1 configuration is a foundation; v0.2 must *consume* it.
@@ -251,7 +251,7 @@ The v0.2 build order. Phases are listed in strict order; later phases assume ear
 - **Must NOT implement yet:** Dynamic hot-reload of configuration.
 - **Current state:** Configuration manager, loader, validator and environment merges are in place; consumption across the runtime is the remaining work.
 
-### Phase 8 — Security integration
+### Phase 8: Security integration
 
 - **Objective:** Real authentication and authorization behind the existing security foundation: identities, permissions, and an actual authentication provider.
 - **Why:** `SecurityManager.authenticate()` is explicitly deferred in v0.1; v0.2 makes identity verification real.
@@ -265,7 +265,7 @@ The v0.2 build order. Phases are listed in strict order; later phases assume ear
 - **Must NOT implement yet:** PKI, remote identity federation, per-subsystem internal auth between local C.O.R.E. components.
 - **Current state:** Security foundation (identities, permissions, manager, event emission) exists; the authentication provider is the missing piece.
 
-### Phase 9 — R.E.S.C.S. adapter
+### Phase 9: R.E.S.C.S. adapter
 
 - **Objective:** A C.O.R.E. adapter that lets callers issue storage requests to R.E.S.C.S. through C.O.R.E.'s routing/communication/services, without C.O.R.E. knowing R.E.S.C.S. internals.
 - **Why:** This is how the ecosystem gets persistence. R.E.S.C.S. stays independent; the adapter is the bridge.
@@ -273,13 +273,13 @@ The v0.2 build order. Phases are listed in strict order; later phases assume ear
 - **Inputs:** C.O.R.E. service requests for storage operations.
 - **Outputs:** R.E.S.C.S. calls and responses routed back to the original requester.
 - **Dependencies:** Phase 3 (service execution), Phase 10-adjacent transport to reach R.E.S.C.S., R.E.S.C.S. record/file API (see [R.E.S.C.S.](../systems/rescs.md)).
-- **Expected behavior:** The request path from [Integration Architecture](../architecture/system-interactions.md#integration-path) works: requester → C.O.R.E. → router → communication → adapter → R.E.S.C.S. → response.
+- **Expected behavior:** The request path from [Integration Architecture](../architecture/system-interactions.md#2-integration-path-the-canonical-request-flow) works: requester → C.O.R.E. → router → communication → adapter → R.E.S.C.S. → response.
 - **Tests required:** adapter unit tests (with R.E.S.C.S. via its API contract), integration test spine hookup.
 - **Completion criteria:** C.O.R.E. can store and retrieve records/files through R.E.S.C.S. without internal coupling.
-- **Must NOT implement yet:** Any R.E.S.C.S. code inside C.O.R.E., storage logic in C.O.R.E., or Ctrl-C the R.E.S.C.S. *ownership* of storage.
+- **Must NOT implement yet:** Any R.E.S.C.S. code inside C.O.R.E., storage logic in C.O.R.E., or copying R.E.S.C.S.'s *ownership* of storage.
 - **Current state:** **PLANNED.** No adapter code exists.
 
-### Phase 10 — External-device transport
+### Phase 10: External-device transport
 
 - **Objective:** A transport that reaches external devices, enabling the ecosystem to talk off-host (devices, sensors, future RadarS.A.R.D. integration).
 - **Why:** The ecosystem's arrows point outward to devices; C.O.R.E. needs a delivery mechanism to them.
@@ -293,7 +293,7 @@ The v0.2 build order. Phases are listed in strict order; later phases assume ear
 - **Must NOT implement yet:** Any *specific* third-party device protocols; physical sensor drivers (those belong to RadarS.A.R.D.).
 - **Current state:** **PLANNED.**
 
-### Phase 11 — Real CLI lifecycle
+### Phase 11: Real CLI lifecycle
 
 - **Objective:** The CLI fully drives the application lifecycle: `python -m core start` genuinely starts/stops the engine, and the runtime-only compatibility path is retired.
 - **Why:** The operator interface currently has a partly stubbed fallback path (`execute()`); operators must see real state.
@@ -307,7 +307,7 @@ The v0.2 build order. Phases are listed in strict order; later phases assume ear
 - **Must NOT implement yet:** Remote administration, web UI.
 - **Current state:** CLI is application-aware and prints `C.O.R.E. v0.2`; the runtime-only compatibility path remains partially stubbed.
 
-### Phase 12 — Full integration test spine
+### Phase 12: Full integration test spine
 
 - **Objective:** An integration test suite that runs the whole application through every phase's behaviors together, plus the store/retrieve path via the R.E.S.C.S. adapter.
 - **Why:** Phases are individually testable, but the ecosystem's value is the *combination*.
@@ -321,7 +321,7 @@ The v0.2 build order. Phases are listed in strict order; later phases assume ear
 - **Must NOT implement yet:** Multi-host integration, real cloud dependencies in the test suite.
 - **Current state:** **PLANNED** (individual integration tests exist; the full spine does not).
 
-### Phase 13 — v0.2 cleanup/documentation/release
+### Phase 13: v0.2 cleanup/documentation/release
 
 - **Objective:** Align version markers (0.1.0 → 0.2.0 everywhere), complete C.O.R.E. docs, write the v0.2 release summary.
 - **Why:** The system must present a coherent versioned face to the rest of the ecosystem.

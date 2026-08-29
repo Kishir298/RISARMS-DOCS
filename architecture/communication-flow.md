@@ -50,7 +50,7 @@ The `Transport` interface is the contract every delivery mechanism must satisfy.
 
 Failure behavior is part of the contract, not an afterthought:
 
-- Unknown route / unknown destination → defined error ([Error model](../interfaces/messaging.md#errors)).
+- Unknown route / unknown destination → defined error ([Error model](../interfaces/messaging.md#4-errors)).
 - Handler failure → isolated, recorded, surfaced as a response error (dispatch guarantees `ServiceResponse`, even on failure).
 - Transport failure → a `transport`/`communication` error class; behavior surfaces deterministically rather than silently dropping.
 

@@ -63,7 +63,7 @@ The arrows are explained precisely in [System Interactions](architecture/system-
 
 ## 5. Current development status
 
-> [!NOTE] **Status vocabulary:** The ecosystem uses four explicit statuses throughout these documents: **IMPLEMENTED**, **IN DEVELOPMENT**, **PLANNED**, **FUTURE**. Definitions are in [Architecture Overview](architecture/overview.md#status-vocabulary).
+> [!NOTE] **Status vocabulary:** The ecosystem uses four explicit statuses throughout these documents: **IMPLEMENTED**, **IN DEVELOPMENT**, **PLANNED**, **FUTURE**. Definitions are in [Architecture Overview](architecture/overview.md#3-status-vocabulary).
 
 | System | Status | Notes |
 |---|---|---|
@@ -95,7 +95,7 @@ C.O.R.E. v0.1 established the architecture and behavioral contracts. **C.O.R.E. 
 | 12 | Full integration test spine |
 | 13 | v0.2 cleanup/documentation/release |
 
-Each phase's objective, inputs, outputs, dependencies, completion criteria and "must not implement yet" constraints are specified in [C.O.R.E. v0.2 Roadmap](systems/core.md#core-v02-roadmap).
+Each phase's objective, inputs, outputs, dependencies, completion criteria and "must not implement yet" constraints are specified in [C.O.R.E. v0.2 Roadmap](systems/core.md#6-core-v02-roadmap).
 
 ## 7. Repository structure
 

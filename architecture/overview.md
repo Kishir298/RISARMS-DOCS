@@ -61,7 +61,7 @@ graph TB
 - **`A.S.I.S.` → `C.O.R.E.`** — the AI layer issues requests (service calls, storage access, device control) to C.O.R.E. rather than reaching other systems directly.
 - **`R.E.S.C.S.` → `C.O.R.E.`** — storage serves results back through C.O.R.E., and is invoked by C.O.R.E. on behalf of callers.
 
-> [!NOTE] **Arrow direction ≠ implemented today.** These arrows describe intended architecture. What is implemented today is stated in each system's page under [`systems/`](../systems/) and in [System Interactions](system-interactions.md#implemented-vs-planned).
+> [!NOTE] **Arrow direction ≠ implemented today.** These arrows describe intended architecture. What is implemented today is stated in each system's page under [`systems/`](../systems/) and in [System Interactions](system-interactions.md#3-implemented-vs-planned-by-pair).
 
 ### The conceptual inner diagram
 
@@ -98,7 +98,7 @@ The following principles govern the entire ecosystem. See [Development Philosoph
 
 1. **Modularity** — systems remain independently developable.
 2. **Explicit boundaries** — each system has clearly defined responsibilities.
-3. **No duplicated ownership** — every responsibility has exactly one clear owner (see [System Boundaries](system-boundaries.md#responsibility-ownership)).
+3. **No duplicated ownership** — every responsibility has exactly one clear owner (see [System Boundaries](system-boundaries.md#1-responsibility-ownership)).
 4. **Contract-first integration** — systems communicate through explicit interfaces (see [Interface Contracts](../interfaces/communication.md)).
 5. **Testability** — every major integration is testable independently (see [Testing](../development/testing.md)).
 6. **Observable operation** — runtime state, health, events and failures are observable.
@@ -107,7 +107,7 @@ The following principles govern the entire ecosystem. See [Development Philosoph
 
 ## 5. System inventory and ownership (summary)
 
-The full ownership table is in [System Boundaries](system-boundaries.md#responsibility-ownership). In brief:
+The full ownership table is in [System Boundaries](system-boundaries.md#1-responsibility-ownership). In brief:
 
 | Responsibility | Owner |
 |---|---|

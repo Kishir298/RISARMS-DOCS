@@ -31,4 +31,4 @@ A version is only coherent when these agree:
 
 - [Development Roadmap](roadmap.md)
 - [Contribution](contribution.md)
-- [Release phases](../systems/core.md#phase-13--v02-cleanupdocumentationrelease)
+- [Release phases](../systems/core.md#phase-13-v02-cleanupdocumentationrelease)

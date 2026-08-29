@@ -23,7 +23,7 @@ C.O.R.E. depends on R.E.S.C.S.'s **API contract**, not its implementation. R.E.S
 - **File/object storage**: store, retrieve, delete files/objects.
 - **Authentication**: R.E.S.C.S. will enforce API-key authentication; C.O.R.E. must present valid credentials ([Security](../security/overview.md)).
 - **Correlation**: C.O.R.E. request IDs propagate into R.E.S.C.S. (X-Request-ID semantics), so cross-system tracing works.
-- **Error mapping**: R.E.S.C.S. error codes map to C.O.R.E. message errors deterministically ([Messaging](messaging.md#errors)).
+- **Error mapping**: R.E.S.C.S. error codes map to C.O.R.E. message errors deterministically ([Messaging](messaging.md#4-errors)).
 - **Health**: C.O.R.E. health reflects R.E.S.C.S. reachability/health via the adapter.
 
 ### Interface points
@@ -40,7 +40,7 @@ flowchart LR
 ## 4. C.O.R.E. ↔ A.S.I.S. contract
 
 ### Required behaviors (to be locked during A.S.I.S. integration)
-- **Service requests**: A.S.I.S. issues service requests to C.O.R.E. as messages with identity ([Identity](../security/overview.md#identity)).
+- **Service requests**: A.S.I.S. issues service requests to C.O.R.E. as messages with identity ([Identity](../security/overview.md#1-security-model)).
 - **Storage via C.O.R.E.**: A.S.I.S. never calls R.E.S.C.S. directly; it requests storage through C.O.R.E. ([Data Flow](../architecture/data-flow.md)).
 - **Device control (future)**: A.S.I.S. requests device actions through C.O.R.E.'s device transport.
 - **Responses**: A.S.I.S. receives C.O.R.E. service responses correlated by request ID.
