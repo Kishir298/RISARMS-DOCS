@@ -1,6 +1,8 @@
 # T.I.V.I.S.S. — Though I'm Vanquished, I'm Still Stronger
 
-> [!NOTE] **Status:** **PLANNED / FUTURE.** This subsystem has no code. This page documents its design intent.
+> [!NOTE] **Status:** Early **IN DEVELOPMENT**. A standalone `tiviss` codebase now exists (identity, memory, permissions, ownership, handover, integrations and a runtime) that is linted and formatted with **ruff** (`ruff check` and `ruff format --check` pass clean; config in `pyproject.toml`). The long-term handover model this page documents is still to be determined.
+
+> [!NOTE] **Integration adapters:** `tiviss.integrations` ships the `IntegrationAdapter` abstraction plus C.O.R.E./R.E.S.C.S. adapters and re-exports `IntegrationRequest`, `IntegrationResponse` and `IntegrationStatus`. These are interfaces and local/mock implementations only — they do not connect to the real C.O.R.E. or R.E.S.C.S. yet.
 
 ## 1. What T.I.V.I.S.S. is
 

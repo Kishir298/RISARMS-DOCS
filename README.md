@@ -68,9 +68,9 @@ The arrows are explained precisely in [System Interactions](architecture/system-
 | System | Status | Notes |
 |---|---|---|
 | **C.O.R.E.** | v0.1 foundation **IMPLEMENTED**; v0.2 **IN DEVELOPMENT** | All 15 subsystems exist. Several v0.2 phases already landed in git history (transport abstraction, routing-to-service execution, runtime orchestration, events/health integration). |
-| **R.E.S.C.S.** | v0.1 **IMPLEMENTED** (phases 1–2) | Health API, record/file repositories, database layer live. Record/file HTTP API, authentication enforcement, object storage and the C.O.R.E. adapter are pending. |
-| **A.S.I.S.** | Partial (**IN DEVELOPMENT**) | Interactive chat runtime (Ollama), memory system, tool framework, event bus and a partially implemented voice input pipeline. Voice pipeline not yet integrated into the chat loop; Forza-era naming not yet fully migrated. |
-| **T.I.V.I.S.S.** | **PLANNED** | No code exists. |
+| **R.E.S.C.S.** | v0.1 **IMPLEMENTED** (phases 1–2) | Health API, record/file repositories, database layer and request-id correlation (`X-Request-ID`) live. Record/file HTTP API, authentication enforcement, object storage and the C.O.R.E. adapter are pending. |
+| **A.S.I.S.** | Partial (**IN DEVELOPMENT**) | Interactive chat runtime (Ollama), memory system, tool framework, event bus, a console CLI entry point (`asis`) and an initial test suite — plus a partially implemented voice input pipeline. Voice pipeline not yet integrated into the chat loop; Forza-era naming not yet fully migrated. |
+| **T.I.V.I.S.S.** | Early **IN DEVELOPMENT** | A standalone agent codebase now exists (identity, memory, permissions, ownership, handover) with ruff-based tooling. Its long-term handover model is still to be determined. |
 | **RadarS.A.R.D.** | **PLANNED** | No code exists. |
 
 The authoritative per-system detail is in [`systems/`](systems/). **Nothing in this repository describes unbuilt functionality as implemented.**

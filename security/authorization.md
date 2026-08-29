@@ -1,6 +1,6 @@
 # Authorization
 
-> [!NOTE] **Status:** **PLANNED** (foundation only). C.O.R.E. has authorization/permission primitives; end-to-end enforcement on operations is part of v0.2 Phase 8.
+> [!NOTE] **Status:** **Implemented, config-gated, and inactive by default.** C.O.R.E. has authorization/permission primitives and now a config-gated enforcement mechanism (`SecurityPolicy.enforced` / the `security.enforce_authorization` config knob, both defaulting to inactive). Enforcement engages at the service-dispatch boundary only when a policy is present **and** enforced; the authentication provider and end-to-end (cross-system) enforcement remain v0.2 Phase 8 work.
 
 ## 1. Definition
 
@@ -9,7 +9,7 @@ Authorization answers: *"Given a proven identity, what may this actor do?"* It s
 ## 2. Current reality
 
 - **C.O.R.E.** `SecurityManager` exposes `authorize` and permission checks, with `IdentityType` and `Permission` primitives. These are implemented and usable in-process.
-- Permissions are **not yet enforced** end to end across the ecosystem flow (routing → service execution), which is Phase 8 work.
+- **Enforcement is config-gated and inactive by default.** Dispatch-level enforcement exists at the service boundary (see [Phase 8](../systems/core.md#phase-8-security-integration)) but engages only when a `SecurityPolicy` is enforced (`security.enforce_authorization: true`). It is not yet enforced by default nor end to end across every ecosystem flow — that remains Phase 8 work.
 
 ## 3. Contract requirements (target)
 

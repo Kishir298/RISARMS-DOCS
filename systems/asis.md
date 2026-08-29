@@ -63,7 +63,7 @@ Documented here so agents don't mistake them for features:
 
 - Package/docs brand the project **A.S.I.S.**, but code artifacts still say **Forza / Forza AI** (persona prompt, config defaults `APP_NAME = "Forza"`, `FORZA_*` env vars, `forza.log`).
 - Version markers disagree: `pyproject.toml` = `0.1.0`; `core/config/defaults.py` = `2.0.0`.
-- `pyproject.toml` declares a console script `asis` → `asis.cli.main:entry`, but no `asis` package exists — the entry point is broken.
+- The console script `asis` → `asis.cli.main:entry` is now functional: a working `asis.cli` package (added with the first test suite) wires identity, local memory, the event bus and an AI provider together, supporting `--version`, `--identify`, `--list-tools`, `--message` and a stdin REPL. `asis.app` was promoted to a proper package (`ProcessResult`, `extract_memories`, `store_auto_memories`). A top-level `tests/` suite (51 tests) now covers ai, app, cli, events, identity, memory and tools.
 - `cloud/memory_api` skeleton exists in git history but was deleted from the working tree (deletion not yet committed); it used FastAPI/SQLAlchemy.
 - Voice is functional in isolation but disconnected from the chat loop.
 

@@ -62,11 +62,12 @@ src/rescs/
 - **Domain + schema layer:** record/file-object dataclasses, Pydantic schemas (extra fields forbidden), JSON-serializability validation.
 - **Repository layer:** runtime-checkable Protocols; in-memory (thread-safe) and SQLAlchemy backends with CRUD/list/pagination and conflict/not-found translation.
 - **Database layer:** engine builder (SQLite dev / PostgreSQL prod), `SchemaManager` (idempotent schema setup), transactional session scope mapping integrity/connectivity errors, `bootstrap_database()`.
+- **Request correlation:** an `ObservabilityMiddleware` (wired into `create_app`) assigns every HTTP request an `X-Request-ID` correlation id — honouring a caller-supplied id up to 128 chars, else generated — echoed on the response and access-logged. The header name is configurable via `RESCS_REQUEST_ID_HEADER`.
 
 ## 5. Known gaps (PLANNED)
 
 - **Record & file HTTP endpoints** — CRUD exists at repository level only; `api/routers/` is empty.
-- **Authentication enforcement** — `RESCS_API_KEY` validates at config load, but no middleware/dependency enforces the `X-API-Key` header. `X-Request-ID` is configured but unused.
+- **Authentication enforcement** — `RESCS_API_KEY` validates at config load, but no middleware/dependency enforces the `X-API-Key` header.
 - **Database bootstrap on startup** — `bootstrap_database()` is not yet called by `create_app()`.
 - **Service layer** (`services/`) and **object storage** (`storage/`) — empty.
 - **Integration tests** (`tests/integration/`) — empty.

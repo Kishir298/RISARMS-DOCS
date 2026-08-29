@@ -263,7 +263,7 @@ The v0.2 build order. Phases are listed in strict order; later phases assume ear
 - **Tests required:** authentication provider tests; authorization-gating tests; negative tests for unauthorized access.
 - **Completion criteria:** No operation can be invoked by an unauthenticated/unpermitted actor; boundaries documented in [`../security/trust-boundaries.md`](../security/trust-boundaries.md).
 - **Must NOT implement yet:** PKI, remote identity federation, per-subsystem internal auth between local C.O.R.E. components.
-- **Current state:** Security foundation (identities, permissions, manager, event emission) exists; the authentication provider is the missing piece.
+- **Current state:** Security foundation (identities, permissions, manager, event emission) exists. Config-gated, boundary-aware **authorization enforcement** has landed: `SecurityPolicy` carries an `enforced` flag (default inactive) toggled by the `security.enforce_authorization` config knob (default false), enforcement is wired into the service dispatch boundary only when security + policy are present and enforced, and the router propagates `identity_id` so denials surface as `SECURITY_ACCESS_DENIED` events that never reach the service. The authentication provider (real credential verification) remains the missing piece.
 
 ### Phase 9: R.E.S.C.S. adapter
 

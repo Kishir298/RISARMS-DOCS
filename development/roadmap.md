@@ -63,6 +63,8 @@ R.E.S.C.S. maintains its own detailed roadmap in `RESCS/docs/architecture.md` (1
 | Memory system | IMPLEMENTED |
 | Tool framework | IMPLEMENTED (no concrete tools) |
 | Event bus / security helpers | IMPLEMENTED |
+| CLI console entry point (`asis`) + `app` package | IMPLEMENTED |
+| Initial test suite (ai, app, cli, events, identity, memory, tools) | IMPLEMENTED (51 tests) |
 | Voice input pipeline (mic → VAD → whisper → normalizer) | IMPLEMENTED (standalone) |
 | Voice speaker/wakeword/TTS | PLANNED |
 | Voice integrated into chat loop | PLANNED |
@@ -71,7 +73,7 @@ R.E.S.C.S. maintains its own detailed roadmap in `RESCS/docs/architecture.md` (1
 
 ## 6. T.I.V.I.S.S.
 
-**FUTURE.** Design intent documented in [systems/tiviss.md](../systems/tiviss.md). No roadmap until its open questions are resolved.
+Early **IN DEVELOPMENT**. A standalone `tiviss` codebase now exists (identity, memory, permissions, ownership, handover and a runtime) documented in [systems/tiviss.md](../systems/tiviss.md), plus ruff-based tooling (lint + format clean). Its long-term handover model — the defining open question — is still to be resolved; no roadmap beyond the existing foundation until then.
 
 ## 7. RadarS.A.R.D.
 
