@@ -1,6 +1,6 @@
 # Testing
 
-> [!NOTE] **Status:** Each system has its own test suite (below). A cross-system integration spine is **PLANNED** (C.O.R.E. Phase 12). Test *policy* is defined here.
+> [!NOTE] **Status:** Every active system has a real test suite. A cross-system (deployed) integration spine is still **PLANNED** — automated contract tests exist on both sides of the C.O.R.E. ↔ R.E.S.C.S. boundary, but no deployed multi-host suite runs. Test *policy* is defined here.
 
 ## 1. Testing principles
 
@@ -14,18 +14,19 @@
 
 | System | Suite | Notes |
 |---|---|---|
-| C.O.R.E. | 22 files / 259 test functions (pytest) | Mirrors `core/` subsystems; includes application orchestration, events, health, routing→service integration |
-| R.E.S.C.S. | Unit + API tests (pytest, TestClient) | Config, errors, health, domain, models, schemas, both repository backends, db layer, health routes |
-| A.S.I.S. | Empty (`tests/`) | Voice smoke test exists at `02_voice/test_cross_platform.py`; not pytest-integrated |
+| C.O.R.E. | 48 test files; README-documented result **649 passed** (pytest) | Covers orchestration, communication/TLS/framing, protocol negotiation, auth, device registration/persistence/reconnect, discovery, routing, services, organization/reconciliation, adapters, scheduler, data distribution, health, events, 0.2.x compatibility |
+| R.E.S.C.S. | Comprehensive unit + API + integration suite (pytest, httpx TestClient) | Includes API, security, rate limiting, observability, lifecycle, quotas, concurrency, backups, PostgreSQL compatibility, contract-consumer tests |
+| A.S.I.S. | 8 test files (ai, app, cli, events, identity, memory, tools) + voice tests | Covers the rebuilt `asis` package |
+| A.S.C.S. | ~560 deterministic tests + opt-in live suite | Live Ollama tests gated behind `RISALIVE=1`, skipped by default; cross-platform dev testing, Windows-only runtime |
 
-C.O.R.E. and R.E.S.C.S. both run via `pytest` from their own roots.
+All four run via `pytest` from their own roots. Counts drift as development continues — verify against the current checkout rather than trusting any documented number.
 
 ## 3. What is missing (PLANNED)
 
-- C.O.R.E. **full integration test spine** (Phase 12): start → configure → send → route → execute → (adapter persist) → respond → health reflects activity → clean stop.
-- R.E.S.C.S. integration tests (`tests/integration/` empty).
-- Cross-system contract tests (adapter ↔ R.E.S.C.S. API).
-- A.S.I.S. automated tests.
+- **Deployed cross-host integration spine**: C.O.R.E. ↔ R.E.S.C.S. ↔ devices exercised over a physical network (the software-side spine is covered; physical LAN validation is pending).
+- **24/7 endurance tests** for C.O.R.E. on the Windows host.
+- **Live-cloud tests** for R.E.S.C.S. against real PostgreSQL/Supabase/S3 (PostgreSQL compatibility is already integration-tested).
+- **A.S.I.S. ↔ C.O.R.E. contract tests** — blocked until that integration exists.
 
 ## 4. Test naming and location conventions
 

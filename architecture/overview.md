@@ -29,8 +29,9 @@ Detail lives in the sibling documents:
 | **C.O.R.E.** | Communication, Organization and Resource Engine | Central management and control engine |
 | **R.E.S.C.S.** | Rishik's Efficient System for Cloud Storage | Cloud/data storage |
 | **A.S.I.S.** | A Smart Intelligence System | Primary AI / intelligence layer |
-| **T.I.V.I.S.S.** | Though I'm Vanquished, I'm Still Stronger | Separate AI agent (future, handover-oriented) |
+| **T.I.V.I.S.S.** | Though I'm Vanquished, I'm Still Stronger | Separate AI agent (handover-oriented, remote foundation) |
 | **RadarS.A.R.D.** | Radar Security, Anomaly Reconnaissance Device | Security and anomaly detection |
+| **A.S.C.S.** | A Smart Coding System | Autonomous coding agent (currently standalone) |
 
 The systems are modular. They are independently developed. They are ultimately intended to operate as **one ecosystem**.
 
@@ -44,12 +45,14 @@ graph TB
     ASIS["A.S.I.S."]
     TIVISS["T.I.V.I.S.S."]
     RADAR["RadarS.A.R.D."]
+    ASCS["A.S.C.S."]
 
     R --> CORE
     CORE -->|coordinate & route| RESCS
     CORE -->|coordinate & route| ASIS
     CORE -->|coordinate & route| TIVISS
     CORE -->|coordinate & route| RADAR
+    CORE -.->|"future: coding capability"| ASCS
     ASIS -->|request via| CORE
     RESCS -->|serve via| CORE
 ```
@@ -60,6 +63,7 @@ graph TB
 - **`C.O.R.E.` → subsystem** — C.O.R.E. is the coordinator: it routes requests, manages communication, governs lifecycle, and owns the shared security infrastructure for the flow. This is management/coordination, not ownership of the subsystem's core purpose.
 - **`A.S.I.S.` → `C.O.R.E.`** — the AI layer issues requests (service calls, storage access, device control) to C.O.R.E. rather than reaching other systems directly.
 - **`R.E.S.C.S.` → `C.O.R.E.`** — storage serves results back through C.O.R.E., and is invoked by C.O.R.E. on behalf of callers.
+- **`C.O.R.E. -.-> A.S.C.S.` (dashed)** — future, not built: coding capability reached through C.O.R.E. No traffic exists today.
 
 > [!NOTE] **Arrow direction ≠ implemented today.** These arrows describe intended architecture. What is implemented today is stated in each system's page under [`systems/`](../systems/) and in [System Interactions](system-interactions.md#3-implemented-vs-planned-by-pair).
 
@@ -67,7 +71,7 @@ graph TB
 
 ```mermaid
 graph TB
-    EXT["Other Systems / Devices"] -->|messages| CORE["C.O.R.E."]
+    EXT["External Devices"] -->|TLS + token auth| CORE["C.O.R.E."]
     CORE --> SERVICES["Services"]
     CORE --> RESOURCES["Resources"]
     CORE --> COMM["Communication"]
@@ -112,13 +116,14 @@ The full ownership table is in [System Boundaries](system-boundaries.md#1-respon
 | Responsibility | Owner |
 |---|---|
 | Communication, message protocols, routing | **C.O.R.E.** |
-| Organization, resource registry, services | **C.O.R.E.** |
+| Organization, resource registry, services, agent scheduling | **C.O.R.E.** |
 | Runtime/lifecycle, events, dependencies, configuration, health, logging | **C.O.R.E.** |
-| Security infrastructure | **C.O.R.E.** |
+| Security infrastructure (for ecosystem flows) | **C.O.R.E.** |
 | Cloud storage, persistent data, files, sync | **R.E.S.C.S.** |
 | NLP, reasoning, response generation, voice interaction | **A.S.I.S.** |
-| AI-agent identity/memory/permissions/handover | **T.I.V.I.S.S.** (future) |
-| Detection and reporting of anomalies | **RadarS.A.R.D.** |
+| AI-agent identity/memory/permissions/handover | **T.I.V.I.S.S.** (remote foundation) |
+| Detection and reporting of anomalies | **RadarS.A.R.D.** (planned) |
+| Autonomous coding execution | **A.S.C.S.** |
 
 ## 6. Current state vs future state (snapshot)
 
@@ -126,11 +131,12 @@ The full ownership table is in [System Boundaries](system-boundaries.md#1-respon
 
 | System | Now | Next |
 |---|---|---|
-| **C.O.R.E.** | v0.1 foundation implemented; v0.2 in development (transport abstraction, routing-to-service execution, runtime orchestration, events, health, configuration-persistence already landed) | Complete the 13 v0.2 phases, culminating in R.E.S.C.S. adapter, external-device transport, real CLI lifecycle, and the integration test spine |
-| **R.E.S.C.S.** | v0.1: health API, record/file repositories (memory + SQLAlchemy), database layer | Expose record/file HTTP API, enforce authentication, object storage, C.O.R.E. adapter |
-| **A.S.I.S.** | Chat runtime (Ollama), memory, tool framework, event bus, partial voice input pipeline | Integrate voice pipeline, migrate Forza naming, define C.O.R.E. integration |
-| **T.I.V.I.S.S.** | — | Define identity/ownership/handover model |
+| **C.O.R.E.** | v0.3.0 software complete (649 tests documented): TLS device transport, token auth, device registry/persistence, agent scheduling, HTTP R.E.S.C.S. adapter, data distribution | Physical Windows ↔ Mac LAN validation; 24/7 operational validation |
+| **R.E.S.C.S.** | v0.3.0: versioned HTTP API, enforced API-key auth, records/files, streaming + resumable uploads, lifecycle/governance, C.O.R.E. contract | Live PostgreSQL/Supabase + real S3 validation; deployed C.O.R.E. ↔ R.E.S.C.S. interop |
+| **A.S.I.S.** | Rebuilt `asis` package (CLI, AI providers, memory, tools, permissions, voice pipeline) + deprecated Forza trees | Wire voice into the chat loop; remove legacy trees; real C.O.R.E. integration |
+| **T.I.V.I.S.S.** | Remote v0.1.0 foundation (identity, ownership states, adapters as interfaces) | Bring development local; resolve the handover model |
 | **RadarS.A.R.D.** | — | Define sensor/detection scope |
+| **A.S.C.S.** | Standalone v0.3.0 coding agent (~560 tests) | Ecosystem integration through C.O.R.E. (future) |
 
 ## 7. Filesystem reality
 
@@ -141,10 +147,11 @@ RISARMS/
 ├── CORE/
 ├── RESCS/
 ├── ASIS/
-└── DOCS/
+├── ASCS/
+└── RISARMS-DOCS/   <- this repository (TIVISS exists on GitHub only)
 ```
 
-> [!IMPORTANT] **Independence rule:** R.E.S.C.S. and A.S.I.S. are independent projects and must never be placed inside CORE. Integration occurs through interfaces and communication contracts, governed by [Integration Contracts](../interfaces/integration-contracts.md). Referenced in ADR [0001](../decisions/0001-rescs-independent-from-core.md) and [0002](../decisions/0002-asis-independent-from-core.md).
+> [!IMPORTANT] **Independence rule:** R.E.S.C.S., A.S.I.S., A.S.C.S. and T.I.V.I.S.S. are independent projects and must never be placed inside CORE. Integration occurs through interfaces and communication contracts, governed by [Integration Contracts](../interfaces/integration-contracts.md). Referenced in ADR [0001](../decisions/0001-rescs-independent-from-core.md), [0002](../decisions/0002-asis-independent-from-core.md) and [0007](../decisions/0007-ascs-standalone-coding-agent.md).
 
 ## Next steps
 

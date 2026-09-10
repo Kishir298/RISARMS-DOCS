@@ -1,6 +1,6 @@
 # Authorization
 
-> [!NOTE] **Status:** **Implemented, config-gated, and inactive by default.** C.O.R.E. has authorization/permission primitives and now a config-gated enforcement mechanism (`SecurityPolicy.enforced` / the `security.enforce_authorization` config knob, both defaulting to inactive). Enforcement engages at the service-dispatch boundary only when a policy is present **and** enforced; the authentication provider and end-to-end (cross-system) enforcement remain v0.2 Phase 8 work.
+> [!NOTE] **Status:** **Implemented as primitives and a config-gated enforcement mechanism; enforcement is inactive in the default development configuration.** C.O.R.E. authorization engages at the service-dispatch boundary only when `security.enforce_authorization` is true. External-device access control is enforced via authentication + identity binding (see [Authentication](authentication.md)). End-to-end, cross-system authorization enforcement remains future work.
 
 ## 1. Definition
 
@@ -9,7 +9,9 @@ Authorization answers: *"Given a proven identity, what may this actor do?"* It s
 ## 2. Current reality
 
 - **C.O.R.E.** `SecurityManager` exposes `authorize` and permission checks, with `IdentityType` and `Permission` primitives. These are implemented and usable in-process.
-- **Enforcement is config-gated and inactive by default.** Dispatch-level enforcement exists at the service boundary (see [Phase 8](../systems/core.md#phase-8-security-integration)) but engages only when a `SecurityPolicy` is enforced (`security.enforce_authorization: true`). It is not yet enforced by default nor end to end across every ecosystem flow — that remains Phase 8 work.
+- **Enforcement is config-gated and inactive by default.** Dispatch-level enforcement exists at the service boundary but engages only when a `SecurityPolicy` is enforced (`security.enforce_authorization: true`). The shipped development configuration keeps it **false**; a LAN deployment must decide and document its setting.
+- **External devices** are constrained by authentication and message-identity binding rather than by permission sets: they can only act as their authenticated identity, and unregistered devices cannot use application-level communication.
+- No cross-system authorization exists — A.S.I.S./T.I.V.I.S.S. traffic that would need boundary authorization does not yet exist.
 
 ## 3. Contract requirements (target)
 
@@ -29,4 +31,4 @@ Authorization answers: *"Given a proven identity, what may this actor do?"* It s
 - [Authentication](authentication.md)
 - [Security Overview](overview.md)
 - [Trust Boundaries](trust-boundaries.md)
-- [C.O.R.E. v0.2 Phase 8](../systems/core.md#phase-8-security-integration)
+- [Security Overview](overview.md)

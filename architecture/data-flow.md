@@ -10,12 +10,14 @@ This document describes **where data lives and flows**. It is a companion to [Co
 
 | Data | Owner | Storage | Status |
 |---|---|---|---|
-| C.O.R.E. runtime/operational state (configuration, resources, health, events) | **C.O.R.E.** | Local, in-process-visible; configuration in YAML + env | **IMPLEMENTED** (in-process) |
-| C.O.R.E. durable records | **C.O.R.E.** | To be decided — likely via R.E.S.C.S. through the adapter | **PLANNED** |
-| Records (structured data) | **R.E.S.C.S.** | R.E.S.C.S. database (SQLAlchemy; SQLite dev, PostgreSQL prod) | Repository layer **IMPLEMENTED**; HTTP API **PLANNED** |
-| Files / objects | **R.E.S.C.S.** | R.E.S.C.S. object storage (planned `storage/` layer) | **PLANNED** |
-| Shared/cloud-backed data | **R.E.S.C.S.** | Cloud-backed (PostgreSQL/Supabase pathconfigured; object store planned) | **PLANNED** |
-| A.S.I.S. memory (conversation context, remembered facts, user identity) | **A.S.I.S.** | Local (JSON memory file; SQLite `MemoryDatabase`) | **IMPLEMENTED** (local only) |
+| C.O.R.E. runtime/operational state (configuration, resources, health, events) | **C.O.R.E.** | Local, in-process-visible; configuration in YAML + env (`config/core.yaml`, `CORE_*` overrides) | **IMPLEMENTED** |
+| C.O.R.E. durable records (device identities, runtime history) | **C.O.R.E.** (creates/reads) → **R.E.S.C.S.** (authoritative store) | Persisted through the `RescsAdapter` boundary (`var/rescs.json` file adapter in dev; HTTP adapter against R.E.S.C.S.) | **IMPLEMENTED** (adapter boundary; deployed interop pending external validation) |
+| Records (structured data) | **R.E.S.C.S.** | R.E.S.C.S. database (SQLAlchemy; SQLite dev, PostgreSQL path ready) | **IMPLEMENTED** (HTTP API + auth enforced; live PostgreSQL deployment pending external validation) |
+| Files / objects | **R.E.S.C.S.** | Object stores: local dir (default), memory, S3-compatible backend | **IMPLEMENTED** (real S3 provider not yet exercised) |
+| Shared/cloud-backed data | **R.E.S.C.S.** | Cloud-backed (PostgreSQL/Supabase path implemented; encryption model delegated/documented) | **IMPLEMENTED** (external validation pending) |
+| Distributed data (device-facing) | **R.E.S.C.S.** (authoritative) → **C.O.R.E.** (retrieves/normalizes/distributes) | C.O.R.E. `DataOrganizer` delivers to devices over device routing | **IMPLEMENTED** (in software) |
+| A.S.I.S. memory (conversation context, remembered facts, user identity) | **A.S.I.S.** | Local (SQL file `MemoryDatabase` in the `asis` package) | **IMPLEMENTED** (local only) |
+| A.S.C.S. task state | **A.S.C.S.** | Local workspace (`.ascs` persistence) | **IMPLEMENTED** (local only) |
 | T.I.V.I.S.S. memory/identity | **T.I.V.I.S.S.** | Undefined (future) | **FUTURE** |
 | RadarS.A.R.D. detections/alerts | **RadarS.A.R.D.** (produces) → **C.O.R.E.** (coordinates) | Undefined (future); reports flow to C.O.R.E. | **FUTURE** |
 
@@ -32,7 +34,7 @@ sequenceDiagram
     participant DB as Database / Object Store
 
     CALLER->>CORE: store/retrieve request
-    CORE->>ADAPTER: routed service call (Phase 9)
+    CORE->>ADAPTER: routed service call
     ADAPTER->>RESCS: HTTP request (R.E.S.C.S. API)
     RESCS->>DB: persist / query
     DB->>RESCS: result
@@ -41,13 +43,13 @@ sequenceDiagram
     CORE->>CALLER: result
 ```
 
-**Current reality:** The adapter, the R.E.S.C.S. record/file HTTP API, and the caller contract are all **PLANNED**. What exists: R.E.S.C.S. repository backends (memory + SQLAlchemy) and its database layer, both tested at the repository level.
+**Current reality:** The storage request path is **implemented in software up to the caller**: R.E.S.C.S. exposes its `/api/v1` record/file API with enforced API-key auth, and C.O.R.E.'s `HttpRescsAdapter` consumes it under a machine-readable contract (both sides ship contract tests). Device-facing distribution of retrieved data through C.O.R.E.'s device routing is also implemented. What is **not** real yet: an A.S.I.S.-originated request (A.S.I.S. is not connected) and deployed cross-host interop (external validation pending).
 
 ## 3. Data flow rules
 
 1. **Storage logic lives in R.E.S.C.S.** C.O.R.E. adapters translate requests; they never re-implement persistence.
 2. **No data-plane coupling between A.S.I.S. and R.E.S.C.S.** A.S.I.S. reaches stored data through C.O.R.E. only.
-3. **Sync/shared-data semantics are owned by R.E.S.C.S.** and will be defined there (see [rescs.md](../systems/rescs.md)).
+3. **Sync/shared-data semantics are owned by R.E.S.C.S.** — its `docs/synchronization.md` and namespace model (reserved `RUNNABLES`/`Ops`/`IDEAS` namespaces for C.O.R.E.) define them (see [rescs.md](../systems/rescs.md)).
 4. **Observability data** (health state, events, logs) is C.O.R.E.'s domain and stays with C.O.R.E.; radar detections are the exception, reported *into* C.O.R.E. by RadarS.A.R.D. for coordination.
 
 ## Related

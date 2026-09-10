@@ -1,6 +1,6 @@
 # Trust Boundaries
 
-> [!NOTE] **Status:** The trust model below is the **target** architecture. Today there is no cross-system traffic, so no boundaries are actually crossed in production. Treat this as the contract for when they are.
+> [!NOTE] **Status:** The trust model below is the **target** architecture. Two boundaries now have **implemented, enforced security** (B4 C.O.R.E. ↔ R.E.S.C.S. and B5 Devices ↔ C.O.R.E., in software); the rest have no traffic at all. Physical LAN deployment of B5 has not yet been validated.
 
 ## 1. Purpose
 
@@ -10,11 +10,11 @@ A trust boundary is a point where the security model must re-validate: identity,
 
 ```mermaid
 graph TB
-    EXT["External Devices"] ---|B5| CORE["C.O.R.E."]
+    EXT["External Devices"] ---|"B5 (TLS + token)"| CORE["C.O.R.E."]
     ASIS["A.S.I.S."] ---|B1| CORE
     TIVISS["T.I.V.I.S.S."] ---|B2| CORE
     RADAR["RadarS.A.R.D."] ---|B3| CORE
-    CORE ---|B4| RESCS["R.E.S.C.S."]
+    CORE ---|"B4 (API key)"| RESCS["R.E.S.C.S."]
 ```
 
 | Boundary | Between | Trust posture |
@@ -37,13 +37,14 @@ graph TB
 
 | Boundary | Exists today? | Today's posture |
 |---|---|---|
-| B1 A.S.I.S. ↔ C.O.R.E. | **No** | No traffic; A.S.I.S. standalone. |
-| B2 T.I.V.I.S.S. ↔ C.O.R.E. | **No** | No code. |
+| B1 A.S.I.S. ↔ C.O.R.E. | **No** | No traffic; A.S.I.S. standalone (interfaces + mock only). |
+| B2 T.I.V.I.S.S. ↔ C.O.R.E. | **No** | No connected code (foundation is remote-only). |
 | B3 RadarS.A.R.D. ↔ C.O.R.E. | **No** | No code. |
-| B4 C.O.R.E. ↔ R.E.S.C.S. | **No** | No adapter; R.E.S.C.S. API key not yet enforced. |
-| B5 Devices ↔ C.O.R.E. | **No** | No device transport (v0.2 Phase 10). |
+| B4 C.O.R.E. ↔ R.E.S.C.S. | **Yes (software)** | Implemented: enforced `X-API-Key` + owner scoping on R.E.S.C.S., request-ID correlation, stable error envelope, machine-readable contract. Deployed cross-host interop not yet exercised. |
+| B5 Devices ↔ C.O.R.E. | **Yes (software)** | Implemented: TLS 1.2+ mandatory externally (fail-closed binding), token authentication, identity binding, registration required, frame/connection limits, structured errors. Physical LAN validation pending. |
+| B6 A.S.C.S. | **n/a** | Standalone local tool; no ecosystem boundary exists. |
 
-> [!IMPORTANT] **Until a boundary has code, it has no implemented security.** Building the boundary (Phase 9/10 and R.E.S.C.S. auth) must include its trust enforcement, not bolt it on later.
+> [!IMPORTANT] **A boundary with code still needs its deployment validation.** B4/B5 enforcement is proven by automated tests, not yet by a physically deployed, hostile-network exercise. Do not describe them as production-hardened until then.
 
 ## Related
 

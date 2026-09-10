@@ -8,7 +8,7 @@ An ecosystem of independent systems (storage, intelligence, agents, sensing) nee
 
 **C.O.R.E. is the integration and control layer of the ecosystem.**
 
-- All cross-system traffic flows through C.O.R.E. ([interactions](../architecture/system-interactions.md)).
+- All cross-system traffic flows through C.O.R.E. ([interactions](../architecture/system-interactions.md)). External devices route through C.O.R.E. as a central hub — never peer-to-peer — as implemented in v0.3.0.
 - C.O.R.E. owns: communication, message protocols, routing, organization, resources, services, runtime/lifecycle, events, dependencies, configuration, health, logging, security infrastructure.
 - C.O.R.E. is *not* the primary AI (that is A.S.I.S./T.I.V.I.S.S.) and is not the storage system (that is R.E.S.C.S.).
 - C.O.R.E. coordinates the ecosystem's response to events; detection itself belongs to the sensor layer (RadarS.A.R.D.).

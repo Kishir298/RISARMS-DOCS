@@ -33,19 +33,22 @@ This document defines **who owns which responsibility**. The rule throughout R.I
 | AI model interaction | **A.S.I.S.** | [asis.md](../systems/asis.md) |
 | Voice functionality | **A.S.I.S.** | [asis.md](../systems/asis.md) |
 | AI-agent identity, memory, permissions, ownership, handover | **T.I.V.I.S.S.** | [tiviss.md](../systems/tiviss.md) |
+| Device registry, device routing, agent scheduling, data distribution | **C.O.R.E.** | [core.md](../systems/core.md) |
 | Detection/reporting of security anomalies | **RadarS.A.R.D.** | [radar-sard.md](../systems/radar-sard.md) |
 | Environmental/device/sensor monitoring | **RadarS.A.R.D.** | [radar-sard.md](../systems/radar-sard.md) |
 | Alert generation / security event reporting | **RadarS.A.R.D.** | [radar-sard.md](../systems/radar-sard.md) |
+| Autonomous coding execution | **A.S.C.S.** | [asc.md](../systems/asc.md) |
 
 ## 2. Explicit non-ownership
 
 Equally important is what each system does **not** own:
 
-- **C.O.R.E does not own** the AI brain, the storage, the anomaly sensors, or agent identity. It coordinates them. It does not contain R.E.S.C.S. or A.S.I.S. code.
+- **C.O.R.E does not own** the AI brain, the storage, the anomaly sensors, agent identity, or autonomous coding. It coordinates them. It does not contain R.E.S.C.S., A.S.I.S. or A.S.C.S. code.
 - **R.E.S.C.S. does not own** the message bus, routing, or runtime; it serves storage. It must not grow a UI or an intelligence layer.
 - **A.S.I.S. does not own** C.O.R.E.'s responsibilities (message routing, resource registry, runtime, security infrastructure). It may only *use* them.
 - **T.I.V.I.S.S. does not** copy A.S.I.S.; it owns a distinct identity and handover model.
 - **RadarS.A.R.D. does not own** the handling of its detections. It **detects and reports**; C.O.R.E. owns event coordination, logging, health state, and system response.
+- **A.S.C.S. does not own** ecosystem coordination or storage. It is a standalone coding agent; when integrated, C.O.R.E. mediates access to it.
 
 ## 3. Independent projects
 
@@ -53,13 +56,14 @@ Equally important is what each system does **not** own:
 
 ```text
 RISARMS/
-├── CORE/     <- owned by C.O.R.E. development
-├── RESCS/    <- owned by R.E.S.C.S. development (independent)
-├── ASIS/     <- owned by A.S.I.S. development (independent)
-└── DOCS/     <- this documentation
+├── CORE/           <- owned by C.O.R.E. development
+├── RESCS/          <- owned by R.E.S.C.S. development (independent)
+├── ASIS/           <- owned by A.S.I.S. development (independent)
+├── ASCS/           <- owned by A.S.C.S. development (independent)
+└── RISARMS-DOCS/   <- this documentation (TIVISS is GitHub-only)
 ```
 
-C.O.R.E. must never contain `RESCS/` or `ASIS/`. Integration is contract-based. Rationale: ADR [0001](../decisions/0001-rescs-independent-from-core.md), ADR [0002](../decisions/0002-asis-independent-from-core.md), ADR [0005](../decisions/0005-storage-integration-via-adapter.md).
+C.O.R.E. must never contain `RESCS/`, `ASIS/` or `ASCS/`. Integration is contract-based. Rationale: ADR [0001](../decisions/0001-rescs-independent-from-core.md), ADR [0002](../decisions/0002-asis-independent-from-core.md), ADR [0005](../decisions/0005-storage-integration-via-adapter.md), ADR [0007](../decisions/0007-ascs-standalone-coding-agent.md).
 
 ## 4. Boundary rules for agents
 

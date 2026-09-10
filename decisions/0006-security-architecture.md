@@ -13,12 +13,12 @@ Identity → Authentication → Authorization → Permission checking → Resour
 ```
 
 - **Identity** — who is acting (systems, agents, operators; per-identity profiles).
-- **Authentication** — proving identity with credentials, via a dedicated provider (deferred to v0.2 Phase 8; today C.O.R.E. only verifies identity existence).
-- **Authorization** — what the proven identity may do.
+- **Authentication** — proving identity with credentials, via a dedicated provider. **Implemented at two perimeters:** C.O.R.E.'s token provider for external devices (with TLS) and R.E.S.C.S.'s enforced `X-API-Key`. Internal/legacy C.O.R.E. use retains an existence-based provider.
+- **Authorization** — what the proven identity may do. Primitives and a config-gated dispatch-boundary enforcement exist; the shipped development config leaves enforcement off.
 - **Permission checking** — enforcement on concrete operations.
 - **Access** — the gated resource/service call.
 
-Each system also secures its own perimeter consistently (e.g., R.E.S.C.S. API-key enforcement — configured but not yet enforced).
+Each system also secures its own perimeter consistently (R.E.S.C.S. enforces its API key; C.O.R.E. enforces TLS + token auth externally).
 
 ## Alternatives
 
@@ -29,9 +29,9 @@ Each system also secures its own perimeter consistently (e.g., R.E.S.C.S. API-ke
 ## Consequences
 
 - Positive: each layer is developable and testable in isolation; boundaries have a clear place to enforce ([trust-boundaries](../security/trust-boundaries.md)); honest status docs prevent false claims of protection.
-- Cost: **today the stack is unenforced** — there is no credential validation (C.O.R.E.), no API-key middleware (R.E.S.C.S.), and no cross-system traffic to protect yet. This is tracked (v0.2 Phase 8, R.E.S.C.S. auth) and must not be misread as shipping security.
-- Guardrail: no boundary is claimed secured until its enforcement lands with it.
+- Cost: **the stack is enforced only at the two perimeters built so far** (C.O.R.E. external devices, R.E.S.C.S. API). There is no cross-system identity federation, no end-to-end authorization across ecosystem flows, and development configs deliberately run without authorization enforcement. These must not be misread as shipping end-to-end security.
+- Guardrail: no boundary is claimed secured until its enforcement lands with it — and no boundary is claimed production-hardened until it is deployment-validated.
 
 ## Status
 
-Accepted as architecture. Implementation is **foundation only**; enforcement is planned.
+Accepted. Implementation: **perimeter enforcement at two boundaries; foundation elsewhere; cross-system enforcement planned.**

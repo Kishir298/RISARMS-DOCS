@@ -1,6 +1,6 @@
 # Security Overview
 
-> [!NOTE] **Status:** Security in R.I.S.A.R.M.S. is currently **foundation-level**. Only the base primitives exist. Production-grade security does **not** exist yet, and this document does not claim otherwise.
+> [!NOTE] **Status:** Security has moved beyond foundation level for **external-device communication**: C.O.R.E. enforces TLS 1.2+ and token authentication on external TCP (fail-closed when misconfigured), and R.E.S.C.S. enforces `X-API-Key` authentication with owner scoping on its API. However, this is **perimeter security for two specific boundaries** — it is not end-to-end ecosystem security. C.O.R.E.'s development configuration still ships with `security.enforce_authorization: false`, no cross-system identity federation exists, and A.S.I.S./A.S.C.S. have no network-facing security. Do not represent the ecosystem as a whole as production-secured.
 
 ## 1. Security model
 
@@ -26,13 +26,14 @@ graph TD
 
 | System | Security artifacts | Reality |
 |---|---|---|
-| **C.O.R.E.** | `core/security`: `Identity`, `IdentityType`, `Permission`, `SecurityManager` (register/unregister identities, authenticate, authorize, permission checks, metrics, event emission) | **IMPLEMENTED foundation.** `authenticate()` currently verifies identity *existence only*; credential verification is explicitly deferred to a dedicated authentication provider (v0.2 Phase 8). |
-| **R.E.S.C.S.** | API-key configuration (`RESCS_API_KEY`, `X-API-Key` header contract) | Config validated, but **not enforced** — no middleware/dependency checks the header. |
-| **A.S.I.S.** | Permission levels, user-confirmation for dangerous operations, sandbox path resolution, secrets helpers | **IMPLEMENTED** as local, single-user safeguards, not ecosystem security. |
+| **C.O.R.E.** | `core/security`: `Identity`, `IdentityType`, `Permission`, `SecurityManager`, `SecurityPolicy`, pluggable **auth providers** (existence-based for internal/legacy; **token-based for external devices**); TLS 1.2+ on external TCP with fail-closed external binding; identity-spoofing rejection (`identity_id == connection.identity_id` enforced); config-gated service-dispatch authorization (`security.enforce_authorization`, default **false**) | **IMPLEMENTED for the external-device boundary** (real credential verification via token provider + TLS). Internal/development use keeps the existence-based provider and authorization enforcement off. |
+| **R.E.S.C.S.** | `rescs/security.py`: `X-API-Key` requirement (`require_api_key`, `hmac.compare_digest`), authenticated principal, owner scoping (`enforce_owner`), optional single-owner lock mode (`RESCS_API_KEY_OWNER`) | **IMPLEMENTED and enforced** on the versioned API. Single shared key — not per-client identities. |
+| **A.S.I.S.** | Permission levels, user-confirmation for dangerous operations, sandbox path resolution, secrets/validation helpers | **IMPLEMENTED** as local, single-user safeguards, not ecosystem security. No network-facing authentication. |
+| **A.S.C.S.** | Local-only execution model (no code leaves the machine; explicit workspace; mode gating on tools) | **IMPLEMENTED** as a local tool boundary; no ecosystem security role. |
 | **T.I.V.I.S.S.** | — | **FUTURE** — owns its own identity/permission/ownership model. |
 | **RadarS.A.R.D.** | — | **FUTURE** — reports to C.O.R.E.; C.O.R.E. enforces handling permissions. |
 
-> [!IMPORTANT] **Do not assume:** No production-grade authentication, encryption, key management, or cross-system channel security exists today. Anything beyond the primitives above is **PLANNED** (primarily v0.2 Phase 8 and R.E.S.C.S. auth enforcement).
+> [!IMPORTANT] **Do not over-assume:** TLS+token (C.O.R.E. external) and API-key (R.E.S.C.S.) are the only enforced channel/credential mechanisms. There is still no cross-system identity federation, no per-client identity model in R.E.S.C.S., and no end-to-end authorization across ecosystem flows. Development configs deliberately run without authorization enforcement.
 
 ## 3. Who owns what (security)
 
@@ -40,20 +41,19 @@ graph TD
 - **Each system secures its own perimeter** consistent with the shared model — e.g., R.E.S.C.S. enforces its API key; A.S.I.S. guards its local tools.
 - **Cross-system boundaries** are documented in [Trust Boundaries](trust-boundaries.md).
 
-## 4. Intended security properties (PLANNED)
+## 4. Security properties — where they stand
 
-These are target properties, listed so future work has a checklist:
-
-1. Every cross-system call authenticates (identity + credentials).
-2. Every cross-system operation authorizes against the caller's permissions.
-3. Request correlation survives end to end (message/request IDs in [Messaging](../interfaces/messaging.md)).
-4. Failures are logged and observable; security events are emitted on the C.O.R.E. event bus.
-5. Secret material (API keys, tokens) is never hard-coded and never committed — configuration/env only.
+1. **Every external-device call authenticates** — **IMPLEMENTED** (TLS + token provider at the C.O.R.E. external boundary).
+2. **R.E.S.C.S. perimeter authentication** — **IMPLEMENTED** (enforced `X-API-Key` + owner scoping).
+3. **Every cross-system operation authorizes against the caller's permissions** — **PLANNED** (C.O.R.E. enforcement is config-gated off by default; no A.S.I.S./T.I.V.I.S.S. traffic exists to authorize).
+4. **Request correlation survives end to end** (message/request IDs in [Messaging](../interfaces/messaging.md); R.E.S.C.S. echoes `X-Request-ID`) — **IMPLEMENTED** on the paths that exist.
+5. **Failures are logged and observable; security events are emitted on the C.O.R.E. event bus** — **IMPLEMENTED** in C.O.R.E.
+6. **Secret material is never hard-coded and never committed** — configuration/env only (both projects document this; RESCS keys/tokens/certs come from env/secret managers).
+7. **No plaintext downgrade on external channels** — **IMPLEMENTED** (C.O.R.E. external TCP fails closed without valid TLS; localhost keeps legacy plaintext for 0.2.x compatibility).
 
 ## Related
 
 - [Authentication](authentication.md)
 - [Authorization](authorization.md)
 - [Trust Boundaries](trust-boundaries.md)
-- [C.O.R.E. v0.2 Phase 8](../systems/core.md#phase-8-security-integration)
 - ADR [0006](../decisions/0006-security-architecture.md)

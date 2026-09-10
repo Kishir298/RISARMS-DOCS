@@ -1,6 +1,6 @@
 # Communication Flow
 
-> [!NOTE] **Status:** The in-process message path is **IMPLEMENTED** (tested in C.O.R.E.). Transport to other systems and devices is **PLANNED** (v0.2 Phases 9–10).
+> [!NOTE] **Status:** The in-process message path is **IMPLEMENTED** (tested in C.O.R.E.). The C.O.R.E.-side HTTP adapter chain to R.E.S.C.S. and the external TCP+TLS device transport are also **IMPLEMENTED** (software complete; physical LAN validation pending). A.S.I.S.-originated cross-system traffic is **PLANNED**.
 
 ## Purpose
 
@@ -20,7 +20,7 @@ flowchart LR
     RESP --> SRC
 ```
 
-Each of these steps exists today (see [core.md](../systems/core.md#42-the-implemented-end-to-end-flow)):
+Each of these steps exists today (see [core.md](../systems/core.md)):
 
 | Step | Component | Notes |
 |---|---|---|
@@ -33,18 +33,21 @@ Each of these steps exists today (see [core.md](../systems/core.md#42-the-implem
 
 ## 2. Transport abstraction
 
-The `Transport` interface is the contract every delivery mechanism must satisfy. Today only the in-process `LocalTransport` exists (thread-safe send/request, endpoint registry, counters). Network delivery is **PLANNED**:
+The `Transport` interface is the contract every delivery mechanism must satisfy. Implemented transports today:
 
-- v0.2 **Phase 10** — a transport that reaches external devices.
-- v0.2 **Phase 9** — the R.E.S.C.S. adapter rides the communication layer to reach R.E.S.C.S.'s HTTP API.
+- `LocalTransport` — in-process (thread-safe send/request, endpoint registry, counters); default for development and tests.
+- `TcpTransport` — external devices over TCP with mandatory TLS when externally bound (TLS 1.2+), framing, connection limits, session handshake, persistent connections.
 
-> [!IMPORTANT] **Transport rule:** callers depend on the `Transport` interface, never on `LocalTransport` directly. Adding a new transport must require implementing the interface only ([ADR 0004](../decisions/0004-communication-abstraction.md)).
+The R.E.S.C.S. HTTP path rides the adapter layer (`HttpRescsAdapter`) rather than a message transport.
+
+> [!IMPORTANT] **Transport rule:** callers depend on the `Transport` interface, never on a concrete transport directly. Adding a new transport must require implementing the interface only ([ADR 0004](../decisions/0004-communication-abstraction.md)).
 
 ## 3. Protocol and serialization
 
 - Messages are serialized as JSON by `MessageSerializer`.
 - The message envelope contract (fields, types, IDs) is defined in [Messaging Contract](../interfaces/messaging.md).
-- Serialization is transport-independent; outbound adapters will marshal messages into whatever R.E.S.C.S. or device protocols require, at the adapter boundary.
+- Serialization is transport-independent; outbound adapters marshal messages into whatever R.E.S.C.S. or device protocols require, at the adapter boundary.
+- The external device protocol adds structured protocol messages (`CORE_HANDSHAKE`, `DEVICE_REGISTER`, `DEVICE_DISCOVER`, `DEVICE_INFO`, `DEVICE_ERROR`, …) with version negotiation that keeps 0.2.x clients working; see [core.md](../systems/core.md).
 
 ## 4. Failure behavior
 

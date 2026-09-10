@@ -20,8 +20,8 @@ R.E.S.C.S. is an **independent project**, developed, versioned, and maintained s
 
 ## Consequences
 
-- Positive: independent change and release cadences; storage can be deployed/operated separately; clear responsibility ownership.
-- Cost: integration work is required to bridge the two (the C.O.R.E. adapter, v0.2 Phase 9); an explicit protocol/contract must be maintained.
+- Positive: independent change and release cadences; storage can be deployed/operated separately; clear responsibility ownership. Both projects are now at v0.3.0 and were developed entirely independently.
+- Cost: integration work is required to bridge the two; an explicit protocol/contract must be maintained (now implemented on both sides — see [integration contracts](../interfaces/integration-contracts.md)).
 - Guardrail: the adapter must be the *only* bridge; direct coupling invalidates the decision.
 
 ## Status
