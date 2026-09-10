@@ -1,6 +1,6 @@
 # Services Contract
 
-> [!NOTE] **Purpose:** Defines the lifecycle and behavior of services — the executable unit C.O.R.E. manages. The C.O.R.E. service layer is **IMPLEMENTED**; cross-system services reuse these semantics but are **PLANNED**.
+> [!NOTE] **Purpose:** Defines the lifecycle and behavior of services — the executable unit C.O.R.E. manages. The C.O.R.E. service layer (9 services in v0.3.0, including the agent scheduler service) is **IMPLEMENTED**; cross-system services reuse these semantics but are **PLANNED**.
 
 ## 1. What a service is
 
@@ -19,7 +19,7 @@ A service is a C.O.R.E.-managed unit of work that:
 
 ### Lifecycle
 - Services start/stop under the runtime's ordering rules ([Lifecycle](../architecture/lifecycle.md)).
-- A service reflects its state via health ([Health integration](../systems/core.md#phase-6-health-integration)).
+- A service reflects its state via health ([core.md](../systems/core.md)).
 
 ### Invocation
 - Callers invoke through the message/service path, not by reaching into a service's internals.

@@ -29,7 +29,9 @@ Every conversation across a system boundary must satisfy:
 
 - [IMPLEMENTED] C.O.R.E. defines a `Transport` interface; callers depend on it.
 - [IMPLEMENTED] An in-process `LocalTransport` provides thread-safe `send`/`request` with counters.
-- [PLANNED] Additional transports (device transport, networked delivery) implement the same interface. See [Communication Flow](../architecture/communication-flow.md).
+- [IMPLEMENTED] `TcpTransport` reaches external devices (TCP + mandatory TLS when externally bound, framing, connection limits, session handshake, persistent connections).
+- [IMPLEMENTED] Structured protocol messages with version negotiation (0.2.x clients remain supported) — see [core.md](../systems/core.md).
+- [PLANNED] Additional transports implement the same interface. See [Communication Flow](../architecture/communication-flow.md).
 
 **Rule:** adding a transport must require implementing the interface only; no caller changes.
 
@@ -40,9 +42,9 @@ Every conversation across a system boundary must satisfy:
 
 ## 5. Out-of-scope for this contract
 
-- Security/authentication of communication channels → [Security](../security/overview.md).
-- Specific R.E.S.C.S. HTTP endpoints → [Integration Contracts](integration-contracts.md).
-- Device wire protocols → defined when the device transport is designed (v0.2 Phase 10).
+- Security/authentication of communication channels → [Security](../security/overview.md) (note: external TCP transport requires TLS + token authentication — see [Authentication](../security/authentication.md)).
+- Specific R.E.S.C.S. HTTP endpoints → [Integration Contracts](integration-contracts.md) (now implemented).
+- Device wire-protocol message details → [core.md](../systems/core.md) (implemented).
 
 ## Related
 

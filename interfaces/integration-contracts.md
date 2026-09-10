@@ -1,58 +1,79 @@
 # Integration Contracts
 
-> [!NOTE] **Status:** **PLANNED.** No cross-system integration exists in code today. This document is the working specification that future R.E.S.C.S./A.S.I.S./C.O.R.E. integration work must satisfy. Do not treat anything here as implemented.
+> [!NOTE] **Status:** The **C.O.R.E. ↔ R.E.S.C.S. contract is IMPLEMENTED** on both sides (machine-readable contract served by R.E.S.C.S. at `GET /api/v1/contract`; consumed in C.O.R.E. by the `RescsAdapter` family with contract-consuming tests). The A.S.I.S. and device sections below are **PLANNED/FUTURE** as caller-facing contracts. Deployed cross-host interop between C.O.R.E. and R.E.S.C.S. is implemented but not yet externally validated.
 
 ## 1. Purpose
 
-This document defines the contracts that will connect the independent systems without coupling them. It is the interface-level companion to [System Interactions](../architecture/system-interactions.md).
+This document defines the contracts that connect the independent systems without coupling them. It is the interface-level companion to [System Interactions](../architecture/system-interactions.md).
 
 ## 2. Principles (contract-first integration)
 
 1. **Contract before code.** An excellent interface spec precedes implementation.
 2. **Contract is the authority.** Given ambiguity, implement to the contract, then ask.
 3. **No cross-system code coupling.** C.O.R.E. never imports R.E.S.C.S./A.S.I.S. internals, and they never import C.O.R.E. internals.
-4. **The contract travels with the docs.** When the R.E.S.C.S. adapter lands (v0.2 Phase 9), the contract here and R.E.S.C.S.'s own `docs/core-integration-contract.md` must agree.
+4. **The contract travels with the docs.** The contract in this repository and R.E.S.C.S.'s own `docs/core-integration-contract.md` describe the same implemented surface and must agree.
 
-## 3. C.O.R.E. ↔ R.E.S.C.S. contract
+## 3. C.O.R.E. ↔ R.E.S.C.S. contract — IMPLEMENTED
 
 ### Direction of dependency
-C.O.R.E. depends on R.E.S.C.S.'s **API contract**, not its implementation. R.E.S.C.S. exposes storage capability; C.O.R.E. brings a caller.
 
-### Required behaviors (to be locked during Phase 9)
-- **Record storage**: create, read, update, delete, list/get records.
-- **File/object storage**: store, retrieve, delete files/objects.
-- **Authentication**: R.E.S.C.S. will enforce API-key authentication; C.O.R.E. must present valid credentials ([Security](../security/overview.md)).
-- **Correlation**: C.O.R.E. request IDs propagate into R.E.S.C.S. (X-Request-ID semantics), so cross-system tracing works.
-- **Error mapping**: R.E.S.C.S. error codes map to C.O.R.E. message errors deterministically ([Messaging](messaging.md#4-errors)).
-- **Health**: C.O.R.E. health reflects R.E.S.C.S. reachability/health via the adapter.
+C.O.R.E. depends on R.E.S.C.S.'s **API contract**, not its implementation. R.E.S.C.S. exposes storage capability; C.O.R.E. brings the caller. R.E.S.C.S. never initiates calls into C.O.R.E. Neither project imports the other.
 
-### Interface points
-The C.O.R.E. side: a **R.E.S.C.S. adapter service** registered with C.O.R.E.'s router/services, reachable by message type. The R.E.S.C.S. side: its HTTP API (record/file endpoints — currently **PLANNED** in R.E.S.C.S.).
+### Implemented behaviors
+
+- **Record storage**: create, read, update, delete, list/search records over `R.E.S.C.S./api/v1` with etag-based optimistic concurrency.
+- **File/object storage**: store, retrieve, delete files/objects; streaming and resumable uploads for large payloads.
+- **Authentication**: R.E.S.C.S. **enforces** `X-API-Key` (min 16 chars, constant-time compare) on protected routes; C.O.R.E. presents credentials per its adapter configuration.
+- **Correlation**: R.E.S.C.S. echoes `X-Request-ID` on every response (configurable header), so cross-system tracing works.
+- **Error mapping**: R.E.S.C.S. returns a stable error envelope (`{"error": {"code", "message", "details"}}`) with a documented code → C.O.R.E.-reaction table (`UNAUTHORIZED`, `FORBIDDEN`, `QUOTA_EXCEEDED`, `NOT_FOUND`, `CONFLICT`, `PRECONDITION_FAILED`, `PAYLOAD_TOO_LARGE`, `VALIDATION_ERROR`, `STORAGE_ERROR`, `DEPENDENCY_UNAVAILABLE`). See [Messaging errors](messaging.md#4-errors).
+- **Runtime discovery**: `GET /api/v1/contract` returns the contract as data, so C.O.R.E. does not hard-code capabilities.
+- **Namespaces**: records live under `(namespace, key, owner)` with reserved ecosystem namespaces (`RUNNABLES`, `Ops`, `IDEAS`) for C.O.R.E.-persisted operational state.
+- **Health**: C.O.R.E. health includes R.E.S.C.S. adapter reachability; R.E.S.C.S. exposes `/health/live` and `/health/ready`.
+
+### Adapter implementations (C.O.R.E. side)
+
+```text
+RescsAdapter
+├── InMemoryRescsAdapter   (tests, deterministic runtime)
+├── FileRescsAdapter       (var/rescs.json — dev persistence)
+└── HttpRescsAdapter       (real HTTP to R.E.S.C.S.; endpoint, timeout, fallback, health)
+```
 
 ```mermaid
 flowchart LR
-    CALLER["Caller (e.g. A.S.I.S.)"] --> CORE["C.O.R.E. Router"]
-    CORE --> ADAPTER["R.E.S.C.S. Adapter (Phase 9)"]
-    ADAPTER --> API["R.E.S.C.S. HTTP API"]
-    API --> DB["Records / Files"]
+    CALLER["Caller (future: A.S.I.S.)"] --> CORE["C.O.R.E. Router"]
+    CORE --> ADAPTER["RescsAdapter (Http in deployment)"]
+    ADAPTER --> API["R.E.S.C.S. /api/v1"]
+    API --> DB["Records / Files / Object store"]
 ```
 
-## 4. C.O.R.E. ↔ A.S.I.S. contract
+> [!IMPORTANT] **Persisted-device rule:** C.O.R.E. persists device identity and runtime history *through* this boundary. R.E.S.C.S. remains the persistence authority; C.O.R.E. never creates a second device database.
 
-### Required behaviors (to be locked during A.S.I.S. integration)
-- **Service requests**: A.S.I.S. issues service requests to C.O.R.E. as messages with identity ([Identity](../security/overview.md#1-security-model)).
-- **Storage via C.O.R.E.**: A.S.I.S. never calls R.E.S.C.S. directly; it requests storage through C.O.R.E. ([Data Flow](../architecture/data-flow.md)).
-- **Device control (future)**: A.S.I.S. requests device actions through C.O.R.E.'s device transport.
+### Remaining for full confidence
+
+Deployed cross-host interop (C.O.R.E. → R.E.S.C.S. over a real network against live PostgreSQL/Supabase) is implemented but not yet exercised — external validation, not missing code.
+
+## 4. C.O.R.E. ↔ A.S.I.S. contract — PLANNED
+
+- **Service requests**: A.S.I.S. issues service requests to C.O.R.E. as messages with identity ([Identity](../security/overview.md#1-security-model)). A.S.I.S. already defines a local `CoreClient` interface + `MockCoreAdapter`; the real adapter awaits the locked contract.
+- **Storage via C.O.R.E.**: A.S.I.S. never calls R.E.S.C.S. directly; it requests storage through C.O.R.E. ([Data Flow](../architecture/data-flow.md)). A.S.I.S.'s `integrations/rescs` placeholder deliberately reports R.E.S.C.S. as unavailable until this contract exists.
+- **Device control (future)**: A.S.I.S. requests device actions through C.O.R.E.'s implemented device transport.
+- **Agent scheduling note**: C.O.R.E.'s scheduler already defines `asis-local` / `asis-offload` agent profiles — a naming reservation for this integration, not an implemented path.
 - **Responses**: A.S.I.S. receives C.O.R.E. service responses correlated by request ID.
 
 ### What A.S.I.S. must NOT do
+
 - Own routing/registry/lifecycle/security infrastructure of C.O.R.E.
 - Reach other systems directly.
 
-## 5. Evolving the contracts
+## 5. External-device contract — IMPLEMENTED (software)
+
+The device-facing contract is implemented in C.O.R.E. and out of scope for this page's detail; see [core.md](../systems/core.md) (handshake, registration, discovery, error messages, TLS/token requirements, limits) and [Trust Boundaries](../security/trust-boundaries.md).
+
+## 6. Evolving the contracts
 
 - Any change to a cross-system contract is a **decision** — record it under [Decisions](../decisions/README.md).
-- Version contracts explicitly ([Versioning](../development/versioning.md)).
+- Version contracts explicitly ([Versioning](../development/versioning.md)). R.E.S.C.S. serves its contract as data so capability discovery stays versioned.
 - A contract change that breaks a caller is a breaking change regardless of which system defines it.
 
 ## Related

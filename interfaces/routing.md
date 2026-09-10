@@ -1,6 +1,6 @@
 # Routing Contract
 
-> [!NOTE] **Purpose:** Defines how messages are directed to the right endpoint. The in-C.O.R.E. router is **IMPLEMENTED**; cross-system routing is built on the same principles but is **PLANNED**.
+> [!NOTE] **Purpose:** Defines how messages are directed to the right endpoint. The in-C.O.R.E. router and device-to-device routing are **IMPLEMENTED**; A.S.I.S.-facing cross-system routing builds on the same principles and is **PLANNED**.
 
 ## 1. Responsibilities
 
@@ -24,9 +24,13 @@ Routing does **not** own: authorization (see [Authorization](../security/authori
 
 ## 3. Current implementation
 
-[IMPLEMENTED] C.O.R.E.'s `Router` maps message type → service endpoint and delegates to the `Transport` with counters, and the full `Message → Router → Service → Response` path is tested ([core.md](../systems/core.md)).
+[IMPLEMENTED] C.O.R.E.'s `Router` maps message type → service endpoint and delegates to the `Transport` with counters; the full `Message → Router → Service → Response` path is tested ([core.md](../systems/core.md)).
 
-## 4. Cross-system routing (PLANNED)
+[IMPLEMENTED] Device-to-device routing: C.O.R.E. acts as the central hub (`DEVICE A → C.O.R.E. → DEVICE B`), validating source identity, destination registration, online state and active connection before forwarding; forwarded messages preserve `message_id`, `message_type`, `payload`, `request_id`, `identity_id`, source and destination. Offline/unavailable destinations produce structured device errors, never silent drops.
+
+[IMPLEMENTED] Device-oriented routing of distributed data: retrieved R.E.S.C.S. data is normalized, deterministically ordered, paginated and delivered as `DATA_RESPONSE` messages over this routing layer.
+
+## 4. A.S.I.S.-facing cross-system routing (PLANNED)
 
 When C.O.R.E. routes outward (R.E.S.C.S. adapter, device transport), the *delivery endpoint* becomes an adapter or device endpoint registered with the router under a message type. The router itself does not change shape — only the endpoints behind the types change. This preserves the contract as integrations land.
 

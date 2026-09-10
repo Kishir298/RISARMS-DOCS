@@ -16,7 +16,7 @@ Every message must carry:
 | Payload | Validated, serializable payload | structure per message type |
 | Timestamp | When the message was produced | UTC |
 
-> [!NOTE] **Implementation status:** A `Message` model with these semantics is [IMPLEMENTED] inside C.O.R.E. (`core/communication`). Cross-system message envelopes are **PLANNED** — the exact field names will be locked when cross-system transport lands (v0.2 Phase 9/10).
+> [!NOTE] **Implementation status:** A `Message` model with these semantics is [IMPLEMENTED] inside C.O.R.E. (`core/communication`), and the external device protocol enforces message identity (source must equal the authenticated connection identity). Cross-system message envelopes beyond the device protocol (e.g. an A.S.I.S.-facing envelope) remain **PLANNED** — field names lock when that transport lands.
 
 ## 2. Requests
 
@@ -36,7 +36,7 @@ A request is a message that expects a response. Contract requirements:
 
 Contract requirements:
 
-- Errors are typed and carry a stable code (not free-text only). C.O.R.E. already does this — see `errors/` in [core.md](../systems/core.md).
+- Errors are typed and carry a stable code (not free-text only). C.O.R.E. already does this — see `errors/` in [core.md](../systems/core.md) — and R.E.S.C.S. exposes a stable JSON error envelope with machine-readable codes ([Integration Contracts](integration-contracts.md)).
 - Transport/routing/validation failures produce defined error types.
 - An error must never be a silent drop from the ecosystem's perspective; it must be observable (response, event, or log).
 - Cross-system error codes will be mapped per-adapter ([integration-contracts.md](integration-contracts.md)).
