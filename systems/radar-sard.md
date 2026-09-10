@@ -1,6 +1,6 @@
 # RadarS.A.R.D. — Radar Security, Anomaly Reconnaissance Device
 
-> [!NOTE] **Status:** **PLANNED / FUTURE.** This subsystem has no code. This page documents its design intent.
+> [!NOTE] **Status:** **PLANNED / FUTURE.** No RadarS.A.R.D. repository exists — locally or on GitHub. This page documents design intent only.
 
 ## 1. What RadarS.A.R.D. is
 

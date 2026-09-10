@@ -1,8 +1,6 @@
 # T.I.V.I.S.S. — Though I'm Vanquished, I'm Still Stronger
 
-> [!NOTE] **Status:** Early **IN DEVELOPMENT**. A standalone `tiviss` codebase now exists (identity, memory, permissions, ownership, handover, integrations and a runtime) that is linted and formatted with **ruff** (`ruff check` and `ruff format --check` pass clean; config in `pyproject.toml`). The long-term handover model this page documents is still to be determined.
-
-> [!NOTE] **Integration adapters:** `tiviss.integrations` ships the `IntegrationAdapter` abstraction plus C.O.R.E./R.E.S.C.S. adapters and re-exports `IntegrationRequest`, `IntegrationResponse` and `IntegrationStatus`. These are interfaces and local/mock implementations only — they do not connect to the real C.O.R.E. or R.E.S.C.S. yet.
+> [!NOTE] **Status:** Foundation **IN DEVELOPMENT** (v0.1.0 on GitHub: `https://github.com/Kishir298/TIVISS`). A standalone `tiviss` codebase exists remotely with an implemented identity model, ownership state model, agent foundation, memory abstraction, integration adapter interfaces (C.O.R.E./R.E.S.C.S., local/mock only) and a runtime. **No TIVISS repository exists in the local `RISARMS/` workspace** — local development has not started; remote-only. The real-world handover mechanism is intentionally not implemented yet, and the long-term handover model is still to be determined.
 
 ## 1. What T.I.V.I.S.S. is
 
@@ -42,7 +40,15 @@ The distinction is architectural:
 - Who administers T.I.V.I.S.S.'s permissions after handover, and how do they degrade if unmanaged?
 - Does T.I.V.I.S.S. use C.O.R.E. services, the device transport, and R.E.S.C.S. the same way A.S.I.S. does — but with its own identity profile?
 
-Until these are resolved, T.I.V.I.S.S. remains **PLANNED** and must not be scaffolded as a copy of A.S.I.S. Track decisions under [Decisions](../decisions/README.md).
+Until these are resolved, T.I.V.I.S.S. remains in its remote foundation phase and must not be scaffolded as a copy of A.S.I.S. Track decisions under [Decisions](../decisions/README.md).
+
+## 5. Where the code lives
+
+- GitHub: `https://github.com/Kishir298/TIVISS` (v0.1.0 foundation)
+- Local workspace: **not present** under `RISARMS/`. Any local T.I.V.I.S.S. work should clone the repository rather than recreating it.
+- Integration adapters (`IntegrationAdapter` plus C.O.R.E./R.E.S.C.S. adapters) are interfaces and local/mock implementations only — they do not connect to the real C.O.R.E. or R.E.S.C.S. yet.
+
+> [!IMPORTANT] T.I.V.I.S.S. must not be confused with A.S.I.S. or with [A.S.C.S.](asc.md): three distinct systems with distinct identities.
 
 ## Related
 
