@@ -56,7 +56,8 @@ Equally important is what each system does **not** own:
 
 ```text
 RISARMS/
-├── CORE/           <- owned by C.O.R.E. development
+├── CORE-HOST/      <- owned by C.O.R.E. development (server/runtime, package `core`)
+├── CORE-CLIENT/    <- owned by C.O.R.E. development (external-device client, package `client`, stdlib-only)
 ├── RESCS/          <- owned by R.E.S.C.S. development (independent)
 ├── ASIS/           <- owned by A.S.I.S. development (independent)
 ├── ASCS/           <- owned by A.S.C.S. development (independent)

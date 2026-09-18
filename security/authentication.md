@@ -17,8 +17,6 @@ Identity → Authentication → Authorization
 - **R.E.S.C.S.** — **IMPLEMENTED.** `X-API-Key` (min 16 chars) is verified with a constant-time compare on protected routes; the authenticated principal drives owner scoping. Optional single-owner lock mode (`RESCS_API_KEY_OWNER`). One shared key — not a per-client identity system.
 - **A.S.I.S.** — no network-facing authentication; local single-user client.
 - **A.S.C.S.** — local-only tool; no network-facing authentication by design.
-- **A.S.I.S.** — no network-facing authentication; local single-user client.
-- **A.S.C.S.** — local-only tool; no network-facing authentication by design.
 - **T.I.V.I.S.S. / RadarS.A.R.D.** — no code connected.
 
 > [!IMPORTANT] **There is no cross-system (ecosystem-wide) authentication scheme.** The two implemented mechanisms protect two specific perimeters. Anything beyond them is future work.

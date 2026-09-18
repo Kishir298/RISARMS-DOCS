@@ -8,7 +8,7 @@ R.I.S.A.R.M.S. is an ecosystem of systems. Storage (R.E.S.C.S.) and the control 
 
 R.E.S.C.S. is an **independent project**, developed, versioned, and maintained separately from C.O.R.E.
 
-- Filesystem: `RISARMS/RESCS/` — a sibling of `CORE/`, not a child.
+- Filesystem: `RISARMS/RESCS/` — a sibling of `CORE-HOST/` + `CORE-CLIENT/`, not a child.
 - C.O.R.E. and R.E.S.C.S. communicate only through defined interfaces and communication contracts ([integration-contracts](../interfaces/integration-contracts.md)).
 - C.O.R.E. never contains R.E.S.C.S. code; R.E.S.C.S. never imports C.O.R.E. internals.
 

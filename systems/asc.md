@@ -1,6 +1,8 @@
 # A.S.C.S. — A Smart Coding System
 
-> [!NOTE] **Status:** **IMPLEMENTED as a standalone tool** (v0.3.0, ~560 deterministic tests + opt-in live tests). A.S.C.S. is a local, private, autonomous coding agent built on Ollama: it plans, writes, runs and verifies code inside an explicit workspace, with three session modes, a web UI and a terminal TUI. It currently has **no C.O.R.E./R.E.S.C.S./A.S.I.S. integration** — its own package docstring states it is "intended to integrate with RISARMS and eventually be usable by ASIS and TIVISS."
+> [!NOTE] **File note:** this page lives at `systems/asc.md` (abbreviation `asc`) for historical link stability; it documents **A.S.C.S.**
+
+> [!NOTE] **Status:** **IMPLEMENTED as a standalone tool** (v0.3.0, 949 passed / 6 skipped 2026-09-18 + opt-in live tests). A.S.C.S. is a local, private, autonomous coding agent built on Ollama: it plans, writes, runs and verifies code inside an explicit workspace, with three session modes, a web UI and a terminal TUI. It currently has **no C.O.R.E./R.E.S.C.S./A.S.I.S. integration** — its own package docstring states it is "intended to integrate with RISARMS and eventually be usable by ASIS and TIVISS."
 
 ## 1. What A.S.C.S. is
 
@@ -10,12 +12,12 @@ Its declared long-term role in R.I.S.A.R.M.S. is as a coding capability that A.S
 
 ## 2. Project facts
 
-- Location: `RISARMS/ASCS/` (sibling of `CORE/`, `RESCS/`, `ASIS/`, `RISARMS-DOCS/`)
+- Location: `RISARMS/ASCS/` (sibling of `CORE-HOST/` + `CORE-CLIENT/`, `RESCS/`, `ASIS/`, `RISARMS-DOCS/`)
 - Own git repository (origin `https://github.com/Kishir298/ASCS.git`, branch `main`, 82 commits)
 - Package: `agent` (distribution name `coding-agent`), version `0.3.0`
 - Entry point: `risa` (e.g. `risa --auto "…"`, `risa --tasks "…"`, `risa --ui`, `risa --tui`, `risa --doctor`)
 - Runtime: **Windows-only** (web UI/TUI + Ollama; 32 GB target); **dev testing is cross-platform** (pytest passes on macOS/Linux)
-- Tests: ~560 deterministic tests (live Ollama tests are opt-in via `RISALIVE=1` and skipped by default)
+- Tests: 949 passed / 6 skipped 2026-09-18 (live Ollama tests opt-in via `RISALIVE=1`, skipped by default; verify with `pytest -q`)
 
 ## 3. What is implemented
 

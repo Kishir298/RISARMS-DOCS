@@ -141,13 +141,16 @@ The ecosystem the documentation governs:
 
 ```text
 RISARMS/
-├── CORE/           <- https://github.com/Kishir298/CORE
+├── CORE-HOST/      <- https://github.com/Kishir298/CORE-HOST (server/runtime, package `core`)
+├── CORE-CLIENT/    <- https://github.com/Kishir298/CORE-CLIENT (stdlib-only external-device client, package `client`)
 ├── RESCS/          <- https://github.com/Kishir298/RESCS
 ├── ASIS/           <- https://github.com/Kishir298/ASIS
 ├── ASCS/           <- https://github.com/Kishir298/ASCS
 ├── TIVISS/         <- (GitHub only: Kishir298/TIVISS — no local checkout)
 └── RISARMS-DOCS/   <- this repository
 ```
+
+> [!NOTE] **Out-of-scope sibling:** a local-first food companion `Flavora/` may sit beside these directories on a developer machine. It is **not** an ecosystem member and is **not** governed by this architecture — do not infer membership by proximity.
 
 > [!IMPORTANT] **Independence rule:** R.E.S.C.S., A.S.I.S., A.S.C.S. and T.I.V.I.S.S. are independent projects. They live *beside* C.O.R.E., not inside it. Integration happens through defined interfaces and communication contracts, never through code sharing.
 

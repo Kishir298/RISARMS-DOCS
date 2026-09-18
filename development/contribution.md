@@ -21,7 +21,7 @@ The ecosystem runs on these principles (established in [Architecture Overview](.
 2. **Never invent APIs.** Documentation describes architectural requirements and contracts ([interfaces](../interfaces/communication.md)); concrete APIs are locked by the owning code, not by docs.
 3. **Keep the ownership table accurate.** Responsibility changes update [System Boundaries](../architecture/system-boundaries.md) first, then the owning system page.
 4. **Cross-link.** New/updated docs link to related architecture, interfaces, security, and decisions documents.
-5. **Consistent terminology.** Use canonical dotted names (`C.O.R.E.`, `R.E.S.C.S.`, `A.S.I.S.`, `T.I.V.I.S.S.`, `RadarS.A.R.D.`, `A.S.C.S.`) and directory forms in backticks (`CORE/`, `RESCS/`, `ASIS/`, `ASCS/`, `RISARMS-DOCS/`).
+5. **Consistent terminology.** Use canonical dotted names (`C.O.R.E.`, `R.E.S.C.S.`, `A.S.I.S.`, `T.I.V.I.S.S.`, `RadarS.A.R.D.`, `A.S.C.S.`) and directory forms in backticks (`CORE-HOST/`, `CORE-CLIENT/`, `RESCS/`, `ASIS/`, `ASCS/`, `RISARMS-DOCS/`).
 6. **Record decisions.** Any meaningful architectural choice becomes an [ADR](../decisions/README.md), even after the fact.
 
 ## 3. Rules for ecosystem code agents
@@ -36,7 +36,7 @@ The ecosystem runs on these principles (established in [Architecture Overview](.
 ## 4. Contribution workflow (this repo)
 
 1. Create/update docs in the matching directory (`architecture/`, `systems/`, `interfaces/`, `security/`, `development/`, `decisions/`).
-2. Validate links and diagrams before opening a change ([Validation checklist in README](../README.md#8-how-to-use-this-documentation)).
+2. Validate links and diagrams before opening a change (see [How to use this documentation](../README.md#8-how-to-use-this-documentation) and [Testing](testing.md)).
 3. Commit in logical bundles with `docs:` prefixed messages (see commit history of this repository for the pattern).
 
 ## Related

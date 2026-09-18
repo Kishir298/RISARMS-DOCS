@@ -1,6 +1,6 @@
 # A.S.I.S. — A Smart Intelligence System
 
-> [!NOTE] **Status:** **IN DEVELOPMENT** — rebuilt on a new architecture. The `asis` package (v0.1.0) ships a working CLI, AI provider layer, inference/conversation/context engines, local SQL memory, a tool framework (with two concrete tools), permissions, events, and a pluggable voice pipeline, backed by a first test suite (8 test files). Legacy `Forza`-era trees (`core/`, `02_voice/`, `monitoring/`) still exist beside the new package and are deprecated. C.O.R.E./R.E.S.C.S. integration is contract-defined but **not connected**. A.S.I.S. is an **independent project**.
+> [!NOTE] **Status:** **IN DEVELOPMENT** — rebuilt `asis` package ships CLI (stateful multi-turn), Ollama provider, inference/conversation/context engines, local SQLite memory (query-scoped recall), tool system (calculator 30 ops, 136-lang translation, web search/fetch, coding tools, 7 CORE tools; native function-calling primary, up to ASIS_TOOL_MAX_CALLS_PER_TURN per turn), permissions (confirmation-gated), events, and voice pipeline sharing app chat loop. Suite: 42 files / 693 passed (2026-09-18, verify with pytest -q). Legacy Forza trees removed. C.O.R.E. uplink is a real optional adapter (via CORE-CLIENT, standalone by default; physical LAN validation NOT PERFORMED). R.E.S.C.S. remains future/placeholder. A.S.I.S. is an **independent project**.
 
 ## 1. What A.S.I.S. is
 
@@ -26,7 +26,7 @@ A.S.I.S. **does not directly own** C.O.R.E.'s responsibilities: message routing,
 
 > [!IMPORTANT] A.S.I.S. is an independent project. It must **never** be placed inside CORE. It uses C.O.R.E. through interfaces. Rationale: ADR [0002](../decisions/0002-asis-independent-from-core.md).
 
-- Location: `RISARMS/ASIS/` (sibling of `CORE/`, `RESCS/`, `ASCS/`, `RISARMS-DOCS/`)
+- Location: `RISARMS/ASIS/` (sibling of `CORE-HOST/`, `CORE-CLIENT/`, `RESCS/`, `ASCS/`, `RISARMS-DOCS/`)
 - Own git repository (origin `https://github.com/Kishir298/ASIS.git`, branch `main`; `legacy-before-rebuild` branch preserves the pre-rebuild state)
 - Stack: Python ≥ 3.11, setuptools package `asis`; extras for AI (`ollama`, `requests`), voice (`faster-whisper`, `silero-vad`, `sounddevice`, torch stack, openwakeword), dev (pytest/ruff/black)
 - Entry points: `asis` console script (`asis.cli.main:entry`) and `python -m asis`
@@ -43,7 +43,7 @@ A.S.I.S. **does not directly own** C.O.R.E.'s responsibilities: message routing,
 - SQL file database (`MemoryDatabase`), `MemoryStorage` CRUD, `MemoryManager`, `MemorySearch`. Local-only: A.S.I.S. memory does not persist through R.E.S.C.S. today.
 
 ### `asis/tools` — tool framework
-- `Tool` base, registry, router, executor with authorization, result handling — **plus two concrete tools** (`EchoTool`, `CurrentTimeTool`).
+- `Tool` base, shared registry, router, executor with authorization, native function-calling primary + heuristic fallback. Concrete tools: offline calculator (30 ops, SymPy-verified), offline translation (136 langs), web search/fetch (SSRF-guarded, opt-in ASIS_WEB_ENABLED), coding workspace tools (A.S.C.S. modes), 7 CORE tools (discover/info/status/data/service/agent/send, HIGH confirmation-gated). Dangerous tools ship gated — none ungated.
 
 ### `asis/permissions`, `asis/identity`, `asis/events`, `asis/configuration`
 - Permission models with confirmation prompts, sandbox path resolution, secrets/validation helpers; `Identity`/`build_identity` and personality; thread-safe event bus; env-driven settings.
@@ -52,36 +52,23 @@ A.S.I.S. **does not directly own** C.O.R.E.'s responsibilities: message routing,
 - Component model, lifecycle, runtime, state, interrupt handling.
 
 ### `asis/voice` — pluggable voice pipeline
-- Pipeline/factory abstraction with engines (mock, wakeword) and input/speech/speaker/tts packages. Functional in isolation; **not wired into the chat loop yet**.
+- Pipeline/factory abstraction (mock default; faster-whisper/STT, pyttsx3/TTS, Silero VAD, wake-word optional). Shares `AssistantApp.chat()`; real-engine hardware validation NOT PERFORMED.
 
 ### Tests
-- Top-level `tests/` suite (8 files: ai, app, cli, events, identity, memory, tools) plus voice tests; runs via `pytest`.
+- Top-level `tests/` suite (42 files, 693 passed 2026-09-18): config, ai/conversation/memory, calculator (62), translation (54), web (89), tools/permissions, coding, voice, CLI/interactive, offline, CORE adapter/tools (7 files); runs via `python3 -m pytest -q`.
 
-## 4. Legacy material (deprecated, still present)
+## 4. Legacy material (removed)
 
-The repository root still contains pre-rebuild trees that are **not** part of the new architecture:
+Pre-rebuild Forza-era trees (`core/`, `02_voice/`, `monitoring/`) were **removed** from the working tree (history only). Do not build on them; `pyproject.toml` + `requirements/` are authoritative.
 
-| Path | Origin | Status |
-|---|---|---|
-| `core/` (ForzaRuntime, config/defaults, logging) | Forza-AI | Deprecated; superseded by `asis/system` and `asis/configuration` |
-| `02_voice/` (input/processing/synthesis/wakeword) | Forza-AI voice work | Deprecated; superseded by `asis/voice` |
-| `monitoring/` (macOS collectors) | Forza-AI system monitoring | Deprecated |
-| `requirements.txt`, `setup_venv.py`, `ASIS.code-workspace` | Mixed-era tooling | Present; `pyproject.toml` is authoritative |
+## 5. A.S.I.S. ↔ C.O.R.E. ↔ R.E.S.C.S. integration (CORE real-optional, RESCS future)
 
-A `cloud/memory_api` skeleton (FastAPI/SQLAlchemy) existed in history and was deleted in the working tree. Treat deprecated trees as reference material, not as the architecture; do not build on them.
-
-## 5. A.S.I.S. ↔ C.O.R.E. ↔ R.E.S.C.S. integration (defined, not connected)
-
-The `asis/integrations` package defines the integration surface:
-
-- `integrations/core` — `CoreClient` interface (`ServiceRequest`, `CoreResponse`) mirroring the eventual C.O.R.E. communication contract, plus a local `MockCoreAdapter`. **Only the mock runs today.**
-- `integrations/rescs` — `StorageClient` interface and a `RESCSAdapter` placeholder that reports R.E.S.C.S. as unavailable; A.S.I.S. uses its local memory provider until integration is established.
-
-None of this is connected to real C.O.R.E. or R.E.S.C.S. code — the interfaces are A.S.I.S.-local abstractions, and no C.O.R.E. adapter for A.S.I.S. exists yet.
+- `integrations/core` — `RealCoreAdapter` + `CoreConnectionManager` over `CORE-CLIENT/CoreDeviceClient` (TCP+TLS, `CORE_HANDSHAKE`→auth→`DEVICE_REGISTER`→online). Opt-in via `ASIS_CORE_ENABLED=true`; standalone by default. Local operation survives host loss; reconnect bounded/stop-aware; `CORE_UNAVAILABLE` on failure. Physical LAN validation NOT PERFORMED.
+- `integrations/rescs` — placeholder adapter (`available()->False`); future storage flows via C.O.R.E., never direct.
 
 ```text
-A.S.I.S. ──(defined interface, no live traffic)──▶ C.O.R.E.
-A.S.I.S. ──(defined interface, no live traffic)──▶ R.E.S.C.S.
+A.S.I.S. ──(optional uplink, standalone by default)──▶ CORE-HOST (via CORE-CLIENT)
+A.S.I.S. ──(future, via C.O.R.E.)──▶ R.E.S.C.S.
 ```
 
 ## Related

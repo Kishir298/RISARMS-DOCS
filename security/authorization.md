@@ -31,4 +31,3 @@ Authorization answers: *"Given a proven identity, what may this actor do?"* It s
 - [Authentication](authentication.md)
 - [Security Overview](overview.md)
 - [Trust Boundaries](trust-boundaries.md)
-- [Security Overview](overview.md)

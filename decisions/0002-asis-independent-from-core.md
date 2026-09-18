@@ -8,7 +8,7 @@ The intelligence layer (A.S.I.S.) and the control engine (C.O.R.E.) serve differ
 
 A.S.I.S. is an **independent project**, developed and versioned separately from C.O.R.E.
 
-- Filesystem: `RISARMS/ASIS/` — a sibling of `CORE/`, not a child.
+- Filesystem: `RISARMS/ASIS/` — a sibling of `CORE-HOST/` + `CORE-CLIENT/`, not a child.
 - A.S.I.S. uses C.O.R.E. through interfaces and communication contracts.
 - A.S.I.S. does **not** directly own C.O.R.E.'s responsibilities (routing, resource registry, runtime, configuration, health, security infrastructure).
 - A.S.I.S. reaches storage ([R.E.S.C.S.](../systems/rescs.md)) through C.O.R.E., never directly.

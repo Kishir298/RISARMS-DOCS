@@ -34,8 +34,8 @@ C.O.R.E. is the **central management and control engine** of R.I.S.A.R.M.S. It i
 
 ## 2. Filesystem and project
 
-- Location: `RISARMS/CORE/` (a sibling of `RESCS/`, `ASIS/`, `ASCS/`, `RISARMS-DOCS/`)
-- Own git repository (origin `https://github.com/Kishir298/CORE.git`, branch `main`)
+- Locations: `RISARMS/CORE-HOST/` (server/runtime, package `core`) + `RISARMS/CORE-CLIENT/` (stdlib-only external-device client, package `client`, Option A login). Former single `RISARMS/CORE/` references mean this HOST+CLIENT split.
+- Own git repositories (`CORE-HOST` + `CORE-CLIENT`, branch `main`)
 - Language: Python (>= 3.10), package name `core`
 - Runtime requirements: `PyYAML` only; no web framework
 - CLI entry point: `python -m core` → `core.cli.main.main()`
@@ -75,8 +75,9 @@ core/
 ├── scheduler/     AgentScheduler, agent profiles, assignments
 ├── security/      SecurityManager, SecurityPolicy, auth providers
 └── services/      ServiceManager, ServiceDispatcher
-client/            stdlib-only external-device client (provisioning/login)
-config/            core.yaml (dev), core.lan.example.yaml (LAN deployment)
+```
+Host layout: `CORE-HOST/core/` (above) + `CORE-HOST/config/` (`core.yaml` dev, `core.lan.example.yaml` LAN deployment).
+Client lives separately: `CORE-CLIENT/client/core_device_client.py` — minimal stdlib external-device client with Option A login semantics (never imports `core`).
 ```
 
 ### 4.1 Purpose of each subsystem (highlights beyond the v0.1 foundation)
@@ -130,7 +131,7 @@ These are deployment-validation items, not missing software:
 
 ## 5. Test coverage
 
-- **48 test files; README-documented result: 649 passed** (verify with `pytest -q` against the current checkout).
+- **50 test files approx; README-documented result: 689 passed (2026-09-18)** (verify with `pytest -q` against the current checkout).
 - Coverage includes application orchestration, communication/TLS/framing, protocol negotiation, authentication, device registration/persistence/reconnect, discovery, presence, routing, services, resources, organization/reconciliation, R.E.S.C.S. adapters, scheduler, data distribution, health, events, integration behavior, and 0.2.x legacy compatibility.
 
 ## 6. Roadmap

@@ -26,7 +26,7 @@ R.E.S.C.S. is the **cloud/data storage system** of R.I.S.A.R.M.S. It provides st
 
 > [!IMPORTANT] R.E.S.C.S. is an independent project. It must **never** be placed inside CORE. C.O.R.E. communicates with R.E.S.C.S. through defined interfaces and protocols — the adapter boundary plus the machine-readable contract both sides now ship. Rationale: ADR [0001](../decisions/0001-rescs-independent-from-core.md), ADR [0005](../decisions/0005-storage-integration-via-adapter.md).
 
-- Location: `RISARMS/RESCS/` (sibling of `CORE/`, `ASIS/`, `ASCS/`, `RISARMS-DOCS/`)
+- Location: `RISARMS/RESCS/` (sibling of `CORE-HOST/` + `CORE-CLIENT/`, `ASIS/`, `ASCS/`, `RISARMS-DOCS/`)
 - Own git repository (origin `https://github.com/Kishir298/RESCS`, branch `main`)
 - Stack: Python ≥ 3.11, FastAPI + uvicorn, SQLAlchemy 2.0, psycopg 3 (PostgreSQL), Pydantic v2 + pydantic-settings
 - Version: **`0.3.0`** (pyproject, package and CHANGELOG agree; 29 commits of phase-based development)

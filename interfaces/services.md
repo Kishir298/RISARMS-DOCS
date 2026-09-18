@@ -50,6 +50,6 @@ Events are the service layer's way of announcing state changes.
 ## Related
 
 - [Messaging Contract](messaging.md)
-- [Events in the Ecosystem](../architecture/data-flow.md)
-- [Robot Events / RadarS.A.R.D. reporting](../systems/radar-sard.md)
+- [Service lifecycle](../architecture/lifecycle.md)
+- [RadarS.A.R.D. reporting](../systems/radar-sard.md)
 - [C.O.R.E. system page](../systems/core.md)
