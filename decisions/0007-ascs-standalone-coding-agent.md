@@ -23,7 +23,7 @@ A.S.C.S. is recognized as a **member system of the R.I.S.A.R.M.S. ecosystem** wi
 
 ## Consequences
 
-- Positive: the architecture reflects the real ecosystem; A.S.C.S. keeps an independent cadence (already at v0.3.0 with ~560 tests); the future integration path (via C.O.R.E.) is explicit.
+- Positive: the architecture reflects the real ecosystem; A.S.C.S. keeps an independent cadence (already at v0.3.0 with 949 passed / 6 skipped 2026-09-18); the future integration path (via C.O.R.E.) is explicit.
 - Cost: until integration, the ecosystem map shows a member with no live edges; the `asis-local`/`asis-offload` scheduler profiles are reservations, not integrations, and must not be documented as working paths.
 - Guardrail: any direct A.S.C.S. call from A.S.I.S. or T.I.V.I.S.S. that bypasses C.O.R.E. invalidates this decision.
 

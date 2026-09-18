@@ -1,6 +1,6 @@
 # Authorization
 
-> [!NOTE] **Status:** **Implemented as primitives and a config-gated enforcement mechanism; enforcement is inactive in the default development configuration.** C.O.R.E. authorization engages at the service-dispatch boundary only when `security.enforce_authorization` is true. External-device access control is enforced via authentication + identity binding (see [Authentication](authentication.md)). End-to-end, cross-system authorization enforcement remains future work.
+> [!NOTE] **Status:** **IMPLEMENTED** (primitives) / **PLANNED** (enforcement). Implemented as primitives and a config-gated enforcement mechanism; enforcement is inactive in the default development configuration. C.O.R.E. authorization engages at the service-dispatch boundary only when `security.enforce_authorization` is true. External-device access control is enforced via authentication + identity binding (see [Authentication](authentication.md)). End-to-end, cross-system authorization enforcement remains future work.
 
 ## 1. Definition
 

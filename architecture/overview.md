@@ -96,7 +96,7 @@ Every feature or system in this documentation is labeled with one of four status
 
 **Any sentence in this documentation that describes behavior carries one of these statuses.** "Planned as implemented" language is forbidden: if the behavior is described but marked PLANNED/FUTURE, it is not real yet.
 
-> [!NOTE] **Status synonyms used in this repo:** `COMPLETE` / `Shipped` / `Current release` = `IMPLEMENTED`. `NOT YET PERFORMED` / `Ready for External Validation` = software `IMPLEMENTED`, deployment-validation `PLANNED` (physical LAN, live backends, 24/7 endurance still required).
+> [!NOTE] **Status vocabulary — use only these four:** `IMPLEMENTED` / `IN DEVELOPMENT` / `PLANNED` / `FUTURE`. Do not use `COMPLETE`, `Shipped`, or `Current release` as status labels. `NOT YET PERFORMED` / `Ready for External Validation` means software `IMPLEMENTED`, deployment-validation `PLANNED` (physical LAN, live backends, 24/7 endurance still required).
 
 ## 4. Architectural principles
 
@@ -133,7 +133,7 @@ The full ownership table is in [System Boundaries](system-boundaries.md#1-respon
 
 | System | Now | Next |
 |---|---|---|
-| **C.O.R.E.** | v0.3.0 software complete (689 passed 2026-09-18,.verify with pytest -q): TLS device transport, token auth, device registry/persistence, agent scheduling, HTTP R.E.S.C.S. adapter, data distribution | Physical Windows ↔ Mac LAN validation; 24/7 operational validation |
+| **C.O.R.E.** | v0.3.0 software IMPLEMENTED (689 passed 2026-09-18, verify with pytest -q): TLS device transport, token auth, device registry/persistence, agent scheduling, HTTP R.E.S.C.S. adapter, data distribution | Physical Windows ↔ Mac LAN validation; 24/7 operational validation |
 | **R.E.S.C.S.** | v0.3.0: versioned HTTP API, enforced API-key auth, records/files, streaming + resumable uploads, lifecycle/governance, C.O.R.E. contract | Live PostgreSQL/Supabase + real S3 validation; deployed C.O.R.E. ↔ R.E.S.C.S. interop |
 | **A.S.I.S.** | Rebuilt `asis` package (CLI, Ollama provider, memory, 30-op calculator, 136-lang translation, web tools, coding mode, permissions, voice pipeline; 693 tests) + Forza trees removed | Physical LAN validation; R.E.S.C.S. via C.O.R.E. (future) |
 | **T.I.V.I.S.S.** | Remote v0.1.0 foundation (identity, ownership states, adapters as interfaces) | Bring development local; resolve the handover model |

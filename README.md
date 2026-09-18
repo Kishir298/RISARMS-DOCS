@@ -73,10 +73,10 @@ The arrows are explained precisely in [System Interactions](architecture/system-
 |---|---|---|
 | **C.O.R.E.** | v0.3.0 **IMPLEMENTED** | Full v0.2 phase set completed; v0.3 adds TLS external transport, token authentication, device registration/persistence, device discovery, device-to-device routing, agent scheduling, HTTP R.E.S.C.S. adapter, data distribution and provisioning. Physical Windows ↔ Mac LAN validation and 24/7 operational validation remain **NOT YET PERFORMED**. |
 | **R.E.S.C.S.** | v0.3.0 **IMPLEMENTED** | Versioned HTTP API, enforced `X-API-Key` auth, records/files, streaming + resumable uploads, lifecycle/governance, audit, quotas, backup tooling, machine-readable C.O.R.E. contract. Live PostgreSQL/Supabase, real S3 and deployed C.O.R.E. ↔ R.E.S.C.S. interop are **Ready for External Validation**. |
-| **A.S.I.S.** | **IN DEVELOPMENT** | Rebuilt `asis` package: CLI, AI provider layer (Ollama), memory, tools, permissions, events, voice pipeline, first test suite. Legacy Forza trees still present (deprecated). C.O.R.E./R.E.S.C.S. integration defined by interfaces only — **not connected**. |
+| **A.S.I.S.** | **IN DEVELOPMENT** | Rebuilt `asis` package: CLI, AI provider layer (Ollama), memory, tools, permissions, events, voice pipeline, first test suite. Legacy Forza trees removed. C.O.R.E. uplink is a real optional adapter (standalone by default); R.E.S.C.S. remains future. |
 | **T.I.V.I.S.S.** | Foundation **IN DEVELOPMENT** (remote-only) | v0.1.0 foundation exists on GitHub (identity, ownership states, agent foundation, memory abstraction, adapter interfaces). No local repository; real handover intentionally not implemented. |
 | **RadarS.A.R.D.** | **PLANNED / FUTURE** | No code exists anywhere. |
-| **A.S.C.S.** | **IMPLEMENTED** (standalone) | v0.3.0 local coding agent (~560 deterministic tests). Zero ecosystem integration today; C.O.R.E.-mediated use by A.S.I.S./T.I.V.I.S.S. is future intent. |
+| **A.S.C.S.** | **IMPLEMENTED** (standalone) | v0.3.0 local coding agent (949 passed / 6 skipped 2026-09-18). Zero ecosystem integration today; C.O.R.E.-mediated use by A.S.I.S./T.I.V.I.S.S. is future intent. |
 
 The authoritative per-system detail is in [`systems/`](systems/). **Nothing in this repository describes unbuilt functionality as implemented.**
 

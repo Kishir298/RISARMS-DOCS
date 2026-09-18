@@ -32,7 +32,7 @@ A version is only coherent when these agree:
 
 ## 4. Known, accepted quirks (tracked)
 
-- **A.S.I.S.** legacy trees (`core/`, `02_voice/`) are unversioned remnants pending removal — do not treat their internals as part of the current 0.1.0 package.
+- **A.S.I.S.** legacy trees (`core/`, `02_voice/`) were unversioned remnants and are removed — do not treat their internals as part of the current 0.1.0 package.
 - **A.S.C.S.** naming spread (`coding-agent` / `agent` / `risa`) is a distribution-name choice, not a version conflict.
 - **C.O.R.E.** keeps `0.2.x` behavior reachable through negotiation — that is compatibility, not version inconsistency.
 

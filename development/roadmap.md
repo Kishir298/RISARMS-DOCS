@@ -12,8 +12,8 @@ Every roadmap item carries one of:
 
 The ecosystem matures in this order (current position in brackets):
 
-1. ~~**C.O.R.E. v0.2** — make the control engine operational~~ — **COMPLETE** (shipped 0.2.0 → 0.2.1; superseded by v0.3.0).
-2. ~~**R.E.S.C.S. v0.1 completion**~~ — **COMPLETE** (long since past v0.1; now v0.3.0 with full API + enforced auth).
+1. ~~**C.O.R.E. v0.2** — make the control engine operational~~ — **IMPLEMENTED** (shipped 0.2.0 → 0.2.1; superseded by v0.3.0).
+2. ~~**R.E.S.C.S. v0.1 completion**~~ — **IMPLEMENTED** (long since past v0.1; now v0.3.0 with full API + enforced auth).
 3. **C.O.R.E. ↔ R.E.S.C.S. integration** — **IMPLEMENTED in software** (adapter + contract both sides); deployed cross-host interop is the remaining validation step.
 4. **Deployment validation** — physical Windows ↔ Mac LAN validation and 24/7 endurance for C.O.R.E.; live PostgreSQL/Supabase + real S3 for R.E.S.C.S. ← *current frontier*
 5. **A.S.I.S. completion + integration** — wire voice into the chat loop, remove legacy Forza trees, then connect A.S.I.S. to C.O.R.E. (**IN DEVELOPMENT**).
@@ -28,7 +28,7 @@ The 13-phase v0.2 build order is **complete**; the per-phase definitions live in
 
 | Capability area | Status |
 |---|---|
-| v0.2 phases 1–13 (runtime → release) | **COMPLETE** |
+| v0.2 phases 1–13 (runtime → release) | **IMPLEMENTED** |
 | TLS external transport, token auth, device lifecycle/persistence, discovery, device-to-device routing | **IMPLEMENTED** |
 | Agent scheduling (capability-driven, `asis-local`/`asis-offload`/`tiviss-compat` profiles) | **IMPLEMENTED** |
 | R.E.S.C.S. adapters (`InMemory`/`File`/`Http`) + data distribution | **IMPLEMENTED** |
@@ -58,10 +58,10 @@ R.E.S.C.S. documents its own history in `RESCS/CHANGELOG.md` and `docs/architect
 | Rebuilt `asis` package: CLI, AI provider layer (Ollama + mock), memory, tool framework, permissions, identity, events, system/runtime | IMPLEMENTED |
 | Concrete tools (Echo, CurrentTime) | IMPLEMENTED |
 | Voice pipeline abstraction (engines, input/speech/speaker/tts packages) | IMPLEMENTED (standalone) |
-| Test suite (8 files) | IMPLEMENTED |
-| Voice wired into the chat loop | PLANNED |
-| Legacy Forza tree removal (`core/`, `02_voice/`, `monitoring/`) | PLANNED |
-| Real C.O.R.E. integration (beyond the mock adapter) | PLANNED |
+| Test suite (42 files / 693 passed) | IMPLEMENTED |
+| Voice wired into the chat loop | IMPLEMENTED |
+| Legacy Forza tree removal (`core/`, `02_voice/`, `monitoring/`) | IMPLEMENTED |
+| Real C.O.R.E. uplink (opt-in adapter) | IMPLEMENTED (standalone by default) |
 
 ## 6. T.I.V.I.S.S.
 
@@ -69,7 +69,7 @@ Foundation **IN DEVELOPMENT**, remote-only (GitHub `Kishir298/TIVISS`, v0.1.0: i
 
 ## 7. A.S.C.S.
 
-**IMPLEMENTED as a standalone tool** (v0.3.0, ~560 deterministic tests). See [systems/asc.md](../systems/asc.md). Its own phase roadmap (00–06) lives in `ASCS/docs/phases/`. Ecosystem integration through C.O.R.E. is **FUTURE**.
+**IMPLEMENTED as a standalone tool** (v0.3.0, 949 passed / 6 skipped 2026-09-18). See [systems/asc.md](../systems/asc.md). Its own phase roadmap (00–06) lives in `ASCS/docs/phases/`. Ecosystem integration through C.O.R.E. is **FUTURE**.
 
 ## 8. RadarS.A.R.D.
 

@@ -1,6 +1,6 @@
 # Authentication
 
-> [!NOTE] **Status:** **Implemented at two perimeters; absent everywhere else.** C.O.R.E. enforces token-based authentication for external devices (with TLS), and R.E.S.C.S. enforces `X-API-Key` on its API. Internal/legacy C.O.R.E. use retains an existence-based provider. No cross-system authentication model exists — there is no A.S.I.S./T.I.V.I.S.S. traffic to authenticate.
+> [!NOTE] **Status:** **IMPLEMENTED** at two perimeters; **PLANNED** elsewhere. C.O.R.E. enforces token-based authentication for external devices (with TLS), and R.E.S.C.S. enforces `X-API-Key` on its API. Internal/legacy C.O.R.E. use retains an existence-based provider. No cross-system authentication model exists — there is no A.S.I.S./T.I.V.I.S.S. traffic to authenticate.
 
 ## 1. Definition
 

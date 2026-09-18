@@ -26,10 +26,10 @@ C.O.R.E. is the **central management and control engine** of R.I.S.A.R.M.S. It i
 
 ### Non-responsibilities
 
-- Natural-language understanding (→ [A.S.I.S.](../systems/asis.md))
-- Cloud/persistent storage authority (→ [R.E.S.C.S.](../systems/rescs.md)) — C.O.R.E. persists *through* R.E.S.C.S., it does not own a second database
-- Security *sensing*/anomaly detection (→ [RadarS.A.R.D.](../systems/radar-sard.md))
-- AI-agent identity/ownership (→ [T.I.V.I.S.S.](../systems/tiviss.md))
+- Natural-language understanding (→ [A.S.I.S.](asis.md))
+- Cloud/persistent storage authority (→ [R.E.S.C.S.](rescs.md)) — C.O.R.E. persists *through* R.E.S.C.S., it does not own a second database
+- Security *sensing*/anomaly detection (→ [RadarS.A.R.D.](radar-sard.md))
+- AI-agent identity/ownership (→ [T.I.V.I.S.S.](tiviss.md))
 - Autonomous coding (→ [A.S.C.S.](asc.md))
 
 ## 2. Filesystem and project
@@ -47,8 +47,8 @@ C.O.R.E. is the **central management and control engine** of R.I.S.A.R.M.S. It i
 | Version | Role | Status |
 |---|---|---|
 | **v0.1** | Established the architectural foundation and behavioral contracts (subsystem layout, interfaces, models, tests) | Superseded, still compatible |
-| **v0.2** | Made the architecture operational: TCP transport, routing-to-service execution, runtime orchestration, events/health integration, configuration-driven runtime, security integration, R.E.S.C.S. adapter groundwork, real CLI | **Shipped** (`0.2.0` → `0.2.1`); clients remain supported via protocol negotiation |
-| **v0.3** | External-device platform: TLS transport, token authentication, device registration/persistence, device discovery and device-to-device routing, capability-driven agent scheduling, HTTP R.E.S.C.S. adapter, data distribution, provisioning CLI/client | **Current release (`0.3.0`), software IMPLEMENTED; physical LAN validation pending** |
+| **v0.2** | Made the architecture operational: TCP transport, routing-to-service execution, runtime orchestration, events/health integration, configuration-driven runtime, security integration, R.E.S.C.S. adapter groundwork, real CLI | **IMPLEMENTED** (`0.2.0` → `0.2.1`); clients remain supported via protocol negotiation |
+| **v0.3** | External-device platform: TLS transport, token authentication, device registration/persistence, device discovery and device-to-device routing, capability-driven agent scheduling, HTTP R.E.S.C.S. adapter, data distribution, provisioning CLI/client | **IMPLEMENTED** (`0.3.0`); physical LAN validation pending |
 
 v0.3.0 is not "v0.2 finished": it adds an external-device platform on top of the v0.2 operational core. Version negotiation (`core/version.py`) keeps `0.2.0`/`0.2.1` clients working; deprecated APIs are scheduled for removal only in a future breaking version.
 
@@ -142,19 +142,19 @@ The 13-phase v0.2 build order was completed; the phase definitions (objectives, 
 
 | Phase | Focus | Outcome |
 |---|---|---|
-| 1 | Runtime + application orchestration | **COMPLETE** |
-| 2 | Communication + transport abstraction | **COMPLETE** |
-| 3 | Routing + service execution | **COMPLETE** |
-| 4 | Resource + organization integration | **COMPLETE** |
-| 5 | Event-driven integration | **COMPLETE** |
-| 6 | Health integration | **COMPLETE** |
-| 7 | Configuration drives runtime | **COMPLETE** |
-| 8 | Security integration | **COMPLETE** (token auth for external devices; development config still ships with `enforce_authorization: false`) |
-| 9 | R.E.S.C.S. adapter | **COMPLETE** (`InMemory`/`File`/`Http` adapters) |
-| 10 | External-device transport | **COMPLETE** (TCP + TLS + protocol) |
-| 11 | Real CLI lifecycle | **COMPLETE** (foreground control loop; `execute_application` path) |
-| 12 | Full integration test spine | **COMPLETE** (localhost spine; physical LAN validation remains) |
-| 13 | v0.2 cleanup/documentation/release | **COMPLETE** (`0.2.0` → `0.2.1` release) |
+| 1 | Runtime + application orchestration | **IMPLEMENTED** |
+| 2 | Communication + transport abstraction | **IMPLEMENTED** |
+| 3 | Routing + service execution | **IMPLEMENTED** |
+| 4 | Resource + organization integration | **IMPLEMENTED** |
+| 5 | Event-driven integration | **IMPLEMENTED** |
+| 6 | Health integration | **IMPLEMENTED** |
+| 7 | Configuration drives runtime | **IMPLEMENTED** |
+| 8 | Security integration | **IMPLEMENTED** (token auth for external devices; development config still ships with `enforce_authorization: false`) |
+| 9 | R.E.S.C.S. adapter | **IMPLEMENTED** (`InMemory`/`File`/`Http` adapters) |
+| 10 | External-device transport | **IMPLEMENTED** (TCP + TLS + protocol) |
+| 11 | Real CLI lifecycle | **IMPLEMENTED** (foreground control loop; `execute_application` path) |
+| 12 | Full integration test spine | **IMPLEMENTED** (localhost spine; physical LAN validation remains) |
+| 13 | v0.2 cleanup/documentation/release | **IMPLEMENTED** (`0.2.0` → `0.2.1` release) |
 
 ### 6.2 v0.3.0 capability summary
 
