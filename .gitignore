@@ -13,3 +13,23 @@ __pycache__/
 .venv/
 venv/
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local secrets / env (docs repo holds no secrets; guard anyway)
+.env
+.env.*
+!.env.example
+
+# TLS / device material (never commit even if dropped here by tooling)
+*.pem
+*.key
+*.pfx
+*.p12
+*.crt
+*.cer
+.risarms-device.json
+*-device.json
+
+# Logs
+*.log
