@@ -68,6 +68,7 @@ src/rescs/
 - **Storage abstraction** — local directory (default), in-memory, and S3-compatible backend (+ fake for tests); delegated encryption model documented in `docs/encryption.md`.
 - **Operability** — live/ready health endpoints with named dependency checks, request-ID correlation middleware (`X-Request-ID`), optional in-memory rate limiting, backup tooling (`scripts/rescs_backup.py` with verify mode).
 - **Machine-readable C.O.R.E. contract** — `rescs/contract.py` + `GET /api/v1/contract`, documented in `docs/core-integration-contract.md`: envelope, error-code → C.O.R.E. reaction table, reserved namespaces (`RUNNABLES`, `Ops`, `IDEAS`), transport and auth rules. C.O.R.E. ships a consuming integration-test fixture against this contract.
+- **Storage domains (logical ownership)** — reserved namespace prefixes `asis.*` (A.S.I.S.), `tiviss.*` (T.I.V.I.S.S.), `personal.*` (general user cloud data), alongside `core.*`/`rescs.*`. Reservation is advisory by convention; agents enforce their own prefix client-side. Documented in `RESCS/docs/storage-domains.md`; no schema changes, no separate databases.
 
 ## 5. Known gaps (Ready for External Validation)
 

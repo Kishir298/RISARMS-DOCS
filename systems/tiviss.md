@@ -1,6 +1,6 @@
 # T.I.V.I.S.S. — Though I'm Vanquished, I'm Still Stronger
 
-> [!NOTE] **Status:** Foundation **IN DEVELOPMENT** (v0.1.0 on GitHub: `https://github.com/Kishir298/TIVISS`, cloned locally at `RISARMS/TIVISS/`). The standalone `tiviss` codebase has an implemented identity model, ownership state model, agent foundation, memory abstraction, integration adapter interfaces (C.O.R.E./R.E.S.C.S., local/mock only) and a runtime. It is still foundation-only: no live traffic, no real handover. The real-world handover mechanism is intentionally not implemented yet, and the long-term handover model is still to be determined.
+> [!NOTE] **Status:** Agent **IN DEVELOPMENT** (v0.2 capabilities on GitHub: `https://github.com/Kishir298/TIVISS`, cloned locally at `RISARMS/TIVISS/`). Beyond the v0.1.0 foundation (identity, ownership, runtime, memory, permissions, handover state model), TIVISS now has: an interactive CLI (`tiviss` REPL + `--message`, `python -m tiviss`), versioned secret-free state export/import, structured JSON-lines logging, provider timeouts, a replaceable voice abstraction (mocks only), and real stdlib-only transports — `core_tcp` (TCP+TLS external-device protocol) and `rescs_http` (RESCS records API, `tiviss.*` namespaces) — all tested offline against fakes. No live traffic is claimed until exercised against real C.O.R.E./R.E.S.C.S. hosts. The real-world handover mechanism is intentionally not implemented yet.
 
 ## 1. What T.I.V.I.S.S. is
 
@@ -44,9 +44,10 @@ Until these are resolved, T.I.V.I.S.S. remains in its remote foundation phase an
 
 ## 5. Where the code lives
 
-- GitHub: `https://github.com/Kishir298/TIVISS` (v0.1.0 foundation)
-- Local workspace: present at `RISARMS/TIVISS/` (full clone, stdlib-only runtime, 14 offline tests). Still foundation-only — no live traffic.
-- Integration adapters (`IntegrationAdapter` plus C.O.R.E./R.E.S.C.S. adapters) are interfaces and local/mock implementations only — they do not connect to the real C.O.R.E. or R.E.S.C.S. yet.
+- GitHub: `https://github.com/Kishir298/TIVISS` (v0.2 capabilities)
+- Local workspace: present at `RISARMS/TIVISS/` (full clone, stdlib-only runtime, offline deterministic tests). Live transports exist but are unexercised against real hosts.
+- Transports: `tiviss/integrations/core_tcp.py` (real wire protocol, session token RAM-only) and `tiviss/integrations/rescs_http.py` (`X-API-Key`, confined to `tiviss.*` namespaces) sit beside the local/mock adapters; mocks remain the default for tests.
+- Storage: TIVISS cloud data lives under `tiviss.*` RESCS namespaces (see `../..`-repo `RESCS/docs/storage-domains.md`); `asis.*` and `personal.*` are never touched.
 
 > [!IMPORTANT] T.I.V.I.S.S. must not be confused with A.S.I.S. or with [A.S.C.S.](asc.md): three distinct systems with distinct identities.
 

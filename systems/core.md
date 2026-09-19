@@ -134,6 +134,17 @@ These are deployment-validation items, not missing software:
 - **50 test files approx; README-documented result: 689 passed (2026-09-18)** (verify with `pytest -q` against the current checkout).
 - Coverage includes application orchestration, communication/TLS/framing, protocol negotiation, authentication, device registration/persistence/reconnect, discovery, presence, routing, services, resources, organization/reconciliation, R.E.S.C.S. adapters, scheduler, data distribution, health, events, integration behavior, and 0.2.x legacy compatibility.
 
+## 5b. Web portals (v0.4.0)
+
+Localhost-only presentation planes (no new authorities):
+
+- **Host portal** (`CORE-HOST/core/portal/`, default `http://127.0.0.1:8765`, configurable via the `web:` config section): 16 sections — Overview, Devices, Network, Resources, Services, Agents, R.E.S.C.S., Health, Events, Routing, Data Distribution, Sessions, Security, Configuration, Logs, Diagnostics. Starts with the host (`py -m core` prints the URL); CLI remains fully available.
+- **Client portal** (`CORE-CLIENT/client/portal/`, default `http://127.0.0.1:8766`): 8 sections — Dashboard, Devices, R.E.S.C.S., Services, AI, Network, Session, Settings. Works offline (remote sections report `C.O.R.E. HOST OFFLINE`); starts with the client CLI unless `--no-portal`.
+- **Capability detection** is deterministic (HIGH/MEDIUM/LOW/UNKNOWN from RAM + CPU cores; Qwen model profiles centralized in one policy module; no LLM involved).
+- **AI offload** routes through the existing `AgentScheduler` (`agent` service `infer` operation): placement truthfully returned, never fabricated model output.
+- **Security**: recursive response redaction (credentials, session tokens shown only as `ACTIVE`, TLS keys, RESCS/S3 secrets never leave the backend); localhost binding default; location is opt-in manual/device-reported with precision controls; Haversine distance only with both coordinates.
+- Physical LAN validation is still NOT PERFORMED; portal behavior over LAN is covered by automated tests with fakes only.
+
 ## 6. Roadmap
 
 ### 6.1 v0.2 phase outcomes

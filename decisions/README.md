@@ -13,6 +13,7 @@
 | [0005](0005-storage-integration-via-adapter.md) | Storage integrates with C.O.R.E. through an adapter |
 | [0006](0006-security-architecture.md) | Security is layered: identity → authentication → authorization |
 | [0007](0007-ascs-standalone-coding-agent.md) | A.S.C.S. is an ecosystem member that runs standalone until a contract exists |
+| [0008](0008-web-portals-presentation-only.md) | Web portals are presentation-only control planes |
 
 ## 2. Template
 

@@ -65,7 +65,7 @@ R.E.S.C.S. documents its own history in `RESCS/CHANGELOG.md` and `docs/architect
 
 ## 6. T.I.V.I.S.S.
 
-Foundation **IN DEVELOPMENT**, local clone present (GitHub `Kishir298/TIVISS`, v0.1.0: identity model, ownership state model, agent foundation, memory abstraction, adapter interfaces). The defining open question — the handover model — is unresolved; see [systems/tiviss.md](../systems/tiviss.md).
+Agent **IN DEVELOPMENT**, local clone present (GitHub `Kishir298/TIVISS`: v0.2 adds interactive CLI, state export/import, structured logging, voice abstraction, timeouts, and real stdlib-only C.O.R.E./R.E.S.C.S. transports tested offline). The defining open question — the handover model — is unresolved; see [systems/tiviss.md](../systems/tiviss.md).
 
 ## 7. A.S.C.S.
 
