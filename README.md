@@ -61,7 +61,7 @@ The arrows are explained precisely in [System Interactions](architecture/system-
 - **C.O.R.E.** is the central control engine. It owns communication, message protocols, routing, organization, resources, services, runtime/lifecycle, events, dependencies, configuration, health, logging and security infrastructure. It is **not** the primary AI. It runs on the Windows control host and serves external devices. → [systems/core.md](systems/core.md)
 - **R.E.S.C.S.** is the cloud/data storage system: persistent records, file/object storage, retrieval, lifecycle/governance and cloud-backed data. It is an **independent project** (`RESCS/` next to `CORE/`, never inside it). → [systems/rescs.md](systems/rescs.md)
 - **A.S.I.S.** is the primary AI/intelligence layer: natural-language understanding, reasoning, response generation and voice. It is an **independent project** (`ASIS/` next to `CORE/`). It uses C.O.R.E. (and storage through C.O.R.E.) rather than owning C.O.R.E. responsibilities. → [systems/asis.md](systems/asis.md)
-- **T.I.V.I.S.S.** is a separate AI agent with its own identity, configuration, memory, permissions and ownership model — intended to eventually be handed over to another person. It must **not** become a renamed copy of A.S.I.S. Its foundation lives on GitHub; no local checkout exists. → [systems/tiviss.md](systems/tiviss.md)
+- **T.I.V.I.S.S.** is a separate AI agent with its own identity, configuration, memory, permissions and ownership model — intended to eventually be handed over to another person. It must **not** become a renamed copy of A.S.I.S. Its v0.1.0 foundation is cloned locally at `TIVISS/` but remains foundation-only (no live traffic, no real handover). → [systems/tiviss.md](systems/tiviss.md)
 - **RadarS.A.R.D.** is the security/anomaly sensor layer. It detects and reports; C.O.R.E. coordinates the resulting events, logging, health state and responses. → [systems/radar-sard.md](systems/radar-sard.md)
 - **A.S.C.S.** is a local autonomous coding agent (Ollama-based). It is fully implemented as a standalone tool and is intended to eventually be usable by A.S.I.S./T.I.V.I.S.S. through C.O.R.E.; no integration exists yet. → [systems/asc.md](systems/asc.md)
 
@@ -73,8 +73,8 @@ The arrows are explained precisely in [System Interactions](architecture/system-
 |---|---|---|
 | **C.O.R.E.** | v0.3.0 **IMPLEMENTED** | Full v0.2 phase set completed; v0.3 adds TLS external transport, token authentication, device registration/persistence, device discovery, device-to-device routing, agent scheduling, HTTP R.E.S.C.S. adapter, data distribution and provisioning. Physical Windows ↔ Mac LAN validation and 24/7 operational validation remain **NOT YET PERFORMED**. |
 | **R.E.S.C.S.** | v0.3.0 **IMPLEMENTED** | Versioned HTTP API, enforced `X-API-Key` auth, records/files, streaming + resumable uploads, lifecycle/governance, audit, quotas, backup tooling, machine-readable C.O.R.E. contract. Live PostgreSQL/Supabase, real S3 and deployed C.O.R.E. ↔ R.E.S.C.S. interop are **Ready for External Validation**. |
-| **A.S.I.S.** | **IN DEVELOPMENT** | Rebuilt `asis` package: CLI, AI provider layer (Ollama), memory, tools, permissions, events, voice pipeline, first test suite. Legacy Forza trees removed. C.O.R.E. uplink is a real optional adapter (standalone by default); R.E.S.C.S. remains future. |
-| **T.I.V.I.S.S.** | Foundation **IN DEVELOPMENT** (remote-only) | v0.1.0 foundation exists on GitHub (identity, ownership states, agent foundation, memory abstraction, adapter interfaces). No local repository; real handover intentionally not implemented. |
+| **A.S.I.S.** | **IN DEVELOPMENT** | Rebuilt `asis` package: CLI, AI provider layer (Ollama), memory, tools, permissions, events, voice pipeline, first test suite. Legacy `core/` + `02_voice/` trees are deprecated and pending removal. C.O.R.E. uplink is a real optional adapter (standalone by default); R.E.S.C.S. remains future. |
+| **T.I.V.I.S.S.** | Foundation **IN DEVELOPMENT** (local clone present) | v0.1.0 foundation on GitHub and at `TIVISS/` (identity, ownership states, agent foundation, memory abstraction, adapter interfaces). Still foundation-only; real handover intentionally not implemented. |
 | **RadarS.A.R.D.** | **PLANNED / FUTURE** | No code exists anywhere. |
 | **A.S.C.S.** | **IMPLEMENTED** (standalone) | v0.3.0 local coding agent (949 passed / 6 skipped 2026-09-18). Zero ecosystem integration today; C.O.R.E.-mediated use by A.S.I.S./T.I.V.I.S.S. is future intent. |
 
@@ -146,8 +146,8 @@ RISARMS/
 ├── RESCS/          <- https://github.com/Kishir298/RESCS
 ├── ASIS/           <- https://github.com/Kishir298/ASIS
 ├── ASCS/           <- https://github.com/Kishir298/ASCS
-├── TIVISS/         <- (GitHub only: Kishir298/TIVISS — no local checkout)
-└── RISARMS-DOCS/   <- this repository
+├── TIVISS/         <- https://github.com/Kishir298/TIVISS (v0.1.0 foundation, local clone present but foundation-only)
+└── DOCS/           <- this repository (remote: RISARMS-DOCS)
 ```
 
 > [!NOTE] **Out-of-scope sibling:** a local-first food companion `Flavora/` may sit beside these directories on a developer machine. It is **not** an ecosystem member and is **not** governed by this architecture — do not infer membership by proximity.

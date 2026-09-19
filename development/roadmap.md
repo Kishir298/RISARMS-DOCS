@@ -16,9 +16,9 @@ The ecosystem matures in this order (current position in brackets):
 2. ~~**R.E.S.C.S. v0.1 completion**~~ — **IMPLEMENTED** (long since past v0.1; now v0.3.0 with full API + enforced auth).
 3. **C.O.R.E. ↔ R.E.S.C.S. integration** — **IMPLEMENTED in software** (adapter + contract both sides); deployed cross-host interop is the remaining validation step.
 4. **Deployment validation** — physical Windows ↔ Mac LAN validation and 24/7 endurance for C.O.R.E.; live PostgreSQL/Supabase + real S3 for R.E.S.C.S. ← *current frontier*
-5. **A.S.I.S. completion + integration** — wire voice into the chat loop, remove legacy Forza trees, then connect A.S.I.S. to C.O.R.E. (**IN DEVELOPMENT**).
+5. **A.S.I.S. completion + integration** — wire voice into the chat loop, remove legacy `core/` + `02_voice/` trees (deprecated, pending removal), then connect A.S.I.S. to C.O.R.E. (**IN DEVELOPMENT**).
 6. **A.S.I.S. ↔ C.O.R.E. contract** — the intelligence layer operates through the control engine (**PLANNED**).
-7. **T.I.V.I.S.S.** — bring remote foundation local; resolve the handover model (**IN DEVELOPMENT**, remote-only).
+7. **T.I.V.I.S.S.** — foundation cloned locally; resolve the handover model (**IN DEVELOPMENT**, foundation-only).
 8. **A.S.C.S. ecosystem role** — coding capability reached through C.O.R.E. by A.S.I.S./T.I.V.I.S.S. (**FUTURE**; A.S.C.S. itself is implemented standalone).
 9. **RadarS.A.R.D.** — detection/reporting into C.O.R.E. (**FUTURE**).
 
@@ -60,12 +60,12 @@ R.E.S.C.S. documents its own history in `RESCS/CHANGELOG.md` and `docs/architect
 | Voice pipeline abstraction (engines, input/speech/speaker/tts packages) | IMPLEMENTED (standalone) |
 | Test suite (42 files / 693 passed) | IMPLEMENTED |
 | Voice wired into the chat loop | IMPLEMENTED |
-| Legacy Forza tree removal (`core/`, `02_voice/`, `monitoring/`) | IMPLEMENTED |
+| Legacy tree removal (`core/`, `02_voice/`, `monitoring/`) | DEPRECATED, pending removal |
 | Real C.O.R.E. uplink (opt-in adapter) | IMPLEMENTED (standalone by default) |
 
 ## 6. T.I.V.I.S.S.
 
-Foundation **IN DEVELOPMENT**, remote-only (GitHub `Kishir298/TIVISS`, v0.1.0: identity model, ownership state model, agent foundation, memory abstraction, adapter interfaces). No local checkout exists. The defining open question — the handover model — is unresolved; see [systems/tiviss.md](../systems/tiviss.md).
+Foundation **IN DEVELOPMENT**, local clone present (GitHub `Kishir298/TIVISS`, v0.1.0: identity model, ownership state model, agent foundation, memory abstraction, adapter interfaces). The defining open question — the handover model — is unresolved; see [systems/tiviss.md](../systems/tiviss.md).
 
 ## 7. A.S.C.S.
 

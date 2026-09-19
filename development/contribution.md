@@ -21,7 +21,7 @@ The ecosystem runs on these principles (established in [Architecture Overview](.
 2. **Never invent APIs.** Documentation describes architectural requirements and contracts ([interfaces](../interfaces/communication.md)); concrete APIs are locked by the owning code, not by docs.
 3. **Keep the ownership table accurate.** Responsibility changes update [System Boundaries](../architecture/system-boundaries.md) first, then the owning system page.
 4. **Cross-link.** New/updated docs link to related architecture, interfaces, security, and decisions documents.
-5. **Consistent terminology.** Use canonical dotted names (`C.O.R.E.`, `R.E.S.C.S.`, `A.S.I.S.`, `T.I.V.I.S.S.`, `RadarS.A.R.D.`, `A.S.C.S.`) and directory forms in backticks (`CORE-HOST/`, `CORE-CLIENT/`, `RESCS/`, `ASIS/`, `ASCS/`, `RISARMS-DOCS/`).
+5. **Consistent terminology.** Use canonical dotted names (`C.O.R.E.`, `R.E.S.C.S.`, `A.S.I.S.`, `T.I.V.I.S.S.`, `RadarS.A.R.D.`, `A.S.C.S.`) and directory forms in backticks (`CORE-HOST/`, `CORE-CLIENT/`, `RESCS/`, `ASIS/`, `ASCS/`, `TIVISS/`, `DOCS/` for this repository).
 6. **Record decisions.** Any meaningful architectural choice becomes an [ADR](../decisions/README.md), even after the fact.
 
 ## 3. Rules for ecosystem code agents

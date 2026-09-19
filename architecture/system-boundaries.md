@@ -61,7 +61,8 @@ RISARMS/
 ├── RESCS/          <- owned by R.E.S.C.S. development (independent)
 ├── ASIS/           <- owned by A.S.I.S. development (independent)
 ├── ASCS/           <- owned by A.S.C.S. development (independent)
-└── RISARMS-DOCS/   <- this documentation (TIVISS is GitHub-only)
+├── TIVISS/         <- owned by T.I.V.I.S.S. development (independent, foundation-only)
+└── DOCS/           <- this documentation (remote: RISARMS-DOCS)
 ```
 
 C.O.R.E. must never contain `RESCS/`, `ASIS/` or `ASCS/`. Integration is contract-based. Rationale: ADR [0001](../decisions/0001-rescs-independent-from-core.md), ADR [0002](../decisions/0002-asis-independent-from-core.md), ADR [0005](../decisions/0005-storage-integration-via-adapter.md), ADR [0007](../decisions/0007-ascs-standalone-coding-agent.md).

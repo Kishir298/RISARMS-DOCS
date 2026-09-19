@@ -135,8 +135,8 @@ The full ownership table is in [System Boundaries](system-boundaries.md#1-respon
 |---|---|---|
 | **C.O.R.E.** | v0.3.0 software IMPLEMENTED (689 passed 2026-09-18, verify with pytest -q): TLS device transport, token auth, device registry/persistence, agent scheduling, HTTP R.E.S.C.S. adapter, data distribution | Physical Windows ↔ Mac LAN validation; 24/7 operational validation |
 | **R.E.S.C.S.** | v0.3.0: versioned HTTP API, enforced API-key auth, records/files, streaming + resumable uploads, lifecycle/governance, C.O.R.E. contract | Live PostgreSQL/Supabase + real S3 validation; deployed C.O.R.E. ↔ R.E.S.C.S. interop |
-| **A.S.I.S.** | Rebuilt `asis` package (CLI, Ollama provider, memory, 30-op calculator, 136-lang translation, web tools, coding mode, permissions, voice pipeline; 693 tests) + Forza trees removed | Physical LAN validation; R.E.S.C.S. via C.O.R.E. (future) |
-| **T.I.V.I.S.S.** | Remote v0.1.0 foundation (identity, ownership states, adapters as interfaces) | Bring development local; resolve the handover model |
+| **A.S.I.S.** | Rebuilt `asis` package (CLI, Ollama provider, memory, 30-op calculator, 136-lang translation, web tools, coding mode, permissions, voice pipeline; 693 tests) + legacy `core/`/`02_voice/` trees deprecated, pending removal | Physical LAN validation; R.E.S.C.S. via C.O.R.E. (future) |
+| **T.I.V.I.S.S.** | Local v0.1.0 foundation at `TIVISS/` (identity, ownership states, adapters as local/mock interfaces; still no live traffic) | Resolve the handover model |
 | **RadarS.A.R.D.** | — | Define sensor/detection scope |
 | **A.S.C.S.** | Standalone v0.3.0 coding agent (949 passed / 6 skipped 2026-09-18; live opt-in RISALIVE=1) | Ecosystem integration through C.O.R.E. (future) |
 
@@ -151,7 +151,7 @@ RISARMS/
 ├── RESCS/
 ├── ASIS/
 ├── ASCS/
-└── RISARMS-DOCS/   <- this repository (TIVISS exists on GitHub only)
+└── DOCS/           <- this repository (remote: RISARMS-DOCS; TIVISS is cloned locally at `TIVISS/`)
 ```
 
 > [!NOTE] **Out-of-scope sibling:** `Flavora/` (local-first food companion) may sit beside these directories on disk. It is not an ecosystem member and is not governed by this architecture.

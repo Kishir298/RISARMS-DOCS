@@ -18,8 +18,9 @@
 | R.E.S.C.S. | Comprehensive unit + API + integration suite (pytest, httpx TestClient) | Includes API, security, rate limiting, observability, lifecycle, quotas, concurrency, backups, PostgreSQL compatibility, contract-consumer tests |
 | A.S.I.S. | 42 files / 693 passed (pytest) + voice tests | Covers the rebuilt `asis` package |
 | A.S.C.S. | 949 passed / 6 skipped + opt-in live suite | Live Ollama tests gated behind `RISALIVE=1`, skipped by default; cross-platform dev testing, Windows-only runtime |
+| T.I.V.I.S.S. | 14 files / offline deterministic suite (pytest) | Covers identity, ownership, conversation, memory, models, permissions, tools, events, handover, config + CORE/RESCS mock adapters; no external services |
 
-All four run via `pytest` from their own roots. Counts drift as development continues — verify against the current checkout rather than trusting any documented number.
+All five run via `pytest` from their own roots. Counts drift as development continues — verify against the current checkout rather than trusting any documented number.
 
 ## 3. What is missing (PLANNED)
 

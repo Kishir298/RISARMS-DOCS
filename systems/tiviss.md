@@ -1,6 +1,6 @@
 # T.I.V.I.S.S. — Though I'm Vanquished, I'm Still Stronger
 
-> [!NOTE] **Status:** Foundation **IN DEVELOPMENT** (v0.1.0 on GitHub: `https://github.com/Kishir298/TIVISS`). A standalone `tiviss` codebase exists remotely with an implemented identity model, ownership state model, agent foundation, memory abstraction, integration adapter interfaces (C.O.R.E./R.E.S.C.S., local/mock only) and a runtime. **No TIVISS repository exists in the local `RISARMS/` workspace** — local development has not started; remote-only. The real-world handover mechanism is intentionally not implemented yet, and the long-term handover model is still to be determined.
+> [!NOTE] **Status:** Foundation **IN DEVELOPMENT** (v0.1.0 on GitHub: `https://github.com/Kishir298/TIVISS`, cloned locally at `RISARMS/TIVISS/`). The standalone `tiviss` codebase has an implemented identity model, ownership state model, agent foundation, memory abstraction, integration adapter interfaces (C.O.R.E./R.E.S.C.S., local/mock only) and a runtime. It is still foundation-only: no live traffic, no real handover. The real-world handover mechanism is intentionally not implemented yet, and the long-term handover model is still to be determined.
 
 ## 1. What T.I.V.I.S.S. is
 
@@ -45,7 +45,7 @@ Until these are resolved, T.I.V.I.S.S. remains in its remote foundation phase an
 ## 5. Where the code lives
 
 - GitHub: `https://github.com/Kishir298/TIVISS` (v0.1.0 foundation)
-- Local workspace: **not present** under `RISARMS/`. Any local T.I.V.I.S.S. work should clone the repository rather than recreating it.
+- Local workspace: present at `RISARMS/TIVISS/` (full clone, stdlib-only runtime, 14 offline tests). Still foundation-only — no live traffic.
 - Integration adapters (`IntegrationAdapter` plus C.O.R.E./R.E.S.C.S. adapters) are interfaces and local/mock implementations only — they do not connect to the real C.O.R.E. or R.E.S.C.S. yet.
 
 > [!IMPORTANT] T.I.V.I.S.S. must not be confused with A.S.I.S. or with [A.S.C.S.](asc.md): three distinct systems with distinct identities.

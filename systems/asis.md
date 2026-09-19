@@ -1,6 +1,6 @@
 # A.S.I.S. — A Smart Intelligence System
 
-> [!NOTE] **Status:** **IN DEVELOPMENT** — rebuilt `asis` package ships CLI (stateful multi-turn), Ollama provider, inference/conversation/context engines, local SQLite memory (query-scoped recall), tool system (calculator 30 ops, 136-lang translation, web search/fetch, coding tools, 7 CORE tools; native function-calling primary, up to ASIS_TOOL_MAX_CALLS_PER_TURN per turn), permissions (confirmation-gated), events, and voice pipeline sharing app chat loop. Suite: 42 files / 693 passed (2026-09-18, verify with pytest -q). Legacy Forza trees removed. C.O.R.E. uplink is a real optional adapter (via CORE-CLIENT, standalone by default; physical LAN validation NOT PERFORMED). R.E.S.C.S. remains future/placeholder. A.S.I.S. is an **independent project**.
+> [!NOTE] **Status:** **IN DEVELOPMENT** — rebuilt `asis` package ships CLI (stateful multi-turn), Ollama provider, inference/conversation/context engines, local SQLite memory (query-scoped recall), tool system (calculator 30 ops, 136-lang translation, web search/fetch, coding tools, 7 CORE tools; native function-calling primary, up to ASIS_TOOL_MAX_CALLS_PER_TURN per turn), permissions (confirmation-gated), events, and voice pipeline sharing app chat loop. Suite: 42 files / 693 passed (2026-09-18, verify with pytest -q). Legacy `core/` + `02_voice/` trees deprecated, pending removal. C.O.R.E. uplink is a real optional adapter (via CORE-CLIENT, standalone by default; physical LAN validation NOT PERFORMED). R.E.S.C.S. remains future/placeholder. A.S.I.S. is an **independent project**.
 
 ## 1. What A.S.I.S. is
 
@@ -26,7 +26,7 @@ A.S.I.S. **does not directly own** C.O.R.E.'s responsibilities: message routing,
 
 > [!IMPORTANT] A.S.I.S. is an independent project. It must **never** be placed inside CORE. It uses C.O.R.E. through interfaces. Rationale: ADR [0002](../decisions/0002-asis-independent-from-core.md).
 
-- Location: `RISARMS/ASIS/` (sibling of `CORE-HOST/`, `CORE-CLIENT/`, `RESCS/`, `ASCS/`, `RISARMS-DOCS/`)
+- Location: `RISARMS/ASIS/` (sibling of `CORE-HOST/`, `CORE-CLIENT/`, `RESCS/`, `ASCS/`, `TIVISS/`, `DOCS/`)
 - Own git repository (origin `https://github.com/Kishir298/ASIS.git`, branch `main`; `legacy-before-rebuild` branch preserves the pre-rebuild state)
 - Stack: Python ≥ 3.11, setuptools package `asis`; extras for AI (`ollama`, `requests`), voice (`faster-whisper`, `silero-vad`, `sounddevice`, torch stack, openwakeword), dev (pytest/ruff/black)
 - Entry points: `asis` console script (`asis.cli.main:entry`) and `python -m asis`
@@ -57,9 +57,9 @@ A.S.I.S. **does not directly own** C.O.R.E.'s responsibilities: message routing,
 ### Tests
 - Top-level `tests/` suite (42 files, 693 passed 2026-09-18): config, ai/conversation/memory, calculator (62), translation (54), web (89), tools/permissions, coding, voice, CLI/interactive, offline, CORE adapter/tools (7 files); runs via `python3 -m pytest -q`.
 
-## 4. Legacy material (removed)
+## 4. Legacy material (deprecated, pending removal)
 
-Pre-rebuild Forza-era trees (`core/`, `02_voice/`, `monitoring/`) were **removed** from the working tree (history only). Do not build on them; `pyproject.toml` + `requirements/` are authoritative.
+Pre-rebuild Forza-era trees (`core/`, `02_voice/`, `monitoring/`) are **deprecated** — still present in the working tree but containing no active sources. Do not build on them; `pyproject.toml` + `requirements/` are authoritative.
 
 ## 5. A.S.I.S. ↔ C.O.R.E. ↔ R.E.S.C.S. integration (CORE real-optional, RESCS future)
 

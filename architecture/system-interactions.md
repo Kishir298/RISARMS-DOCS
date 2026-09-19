@@ -106,7 +106,7 @@ sequenceDiagram
 
 ### C.O.R.E. ↔ T.I.V.I.S.S.
 
-- **Current:** No code (T.I.V.I.S.S. foundation is remote-only; its adapters are local interfaces).
+- **Current:** No connected code (T.I.V.I.S.S. foundation is cloned locally at `TIVISS/` but still foundation-only; its adapters are local/mock interfaces).
 - **Future:** T.I.V.I.S.S. requests through C.O.R.E.; C.O.R.E. respects T.I.V.I.S.S. identity/ownership model.
 
 ### A.S.I.S. ↔ R.E.S.C.S.
