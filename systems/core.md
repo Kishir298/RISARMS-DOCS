@@ -126,6 +126,7 @@ External TCP requires TLS 1.2+, token authentication, validated protocol version
 These are deployment-validation items, not missing software:
 
 - **Physical Windows ↔ Mac LAN validation has not been performed.** All external-transport behavior is covered by automated localhost tests (TLS, handshake, framing, identity, persistence, timeouts).
+- **Launcher-owned `ollama serve` lifecycle: PERFORMED 2026-09-19** (tray quit → owned autostart → owned stop → tray restored; pre-existing servers untouched). See CORE's `docs/serve-autostart-manual-test.md`.
 - **Extended 24/7 physical-host validation has not been performed** (Task Scheduler autostart and NSSM service configuration are documented but not endurance-validated).
 - The development configuration (`transport: local`, `network.enabled: false`, `security.enforce_authorization: false`) is intentionally *not* the deployment configuration; see `config/core.lan.example.yaml` and CORE's own `docs/lan-readiness.md`.
 
