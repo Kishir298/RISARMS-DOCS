@@ -76,7 +76,7 @@ The arrows are explained precisely in [System Interactions](architecture/system-
 | **A.S.I.S.** | **IN DEVELOPMENT** | Rebuilt `asis` package: CLI, AI provider layer (Ollama), memory, tools, permissions, events, voice pipeline, first test suite. Legacy `core/` + `02_voice/` trees are deprecated and pending removal. C.O.R.E. uplink is a real optional adapter (standalone by default); R.E.S.C.S. remains future. |
 | **T.I.V.I.S.S.** | Foundation **IN DEVELOPMENT** (local clone present) | v0.1.0 foundation on GitHub and at `TIVISS/` (identity, ownership states, agent foundation, memory abstraction, adapter interfaces). Still foundation-only; real handover intentionally not implemented. |
 | **RadarS.A.R.D.** | **PLANNED / FUTURE** | No code exists anywhere. |
-| **A.S.C.S.** | **IMPLEMENTED** (standalone) | v0.3.0 local coding agent (949 passed / 6 skipped 2026-09-18). Zero ecosystem integration today; C.O.R.E.-mediated use by A.S.I.S./T.I.V.I.S.S. is future intent. |
+| **A.S.C.S.** | **IMPLEMENTED** (standalone) | v0.3.0 local coding agent (951 passed / 6 skipped 2026-09-23). Zero ecosystem integration today; C.O.R.E.-mediated use by A.S.I.S./T.I.V.I.S.S. is future intent. |
 
 The authoritative per-system detail is in [`systems/`](systems/). **Nothing in this repository describes unbuilt functionality as implemented.**
 

@@ -132,7 +132,7 @@ These are deployment-validation items, not missing software:
 
 ## 5. Test coverage
 
-- **50 test files approx; README-documented result: 689 passed (2026-09-18)** (verify with `pytest -q` against the current checkout).
+- **52 test files; README-documented result: 722 passed (2026-09-23)** (verify with `pytest -q` against the current checkout).
 - Coverage includes application orchestration, communication/TLS/framing, protocol negotiation, authentication, device registration/persistence/reconnect, discovery, presence, routing, services, resources, organization/reconciliation, R.E.S.C.S. adapters, scheduler, data distribution, health, events, integration behavior, and 0.2.x legacy compatibility.
 
 ## 5b. Web portals (v0.4.0)

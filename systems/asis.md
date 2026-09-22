@@ -1,6 +1,6 @@
 # A.S.I.S. — A Smart Intelligence System
 
-> [!NOTE] **Status:** **IN DEVELOPMENT** — rebuilt `asis` package ships CLI (stateful multi-turn), Ollama provider, inference/conversation/context engines, local SQLite memory (query-scoped recall), tool system (calculator 30 ops, 136-lang translation, web search/fetch, coding tools, 7 CORE tools; native function-calling primary, up to ASIS_TOOL_MAX_CALLS_PER_TURN per turn), permissions (confirmation-gated), events, and voice pipeline sharing app chat loop. Suite: 42 files / 693 passed (2026-09-18, verify with pytest -q). Legacy `core/` + `02_voice/` trees deprecated, pending removal. C.O.R.E. uplink is a real optional adapter (via CORE-CLIENT, standalone by default; physical LAN validation NOT PERFORMED). R.E.S.C.S. remains future/placeholder. A.S.I.S. is an **independent project**.
+> [!NOTE] **Status:** **IN DEVELOPMENT** — rebuilt `asis` package ships CLI (stateful multi-turn), Ollama provider, inference/conversation/context engines, local SQLite memory (query-scoped recall), tool system (calculator 30 ops, 136-lang translation, web search/fetch, coding tools, 7 CORE tools; native function-calling primary, up to ASIS_TOOL_MAX_CALLS_PER_TURN per turn), permissions (confirmation-gated), events, and voice pipeline sharing app chat loop. Suite: 53 files / 789 passed / 10 skipped (2026-09-23, verify with pytest -q). Legacy `core/` + `02_voice/` trees deprecated, pending removal. C.O.R.E. uplink is a real optional adapter (via CORE-CLIENT, standalone by default; physical LAN validation NOT PERFORMED). R.E.S.C.S. remains future/placeholder. A.S.I.S. is an **independent project**.
 
 ## 1. What A.S.I.S. is
 
@@ -55,7 +55,7 @@ A.S.I.S. **does not directly own** C.O.R.E.'s responsibilities: message routing,
 - Pipeline/factory abstraction (mock default; faster-whisper/STT, pyttsx3/TTS, Silero VAD, wake-word optional). Shares `AssistantApp.chat()`; real-engine hardware validation NOT PERFORMED.
 
 ### Tests
-- Top-level `tests/` suite (42 files, 693 passed 2026-09-18): config, ai/conversation/memory, calculator (62), translation (54), web (89), tools/permissions, coding, voice, CLI/interactive, offline, CORE adapter/tools (7 files); runs via `python3 -m pytest -q`.
+- Top-level `tests/` suite (53 files, 789 passed / 10 skipped 2026-09-23): config, ai/conversation/memory, calculator (62), translation (54), web (89), tools/permissions, coding, voice, CLI/interactive, offline, CORE adapter/tools (7 files); runs via `python3 -m pytest -q`.
 
 ## 4. Legacy material (deprecated, pending removal)
 

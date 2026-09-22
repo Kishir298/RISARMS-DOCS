@@ -138,7 +138,7 @@ The full ownership table is in [System Boundaries](system-boundaries.md#1-respon
 | **A.S.I.S.** | Rebuilt `asis` package (CLI, Ollama provider, memory, 30-op calculator, 136-lang translation, web tools, coding mode, permissions, voice pipeline; 693 tests) + legacy `core/`/`02_voice/` trees deprecated, pending removal | Physical LAN validation; R.E.S.C.S. via C.O.R.E. (future) |
 | **T.I.V.I.S.S.** | Local agent at `TIVISS/` (v0.2: CLI, export/import, logging, voice abstraction, real stdlib transports offline-tested; still no live traffic) | Resolve the handover model |
 | **RadarS.A.R.D.** | — | Define sensor/detection scope |
-| **A.S.C.S.** | Standalone v0.3.0 coding agent (949 passed / 6 skipped 2026-09-18; live opt-in RISALIVE=1) | Ecosystem integration through C.O.R.E. (future) |
+| **A.S.C.S.** | Standalone v0.3.0 coding agent (951 passed / 6 skipped 2026-09-23; live opt-in RISALIVE=1) | Ecosystem integration through C.O.R.E. (future) |
 
 ## 7. Filesystem reality
 
