@@ -21,18 +21,22 @@ A version is only coherent when these agree:
 | A.S.I.S. | `pyproject.toml`, `asis/__init__.py`, config settings, docs |
 | A.S.C.S. | `pyproject.toml`, package docstring/docs |
 
-## 3. Current version matrix (verified)
+## 3. Current version matrix (verified 2026-09-23, TIVISS v0.2 caps)
 
 | System | Version | Consistency |
 |---|---|---|
-| **C.O.R.E.** | `0.3.0` | Consistent (pyproject, version module, config) |
+| **C.O.R.E. (CORE-HOST)** | `0.3.0` | Consistent (pyproject, version module, config) |
+| **CORE-CLIENT** | `0.3.0` | Consistent, stdlib-only |
 | **R.E.S.C.S.** | `0.3.0` | Consistent (pyproject + CHANGELOG) |
-| **A.S.I.S.** | `0.1.0` | Consistent for the new `asis` package; deprecated legacy trees are not versioned |
+| **A.S.I.S.** | `0.1.0` | Consistent for `asis` package; + identities subsystem (parser/memory/persona/calibration/CLI) |
 | **A.S.C.S.** | `0.3.0` | Consistent; note distribution name `coding-agent` vs package `agent` vs command `risa` |
+| **T.I.V.I.S.S.** | `0.2` caps on 0.1.0 foundation | Local clone at `TIVISS/` (CLI, export/import, logging, voice, core_tcp/rescs_http offline-tested) |
+| **Portals** | `v0.4.0` | Presentation-only on 0.3.0 (CORE-HOST + CLIENT portals) |
+| **Radar** | — | Code-free |
 
 ## 4. Known, accepted quirks (tracked)
 
-- **A.S.I.S.** legacy trees (`core/`, `02_voice/`) are unversioned deprecated remnants still present in the working tree — do not treat their internals as part of the current 0.1.0 package.
+- **A.S.I.S.** legacy trees (`core/`, `02_voice/`) removed 2026-09-23 (0-py shells deleted).
 - **A.S.C.S.** naming spread (`coding-agent` / `agent` / `risa`) is a distribution-name choice, not a version conflict.
 - **C.O.R.E.** keeps `0.2.x` behavior reachable through negotiation — that is compatibility, not version inconsistency.
 

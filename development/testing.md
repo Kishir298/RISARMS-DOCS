@@ -14,13 +14,14 @@
 
 | System | Suite | Notes |
 |---|---|---|
-| C.O.R.E. | 52 test files; **722 passed** (2026-09-23, pytest) | Covers orchestration, communication/TLS/framing, protocol negotiation, auth, device registration/persistence/reconnect, discovery, routing, services, organization/reconciliation, adapters, scheduler, data distribution, health, events, 0.2.x compatibility |
-| R.E.S.C.S. | Comprehensive unit + API + integration suite, **301 passed / 4 skipped** (2026-09-23, pytest, httpx TestClient) | Includes API, security, rate limiting, observability, lifecycle, quotas, concurrency, backups, PostgreSQL compatibility, contract-consumer tests |
-| A.S.I.S. | 53 files / **789 passed / 10 skipped** (2026-09-23, pytest) + voice tests | Covers the rebuilt `asis` package |
-| A.S.C.S. | **951 passed / 6 skipped** (2026-09-23) + opt-in live suite | Live Ollama tests gated behind `RISALIVE=1`, skipped by default; cross-platform dev testing, Windows-only runtime |
-| T.I.V.I.S.S. | 14 files / offline deterministic suite (pytest) | Covers identity, ownership, conversation, memory, models, permissions, tools, events, handover, config + CORE/RESCS mock adapters; no external services |
+| CORE-HOST | 52 test files; **722 passed** (2026-09-23, pytest) | Host spine; run `py -m pytest` in CORE-HOST |
+| CORE-CLIENT | **123 passed** (2026-09-23, 13 files) | Client + portal; run `py -m pytest` in CORE-CLIENT |
+| R.E.S.C.S. | Comprehensive unit + API + integration suite, **302 passed / 1 skipped** (2026-09-23) | Bounded chunk intake, LIKE-escape, S3 close; run `.venv\Scripts\python -m pytest` |
+| A.S.I.S. | 54 files / **789+ passed / 10 skipped** (2026-09-23 + identities 8) | Rebuilt `asis` + `asis/identities` + `/identity` CLI |
+| A.S.C.S. | **943 passed** (2026-09-23, offline) + opt-in live suite | `.ascs` guards + UI token; live gated `RISALIVE=1` |
+| T.I.V.I.S.S. | **254 passed** (2026-09-23) | Failure-first checks, atomic handover, bounded events |
 
-All five run via `pytest` from their own roots. Counts drift as development continues — verify against the current checkout rather than trusting any documented number.
+All run via `pytest` from their own roots — never from `RISARMS/` root (no root suite; root `.pytest_cache/` deleted). Counts drift — re-verify. Portal suites included in host/client counts.
 
 ## 3. What is missing (PLANNED)
 
