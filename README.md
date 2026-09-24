@@ -90,6 +90,7 @@ C.O.R.E. v0.1 established the architecture and behavioral contracts. The **13-ph
 RISARMS-DOCS/
 │
 ├── README.md
+├── AGENT.md
 │
 ├── architecture/
 │   ├── README.md
@@ -129,7 +130,8 @@ RISARMS-DOCS/
 │   ├── roadmap.md
 │   ├── versioning.md
 │   ├── testing.md
-│   └── contribution.md
+│   ├── contribution.md
+│   └── hw-gated-validation.md
 │
 └── decisions/
     ├── README.md
