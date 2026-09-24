@@ -30,6 +30,12 @@ All run via `pytest -q` from their own roots — never from `RISARMS/` root (no 
 - **Live-cloud tests** for R.E.S.C.S. against real PostgreSQL/Supabase/S3 (PostgreSQL compatibility is already integration-tested).
 - **A.S.I.S. ↔ C.O.R.E. contract tests** — blocked until that integration exists.
 
+> [!IMPORTANT] **Hardware/cloud-gated items are BLOCKED, not bugs** — every item above
+> (plus live voice/model runs and T.I.V.I.S.S. re-verification) requires physical
+> hardware, network, or credentials unavailable in this workspace. Per-item blockers
+> are listed in [hw-gated-validation.md](hw-gated-validation.md) §"Current status";
+> they stay closed until the resource appears.
+
 ## 4. Test naming and location conventions
 
 - Unit tests live beside the subsystem they cover (`tests/<subsystem>/`).

@@ -6,6 +6,22 @@
 > testing must never be presented as hardware/cloud validation. Run serially, one
 > item at a time, and never on a machine you need to keep free.
 
+## Current status (2026-09-24)
+
+Every item is **BLOCKED** in the current workspace — the preconditions below cannot
+be satisfied here (no Windows host on LAN, no cloud credentials, no dedicated
+hardware, no TIVISS checkout, voice/model live runs forbidden by AGENT.md). These
+are honest blockers, not open bugs: re-open only when the listed resource exists.
+
+| # | Validation | Status | Blocker |
+|---|------------|--------|---------|
+| 1 | Physical LAN (host ↔ device) | ❌ BLOCKED | No Windows host on the LAN; firewall + TLS certs not re-verifiable |
+| 2 | R.E.S.C.S. live S3 | ❌ BLOCKED | No bucket or `RESCS_LIVE_S3_*` credentials (keys must rotate after) |
+| 3 | R.E.S.C.S. live PostgreSQL/Supabase | ❌ BLOCKED | No live DB or `RESCS_INTEGRATION_DATABASE_URL` |
+| 4 | R.E.S.C.S. 24/7 endurance | ❌ BLOCKED | Needs non-primary hardware; >5 s budget is forbidden on the MacBook |
+| 5 | A.S.I.S./A.S.C.S. live voice + model | ❌ BLOCKED | Requires mic/speaker + Ollama 30b; live flags forbidden by AGENT.md here |
+| 6 | T.I.V.I.S.S. external verification | ❌ BLOCKED | No local checkout; requires fresh clone of `Kishir298/TIVISS` |
+
 ## Rules that always apply
 
 - Never commit `*.key`, `*.pem`, `*.crt`, `*.jks`, `var/rescs.json`,
