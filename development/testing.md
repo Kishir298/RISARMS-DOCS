@@ -14,11 +14,11 @@
 
 | System | Suite | Notes |
 |---|---|---|
-| CORE-HOST | 52 test files; **722 passed** (2026-09-23, pytest) | Host spine; run `py -m pytest` in CORE-HOST |
-| CORE-CLIENT | **123 passed** (2026-09-23, 13 files) | Client + portal; run `py -m pytest` in CORE-CLIENT |
-| R.E.S.C.S. | Comprehensive unit + API + integration suite, **302 passed / 1 skipped** (2026-09-23) | Bounded chunk intake, LIKE-escape, S3 close; run `.venv\Scripts\python -m pytest` |
-| A.S.I.S. | 54 files / **789+ passed / 10 skipped** (2026-09-23 + identities 8) | Rebuilt `asis` + `asis/identities` + `/identity` CLI |
-| A.S.C.S. | **943 passed** (2026-09-23, offline) + opt-in live suite | `.ascs` guards + UI token; live gated `RISALIVE=1` |
+| CORE-HOST | 52 test files; **723 passed** (2026-09-24, pytest, v0.4.0) | Host spine; run `py -m pytest` in CORE-HOST |
+| CORE-CLIENT | **123 passed** (2026-09-24, 13 files, v0.4.0) | Client + portal; run `py -m pytest` in CORE-CLIENT |
+| R.E.S.C.S. | Comprehensive unit + API + integration suite, **308 passed / 4 skipped** (2026-09-24) | Bounded chunk intake, LIKE-escape, S3 close; run `.venv/bin/python -m pytest` |
+| A.S.I.S. | 56 files / **812 collected, EXIT 0** (2026-09-24, .venv py3.12) | Rebuilt `asis` + `asis/identities` + `/identity` CLI |
+| A.S.C.S. | **957 collected, EXIT 0** (2026-09-24, offline) + opt-in live suite | `.ascs` guards + UI token; live gated `RISALIVE=1` |
 | T.I.V.I.S.S. | **254 passed** (2026-09-23) | Failure-first checks, atomic handover, bounded events |
 
 All run via `pytest -q` from their own roots — never from `RISARMS/` root (no root suite; root `.pytest_cache/` deleted). Counts drift between docs (e.g. ASCS 943 vs 949 vs 951; ASIS 693 vs 789) — re-verify with `pytest -q` in each repo; do not treat hardcoded counts as authoritative. Portal suites included in host/client counts.
