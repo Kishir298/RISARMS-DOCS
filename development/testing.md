@@ -19,9 +19,9 @@
 | R.E.S.C.S. | Comprehensive unit + API + integration suite, **308 passed / 4 skipped** (2026-09-24) | Bounded chunk intake, LIKE-escape, S3 close; run `.venv/bin/python -m pytest` |
 | A.S.I.S. | 56 files / **812 collected, EXIT 0** (2026-09-24, .venv py3.12) | Rebuilt `asis` + `asis/identities` + `/identity` CLI |
 | A.S.C.S. | **957 collected, EXIT 0** (2026-09-24, offline) + opt-in live suite | `.ascs` guards + UI token; live gated `RISALIVE=1` |
-| T.I.V.I.S.S. | **254 passed** (2026-09-23) | Failure-first checks, atomic handover, bounded events |
+| T.I.V.I.S.S. | **254 passed** (reported 2026-09-23, **unverified** — no local checkout in this workspace; re-verify against a fresh clone) | Failure-first checks, atomic handover, bounded events |
 
-All run via `pytest -q` from their own roots — never from `RISARMS/` root (no root suite; root `.pytest_cache/` deleted). Counts drift between docs (e.g. ASCS 943 vs 949 vs 951; ASIS 693 vs 789) — re-verify with `pytest -q` in each repo; do not treat hardcoded counts as authoritative. Portal suites included in host/client counts.
+All run via `pytest -q` from their own roots — never from `RISARMS/` root (no root suite; root `.pytest_cache/` deleted). Counts drift between docs (e.g. ASCS 943 vs 949 vs 951; ASIS 693 vs 789) — re-verify with `pytest -q` in each repo; do not treat hardcoded counts as authoritative. Portal suites included in host/client counts. Hardware/cloud-gated validations (physical LAN, live S3/PG, endurance, live voice/model) have their own runbook: [hw-gated-validation.md](hw-gated-validation.md).
 
 ## 3. What is missing (PLANNED)
 
