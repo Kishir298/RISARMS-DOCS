@@ -43,7 +43,7 @@ Every ADR follows this structure:
 ## 3. How to add an ADR
 
 1. Copy the template above.
-2. Number sequentially (`0008-…`; 0007 already taken).
+2. Number sequentially (`0009-…`; 0008 already taken).
 3. Fill Context (the problem), Decision (what we chose), Alternatives (what we rejected and why), Consequences (what the choice costs and enables), Status.
 4. Link the ADR from the [System Boundaries](../architecture/system-boundaries.md) or the relevant system documentation.
 5. Reference the ADR from the docs that rely on it.

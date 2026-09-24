@@ -92,6 +92,7 @@ RISARMS-DOCS/
 ├── README.md
 │
 ├── architecture/
+│   ├── README.md
 │   ├── overview.md
 │   ├── system-boundaries.md
 │   ├── system-interactions.md
@@ -100,6 +101,7 @@ RISARMS-DOCS/
 │   └── lifecycle.md
 │
 ├── systems/
+│   ├── README.md
 │   ├── core.md
 │   ├── rescs.md
 │   ├── asis.md
@@ -108,6 +110,7 @@ RISARMS-DOCS/
 │   └── radar-sard.md
 │
 ├── interfaces/
+│   ├── README.md
 │   ├── communication.md
 │   ├── messaging.md
 │   ├── routing.md
@@ -115,12 +118,14 @@ RISARMS-DOCS/
 │   └── integration-contracts.md
 │
 ├── security/
+│   ├── README.md
 │   ├── overview.md
 │   ├── authentication.md
 │   ├── authorization.md
 │   └── trust-boundaries.md
 │
 ├── development/
+│   ├── README.md
 │   ├── roadmap.md
 │   ├── versioning.md
 │   ├── testing.md
@@ -134,7 +139,8 @@ RISARMS-DOCS/
     ├── 0004-communication-abstraction.md
     ├── 0005-storage-integration-via-adapter.md
     ├── 0006-security-architecture.md
-    └── 0007-ascs-standalone-coding-agent.md
+    ├── 0007-ascs-standalone-coding-agent.md
+    └── 0008-web-portals-presentation-only.md
 ```
 
 The ecosystem the documentation governs:

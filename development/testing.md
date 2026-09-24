@@ -21,7 +21,7 @@
 | A.S.C.S. | **943 passed** (2026-09-23, offline) + opt-in live suite | `.ascs` guards + UI token; live gated `RISALIVE=1` |
 | T.I.V.I.S.S. | **254 passed** (2026-09-23) | Failure-first checks, atomic handover, bounded events |
 
-All run via `pytest` from their own roots — never from `RISARMS/` root (no root suite; root `.pytest_cache/` deleted). Counts drift — re-verify. Portal suites included in host/client counts.
+All run via `pytest -q` from their own roots — never from `RISARMS/` root (no root suite; root `.pytest_cache/` deleted). Counts drift between docs (e.g. ASCS 943 vs 949 vs 951; ASIS 693 vs 789) — re-verify with `pytest -q` in each repo; do not treat hardcoded counts as authoritative. Portal suites included in host/client counts.
 
 ## 3. What is missing (PLANNED)
 
