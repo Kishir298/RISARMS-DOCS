@@ -51,6 +51,8 @@ python-multipart==0.0.32
 # EXTRAS - All optional dependencies from all projects
 textual>=0.70
 textual-dev>=0.70
+tomli>=2.0
+tomli-w>=1.0
 numpy
 scipy
 sounddevice
@@ -97,6 +99,8 @@ windows-curses>=2.3; sys_platform == "win32"
 # EXTRAS - All optional (same as all)
 textual>=0.70
 textual-dev>=0.70
+tomli>=2.0
+tomli-w>=1.0
 numpy
 scipy
 sounddevice
@@ -143,6 +147,8 @@ python-multipart==0.0.32
 # EXTRAS - All optional (same as all)
 textual>=0.70
 textual-dev>=0.70
+tomli>=2.0
+tomli-w>=1.0
 numpy
 scipy
 sounddevice
