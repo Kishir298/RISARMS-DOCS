@@ -3,34 +3,32 @@
 #
 # THREE INSTALL COMMANDS:
 # =============================================================================
-
+#
 # COMMAND 1 - EVERYTHING (all packages + all extras from all 6 repos):
 #   pip install -r C:\Users\rishi\Desktop\RISARMS\DOCS\requirements.txt
-
+#
 # COMMAND 2 - EVERYTHING EXCEPT CORE-HOST:
 #   pip install -r C:\Users\rishi\Desktop\RISARMS\DOCS\requirements.txt --exclude=CORE-HOST
-
+#
 # COMMAND 3 - EVERYTHING EXCEPT CORE-CLIENT:
 #   pip install -r C:\Users\rishi\Desktop\RISARMS\DOCS\requirements.txt --exclude=CORE-CLIENT
-
+#
 # NOTE: pip --exclude is not standard. Use one of these methods:
 #   Method 1 - Manual: Copy the relevant section to a temp file and pip install -r temp.txt
 #   Method 2 - Script: Use the helper script below
 #   Method 3 - Manual install: Copy/paste the relevant section
-
+#
 # HELPER SCRIPT (save as install.py and run: python install.py [all|no-host|no-client]):
 # import sys, re
-# section = sys.argv[1] if len(sys.argv) > 1 else "all"
+# section = sys.argv[1] if len(sys.argv) > 1 else 'all'
 # with open(__file__) as f: content = f.read()
-# section_content = re.search(f"# SECTION: {re.escape(section)}(.*?)(?=# SECTION:|$)", content, re.DOTALL)
+# section_content = re.search(f'# SECTION: {re.escape(section)}(.*?)(?=# SECTION:|$)', content, re.DOTALL)
 # if section_content:
-#     lines = [l for l in section_content.group(1).split("
-") if l and not l.startswith("#")]
-#     with open("temp_req.txt", "w") as f: f.write("
-".join(lines))
-#     print(f"Created temp_req.txt for section: {section}")
-#     print("Run: pip install -r temp_req.txt")
-
+#     lines = [l for l in section_content.group(1).split('\n') if l and not l.startswith('#')]
+#     with open('temp_req.txt', 'w') as f: f.write('\n'.join(lines))
+#     print(f'Created temp_req.txt for section: {section}')
+#     print('Run: pip install -r temp_req.txt')
+#
 # =============================================================================
 
 # SECTION: all
