@@ -80,3 +80,12 @@ Each BUILD turn must return:
 5. **No commit** performed.
 
 Reference: `DOCS/README.md`, `DOCS/architecture/`, `DOCS/systems/`, `DOCS/interfaces/`, `DOCS/security/`, `DOCS/development/`.
+
+## 6. Canonical Reference Documents
+
+- `DOCS/R.I.S.A.R.M.S brief.txt` — High-level system overview (R.I.S.A.R.M.S, C.O.R.E, R.E.S.C.S, A.S.I.S, T.I.V.I.S.S, RadarS.A.R.D)
+- `DOCS/README.md` — Repository structure and navigation
+- `DOCS/architecture/overview.md` — System status vocabulary and architecture
+- `DOCS/systems/` — Per-system ownership and interfaces
+- `DOCS/architecture/system-interactions.md` — Cross-system communication flows
+- `DOCS/architecture/system-boundaries.md` — Independence rules and boundaries

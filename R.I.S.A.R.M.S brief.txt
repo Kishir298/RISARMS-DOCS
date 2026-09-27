@@ -1,0 +1,6 @@
+R.I.S.A.R.M.S - Rishik's Intelligent Smart Administration and Resource Management System (Blanket Name for my entire system)
+C.O.R.E - Communication, Organization and Resource Engine (Acctually manages everything such as communication protocol between this laptop and any other device and organizes data collected through R.E.S.C.S as this laptop is the control system)
+R.E.S.C.S - Rishik's Efficient System for Cloud Storage - The system that just stores anything i want to be in the cloud (Still this laptop but thing that i want to be shared also)
+A.S.I.S - A Smart Intelligence System - My AI model, previously named Forza-AI
+T.I.V.I.S.S - Though I'm Vanquished, I'm Still Stronger - My AI agent i would hand over to my best friend Ansh in case i die or i feel like I want to give it to him
+RadarS.A.R.D - Radar Security, Anomaly Reconnaissance Device
