@@ -1,0 +1,172 @@
+# RISARMS Ecosystem - Unified Requirements with Three Install Commands
+# Location: C:\Users\rishi\Desktop\RISARMS\DOCS\requirements.txt
+#
+# THREE INSTALL COMMANDS:
+# =============================================================================
+
+# COMMAND 1 - EVERYTHING (all packages + all extras from all 6 repos):
+#   pip install -r C:\Users\rishi\Desktop\RISARMS\DOCS\requirements.txt
+
+# COMMAND 2 - EVERYTHING EXCEPT CORE-HOST:
+#   pip install -r C:\Users\rishi\Desktop\RISARMS\DOCS\requirements.txt --exclude=CORE-HOST
+
+# COMMAND 3 - EVERYTHING EXCEPT CORE-CLIENT:
+#   pip install -r C:\Users\rishi\Desktop\RISARMS\DOCS\requirements.txt --exclude=CORE-CLIENT
+
+# NOTE: pip --exclude is not standard. Use one of these methods:
+#   Method 1 - Manual: Copy the relevant section to a temp file and pip install -r temp.txt
+#   Method 2 - Script: Use the helper script below
+#   Method 3 - Manual install: Copy/paste the relevant section
+
+# HELPER SCRIPT (save as install.py and run: python install.py [all|no-host|no-client]):
+# import sys, re
+# section = sys.argv[1] if len(sys.argv) > 1 else "all"
+# with open(__file__) as f: content = f.read()
+# section_content = re.search(f"# SECTION: {re.escape(section)}(.*?)(?=# SECTION:|$)", content, re.DOTALL)
+# if section_content:
+#     lines = [l for l in section_content.group(1).split("
+") if l and not l.startswith("#")]
+#     with open("temp_req.txt", "w") as f: f.write("
+".join(lines))
+#     print(f"Created temp_req.txt for section: {section}")
+#     print("Run: pip install -r temp_req.txt")
+
+# =============================================================================
+
+# SECTION: all
+# =============================================================================
+# CORE RUNTIME - All projects
+platformdirs>=4
+python-dotenv>=1.0
+sympy>=1.13
+requests>=2.31
+windows-curses>=2.3; sys_platform == "win32"
+PyYAML>=6.0
+fastapi==0.141.1
+uvicorn[standard]==0.52.4
+sqlalchemy==2.0.52
+psycopg[binary]==3.3.4
+pydantic==2.13.5
+pydantic-settings==2.15.0
+python-multipart==0.0.32
+
+# EXTRAS - All optional dependencies from all projects
+textual>=0.70
+textual-dev>=0.70
+numpy
+scipy
+sounddevice
+soundfile
+silero-vad
+faster-whisper
+torch
+torchaudio
+speechbrain
+openwakeword
+pyttsx3
+pycaw; sys_platform == "win32"
+comtypes; sys_platform == "win32"
+pywin32; sys_platform == "win32"
+pypdf>=4
+python-docx>=1.1
+boto3>=1.28
+
+# DEVELOPMENT / TEST DEPENDENCIES
+pytest>=8
+pytest-cov>=5
+pytest-asyncio>=0.23
+httpx==0.28.1
+ruff
+black
+
+# SECTION: except-core-host
+# =============================================================================
+# CORE RUNTIME - EXCEPT CORE-HOST (excludes PyYAML and fastapi stack)
+platformdirs>=4
+python-dotenv>=1.0
+sympy>=1.13
+requests>=2.31
+windows-curses>=2.3; sys_platform == "win32"
+# PyYAML>=6.0  <-- EXCLUDED (core-host)
+# fastapi==0.141.1  <-- EXCLUDED (core-host/RESCS)
+# uvicorn[standard]==0.52.4  <-- EXCLUDED (core-host/RESCS)
+# sqlalchemy==2.0.52  <-- EXCLUDED (core-host/RESCS)
+# psycopg[binary]==3.3.4  <-- EXCLUDED (core-host/RESCS)
+# pydantic==2.13.5  <-- EXCLUDED (core-host/RESCS)
+# pydantic-settings==2.15.0  <-- EXCLUDED (core-host/RESCS)
+# python-multipart==0.0.32  <-- EXCLUDED (core-host/RESCS)
+
+# EXTRAS - All optional (same as all)
+textual>=0.70
+textual-dev>=0.70
+numpy
+scipy
+sounddevice
+soundfile
+silero-vad
+faster-whisper
+torch
+torchaudio
+speechbrain
+openwakeword
+pyttsx3
+pycaw; sys_platform == "win32"
+comtypes; sys_platform == "win32"
+pywin32; sys_platform == "win32"
+pypdf>=4
+python-docx>=1.1
+boto3>=1.28
+
+# DEVELOPMENT / TEST DEPENDENCIES
+pytest>=8
+pytest-cov>=5
+pytest-asyncio>=0.23
+httpx==0.28.1
+ruff
+black
+
+# SECTION: except-core-client
+# =============================================================================
+# CORE RUNTIME - EXCEPT CORE-CLIENT (core-client has no direct deps, same as all)
+platformdirs>=4
+python-dotenv>=1.0
+sympy>=1.13
+requests>=2.31
+windows-curses>=2.3; sys_platform == "win32"
+PyYAML>=6.0
+fastapi==0.141.1
+uvicorn[standard]==0.52.4
+sqlalchemy==2.0.52
+psycopg[binary]==3.3.4
+pydantic==2.13.5
+pydantic-settings==2.15.0
+python-multipart==0.0.32
+
+# EXTRAS - All optional (same as all)
+textual>=0.70
+textual-dev>=0.70
+numpy
+scipy
+sounddevice
+soundfile
+silero-vad
+faster-whisper
+torch
+torchaudio
+speechbrain
+openwakeword
+pyttsx3
+pycaw; sys_platform == "win32"
+comtypes; sys_platform == "win32"
+pywin32; sys_platform == "win32"
+pypdf>=4
+python-docx>=1.1
+boto3>=1.28
+
+# DEVELOPMENT / TEST DEPENDENCIES
+pytest>=8
+pytest-cov>=5
+pytest-asyncio>=0.23
+httpx==0.28.1
+ruff
+black
