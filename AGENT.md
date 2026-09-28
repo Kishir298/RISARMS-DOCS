@@ -19,7 +19,6 @@ You edit files, run tests, and report files changed/deleted + test results. Do N
 
 **Explicitly excluded:**
 
-- `IMH/` — Personal / food-companion and chat-log data (`AI/`, `WhatsApp_Chat_Logs_*.zip`). Never read, edit, index, or infer ecosystem membership from it.
 - `Flavora/` sibling if present on disk — not an ecosystem member.
 - Git history (`.git/`) — never delete, rewrite, or force-push.
 
@@ -42,7 +41,6 @@ Rules:
 - One directory per agent, no cross-writes.
 - Each agent: inspect → edit → run scoped tests → report.
 - Coordinator merges reports, runs cross-system checks, returns unified changed/deleted + test results.
-- `IMH` never gets an agent.
 - Prefer specialized file tools (`read`/`edit`/`write`) over shell for file ops; use `bash` only for `pytest`, `ruff`, `git status/diff`, `Test-Path`/`Remove-Item`.
 
 ## 3. Taxonomy
@@ -59,7 +57,7 @@ Rules:
 
 ```text
 You are in BUILD MODE. Work in C:\Users\rishi\Desktop\RISARMS.
-Scope: ASIS, ASCS, CORE-HOST, CORE-CLIENT, RESCS, TIVISS, DOCS. Exclude IMH.
+Scope: ASIS, ASCS, CORE-HOST, CORE-CLIENT, RESCS, TIVISS, DOCS.
 Method: 7 parallel sub-agents (one per in-scope root).
 For each task: read target files first, make minimal edits, run scoped pytest/ruff, verify no .py deleted before any Remove-Item -Recurse, never touch .git history.
 Do NOT commit. Return files changed/deleted + test results.
@@ -89,3 +87,24 @@ Reference: `DOCS/README.md`, `DOCS/architecture/`, `DOCS/systems/`, `DOCS/interf
 - `DOCS/systems/` — Per-system ownership and interfaces
 - `DOCS/architecture/system-interactions.md` — Cross-system communication flows
 - `DOCS/architecture/system-boundaries.md` — Independence rules and boundaries
+
+## 7. Repository Sync Protocol
+
+Before any BUILD MODE work, sync all 7 ecosystem repos:
+
+```bash
+git -C ASCS pull
+git -C ASIS pull
+git -C CORE-CLIENT pull
+git -C CORE-HOST pull
+git -C DOCS pull
+git -C RESCS pull
+git -C TIVISS pull
+```
+
+Or single command (PowerShell):
+```powershell
+git -C ASCS pull; git -C ASIS pull; git -C CORE-CLIENT pull; git -C CORE-HOST pull; git -C DOCS pull; git -C RESCS pull; git -C TIVISS pull
+```
+
+Verify all report "Already up to date" or fast-forward. Note any conflicts.
