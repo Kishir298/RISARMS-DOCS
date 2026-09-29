@@ -70,6 +70,51 @@ src/rescs/
 - **Machine-readable C.O.R.E. contract** — `rescs/contract.py` + `GET /api/v1/contract`, documented in `docs/core-integration-contract.md`: envelope, error-code → C.O.R.E. reaction table, reserved namespaces (`RUNNABLES`, `Ops`, `IDEAS`), transport and auth rules. C.O.R.E. ships a consuming integration-test fixture against this contract.
 - **Storage domains (logical ownership)** — reserved namespace prefixes `asis.*` (A.S.I.S.), `tiviss.*` (T.I.V.I.S.S.), `personal.*` (general user cloud data), alongside `core.*`/`rescs.*`. Reservation is advisory by convention; agents enforce their own prefix client-side. Documented in `RESCS/docs/storage-domains.md`; no schema changes, no separate databases.
 
+## 4b. Device-Scoped Access Validation (v0.3.1)
+
+RESCS now enforces device-scoped access at the API level via `rescs/security.py`. When C.O.R.E. (via `RescsDeviceProxy`) or other clients make requests on behalf of a device, namespaces and owners are automatically scoped to the requesting device:
+
+### Namespace Enforcement
+
+- **Reserved prefixes** — `core.`, `rescs.`, `asis.`, `tiviss.` cannot be accessed by devices
+- **Device-scoped format** — `personal.device.{device_id}.{namespace}`
+- **Automatic prefixing** — Unprefixed namespaces are automatically prefixed with `personal.device.{device_id}.`
+- **Cross-device protection** — Devices cannot access other devices' namespaces
+
+```python
+# rescs/security.py
+validate_device_namespace(namespace, device_id, operation) -> str
+# Returns device-scoped namespace, raises UnauthorizedError on violation
+```
+
+### Owner Enforcement
+
+- **Device-scoped format** — `personal.device.{device_id}.{owner}`
+- **Cross-device protection** — Devices cannot use other devices' owner scopes
+- **Automatic prefixing** — Unprefixed owners are automatically prefixed
+
+```python
+validate_device_owner(owner, device_id, operation) -> str | None
+```
+
+### Ownership Assertion
+
+```python
+assert_device_ownership(
+    resource_owner=...,
+    resource_namespace=...,
+    device_id=...,
+    operation=...
+)
+# Verifies both owner and namespace belong to the requesting device
+```
+
+### Integration with C.O.R.E.
+
+`RescsDeviceProxy` in C.O.R.E. (`core/services/rescs_proxy.py`) automatically rewrites namespaces and owners before forwarding to RESCS, providing defense-in-depth: namespaces are rewritten at the gateway **and** validated at the API.
+
+---
+
 ## 5. Known gaps (Ready for External Validation)
 
 These are implemented but **not yet validated against live external infrastructure**:

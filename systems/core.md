@@ -85,9 +85,9 @@ Client lives separately: `CORE-CLIENT/client/core_device_client.py` — minimal 
 | Subsystem | Purpose |
 |---|---|
 | `communication` | `Transport` → `LocalTransport` (in-process) and `TcpTransport` (external devices). Framing, connection limits (10 MiB frames, 64 connections, 300 s idle), protocol negotiation, session/TLS fail-closed handshake, persistent connections, `DeviceRegistry` with distinct `device_id` / `identity_id` / `connection_id` |
-| `rescs` | `RescsAdapter` implementations: `InMemoryRescsAdapter`, `FileRescsAdapter` (`var/rescs.json`), `HttpRescsAdapter` (endpoint/timeout/fallback) |
+| `rescs` | `RescsAdapter` implementations: `InMemoryRescsAdapter`, `FileRescsAdapter` (`var/rescs.json`), `HttpRescsAdapter` (endpoint/timeout/fallback). **New in v0.3.1**: `RescsDeviceProxy` — device-scoped namespace enforcement. Rewrites namespaces to `personal.device.{device_id}.{namespace}` format, enforces reserved prefix protection (`core.`, `rescs.`, `asis.`, `tiviss.`), validates device ownership on owner field. RESCS API validates device ownership via `validate_device_namespace()`, `validate_device_owner()`, `assert_device_ownership()`. |
 | `organization` | `OrganizationEngine` + `ResourceIngestor`: the controlled R.E.S.C.S. → C.O.R.E. ingestion boundary (strict validation, normalization, idempotent upserts, bulk ingest, authoritative `reconcile()` with backend-failure safety) |
-| `scheduler` | Capability-driven agent assignment (local execution or Windows-host offloading). Default profiles: `asis-local`, `asis-offload`, `tiviss-compat`. Auto-assign on `DEVICE_CONNECTED` is opt-in; explicit `agent.assign` remains supported |
+| `scheduler` | Capability-driven agent assignment (local execution or Windows-host offloading). Default profiles: `asis-local`, `asis-offload`, `tiviss-compat`. Auto-assign on `DEVICE_CONNECTED` is opt-in; explicit `agent.assign` remains supported. **New in v0.3.1**: `CapabilityRouter` with `ModelProfile` — device-capability-based model selection (RAM/CPU/GPU-aware). Profiles: `asis-local-heavy` (qwen3-coder:30b, 24GB RAM, CUDA), `asis-local-medium` (qwen2.5-coder:14b, 12GB RAM), `asis-local-light` (qwen3:14b, 8GB RAM), `asis-offload-phone`/`asis-offload-watch` for low-capability devices. `CapabilityRouter.select_model_profile(device_caps)` scores profiles by RAM, CPU, GPU match. |
 | `data` | `DataOrganizer`: owner-scoped R.E.S.C.S. retrieval → normalization → deterministic ordering (`updated_at DESC, id ASC`) → pagination (limit 1–500, max 500 items, 5 MiB metadata budget, 1 MiB inline-file limit, SHA-256 verification) → `DATA_RESPONSE` distribution over device routing |
 | `security` | Pluggable providers: existence-based (internal/legacy) and token-based (required for external devices). Identity spoofing (`identity_id != connection.identity_id`) is rejected |
 | `runtime` | Component lifecycle plus `RuntimeHistory` (device/agent/service lifecycle intervals, persisted through the R.E.S.C.S. adapter boundary) |
@@ -178,6 +178,8 @@ The 13-phase v0.2 build order was completed; the phase definitions (objectives, 
 | Device discovery + presence | IMPLEMENTED |
 | Device-to-device routing through C.O.R.E. | IMPLEMENTED |
 | Capability-driven agent scheduling (+ auto-assign, opt-in) | IMPLEMENTED |
+| **CapabilityRouter with ModelProfile (device-capability-based model selection)** | **IMPLEMENTED (v0.3.1)** |
+| **RescsDeviceProxy (device-scoped namespace enforcement)** | **IMPLEMENTED (v0.3.1)** |
 | `HttpRescsAdapter` with fallback + health | IMPLEMENTED |
 | Data distribution (owner-scoped retrieval → pagination → routing) | IMPLEMENTED |
 | Organization ingestion/reconciliation boundary | IMPLEMENTED |

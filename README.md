@@ -71,12 +71,12 @@ The arrows are explained precisely in [System Interactions](architecture/system-
 
 | System | Status | Notes |
 |---|---|---|
-| **C.O.R.E.** | v0.3.0 **IMPLEMENTED** | Full v0.2 phase set completed; v0.3 adds TLS external transport, token authentication, device registration/persistence, device discovery, device-to-device routing, agent scheduling, HTTP R.E.S.C.S. adapter, data distribution and provisioning. Physical Windows ↔ Mac LAN validation and 24/7 operational validation remain **NOT YET PERFORMED**. |
-| **R.E.S.C.S.** | v0.3.0 **IMPLEMENTED** | Versioned HTTP API, enforced `X-API-Key` auth, records/files, streaming + resumable uploads, lifecycle/governance, audit, quotas, backup tooling, machine-readable C.O.R.E. contract. Live PostgreSQL/Supabase, real S3 and deployed C.O.R.E. ↔ R.E.S.C.S. interop are **Ready for External Validation**. |
-| **A.S.I.S.** | **IN DEVELOPMENT** | Rebuilt `asis` package: CLI, AI provider layer (Ollama), memory, tools, permissions, events, voice pipeline, first test suite. Legacy `core/` + `02_voice/` trees are deprecated and pending removal. C.O.R.E. uplink is a real optional adapter (standalone by default); R.E.S.C.S. remains future. |
-| **T.I.V.I.S.S.** | Foundation **IN DEVELOPMENT** (local clone present) | v0.1.0 foundation on GitHub and at `TIVISS/` (identity, ownership states, agent foundation, memory abstraction, adapter interfaces). Still foundation-only; real handover intentionally not implemented. |
+| **C.O.R.E.** | v0.3.1 **IMPLEMENTED** | v0.3.0 external-device platform + v0.3.1: CapabilityRouter with ModelProfile (device-capability-based model selection), RescsDeviceProxy (device-scoped namespace enforcement). Physical Windows ↔ Mac LAN validation and 24/7 operational validation remain **NOT YET PERFORMED**. |
+| **R.E.S.C.S.** | v0.3.1 **IMPLEMENTED** | v0.3.0 versioned HTTP API + v0.3.1: device-scoped namespace/owner validation (`validate_device_namespace`, `validate_device_owner`, `assert_device_ownership`), RESCS_API_KEY_OWNER enforcement. Live PostgreSQL/Supabase, real S3 and deployed C.O.R.E. ↔ R.E.S.C.S. interop are **Ready for External Validation**. |
+| **A.S.I.S.** | **IN DEVELOPMENT** | Rebuilt `asis` package: CLI, AI provider layer (Ollama), memory, tools, permissions, events, voice pipeline, first test suite. **ASCS integration IMPLEMENTED**: `ascs_integration` toolset (subprocess + API modes), `ascs_handover` for session continuity, `ascs_status` for monitoring. Legacy `core/` + `02_voice/` trees deprecated. C.O.R.E. uplink optional; R.E.S.C.S. future. |
+| **T.I.V.I.S.S.** | **IN DEVELOPMENT** (v0.3) | v0.3 capabilities: **OllamaProvider** (real Ollama HTTP API with streaming, tool calling, thinking tag stripping), **SQLiteMemoryStore** (dual DB: `conversation_logs.db` + `semantic_memory.db`), Web/Calculator/Translation/Voice config mirroring ASIS. Foundation v0.1 (identity, ownership, runtime, memory, permissions, handover). Local clone at `TIVISS/`; real handover intentionally not implemented. |
 | **RadarS.A.R.D.** | **PLANNED / FUTURE** | No code exists anywhere. |
-| **A.S.C.S.** | **IMPLEMENTED** (standalone) | v0.3.0 local coding agent (951 passed / 6 skipped 2026-09-23). Zero ecosystem integration today; C.O.R.E.-mediated use by A.S.I.S./T.I.V.I.S.S. is future intent. |
+| **A.S.C.S.** | **IMPLEMENTED** (standalone) | v0.3.0 local coding agent (951 passed / 6 skipped 2026-09-23). **ASIS integration IMPLEMENTED**: `export_handover_state()` for session continuity. C.O.R.E.-mediated use by A.S.I.S./T.I.V.I.S.S. is future intent. |
 
 The authoritative per-system detail is in [`systems/`](systems/). **Nothing in this repository describes unbuilt functionality as implemented.**
 
@@ -154,7 +154,7 @@ RISARMS/
 ├── RESCS/          <- https://github.com/Kishir298/RESCS
 ├── ASIS/           <- https://github.com/Kishir298/ASIS
 ├── ASCS/           <- https://github.com/Kishir298/ASCS
-├── TIVISS/         <- https://github.com/Kishir298/TIVISS (v0.1.0 foundation, local clone present but foundation-only)
+├── TIVISS/         <- https://github.com/Kishir298/TIVISS (v0.3 capabilities: OllamaProvider, SQLiteMemoryStore, local clone present)
 └── DOCS/           <- this repository (remote: RISARMS-DOCS)
 ```
 

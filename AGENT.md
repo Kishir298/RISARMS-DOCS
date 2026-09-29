@@ -10,11 +10,11 @@ You edit files, run tests, and report files changed/deleted + test results. Do N
 **In-scope (7 top-level entries):**
 
 - `ASIS/` — A Smart Intelligence System (primary AI layer)
-- `ASCS/` — A Smart Coding System (standalone coding agent)
-- `CORE-HOST/` — C.O.R.E. server/runtime (`core` package)
+- `ASCS/` — A Smart Coding System (standalone coding agent, ASIS integration IMPLEMENTED)
+- `CORE-HOST/` — C.O.R.E. server/runtime (`core` package), v0.3.1 with CapabilityRouter + RescsDeviceProxy
 - `CORE-CLIENT/` — C.O.R.E. external-device client (`client` package)
-- `RESCS/` — Cloud storage system
-- `TIVISS/` — Separate AI agent (foundation-only, no live handover)
+- `RESCS/` — Cloud storage system, v0.3.1 with device-scoped validation
+- `TIVISS/` — Separate AI agent (v0.3: OllamaProvider, SQLiteMemoryStore, Web/Calc/Translation/Voice config)
 - `DOCS/` — Architecture source of truth (this repo docs)
 
 **Explicitly excluded:**
@@ -108,3 +108,14 @@ git -C ASCS pull; git -C ASIS pull; git -C CORE-CLIENT pull; git -C CORE-HOST pu
 ```
 
 Verify all report "Already up to date" or fast-forward. Note any conflicts.
+
+**Enhanced verification (recommended):**
+```bash
+# Check all repos are clean after pull
+for dir in ASCS ASIS CORE-HOST CORE-CLIENT RESCS RISARMS-DOCS TIVISS; do
+  echo "=== $dir ==="
+  git -C "$dir" status --short
+done
+```
+
+If new repositories are added to the ecosystem after pull, they will appear as new directories. Add them to the sync list and update this protocol accordingly.

@@ -22,6 +22,7 @@ graph TB
     DEVICES["External Devices"]
 
     ASIS -->|requests (contract defined, no traffic)| CORE
+    ASIS -.->|coding + handover (IMPLEMENTED)| ASCS
     TIVISS -->|requests (future)| CORE
     RADAR -->|reports (future)| CORE
     ASCS -.->|future: reached via CORE| CORE
@@ -39,12 +40,15 @@ graph TB
 | Edge | Meaning | Status |
 |---|---|---|
 | A.S.I.S. → C.O.R.E. | A.S.I.S. requests services/storage/device action through C.O.R.E. | **PLANNED** (interfaces defined in A.S.I.S.; mock-only, no live traffic) |
+| A.S.I.S. ↔ A.S.C.S. | Coding capability + handover protocol | **IMPLEMENTED** (`ascs_integration` toolset + `export_handover_state()`) |
 | T.I.V.I.S.S. → C.O.R.E. | Same path, future agent | **FUTURE** |
 | RadarS.A.R.D. → C.O.R.E. | Detection/alert reporting | **FUTURE** |
-| A.S.C.S. ↔ C.O.R.E. | Coding capability mediated by C.O.R.E. | **FUTURE** (A.S.C.S. is standalone today) |
+| A.S.C.S. ↔ C.O.R.E. | Coding capability mediated by C.O.R.E. | **FUTURE** (A.S.C.S. is standalone today; ASIS integration direct) |
 | C.O.R.E. internal (Services/Router/Communication) | Internal dispatch within C.O.R.E. | **IMPLEMENTED** (message → router → service flow tested) |
 | C.O.R.E. → R.E.S.C.S. | Storage requests via `RescsAdapter` (`InMemory` / `File` / `Http`) | **IMPLEMENTED** in C.O.R.E. (`HttpRescsAdapter` + consuming contract tests); deployed cross-host interop not yet exercised |
 | C.O.R.E. → Devices | External-device transport | **IMPLEMENTED** (TCP + TLS + token auth + device protocol); physical LAN validation pending |
+| C.O.R.E. (CapabilityRouter) → ModelProfile | Device-capability-based model selection | **IMPLEMENTED (v0.3.1)** |
+| C.O.R.E. (RescsDeviceProxy) → R.E.S.C.S. | Device-scoped namespace enforcement | **IMPLEMENTED (v0.3.1)** |
 
 ## 2. Integration path (the canonical request flow)
 
@@ -94,10 +98,27 @@ sequenceDiagram
 - **Implemented (software):** TCP + TLS transport (TLS 1.2+, fail-closed when misconfigured externally), token authentication, handshake/protocol negotiation with 0.2.x legacy support, device registration with persistence (via R.E.S.C.S.), discovery, presence, reconnection handling, device-to-device routing through C.O.R.E., structured device errors, connection/frame limits, and a stdlib external client with provisioning (`provision-device`).
 - **Remaining:** physical Windows ↔ Mac LAN validation and 24/7 endurance.
 
+### C.O.R.E. CapabilityRouter & ModelProfile (v0.3.1)
+
+- **Implemented:** `CapabilityRouter` with `ModelProfile` for device-capability-based model selection. Devices report capabilities (RAM, CPU, GPU, platform); router selects best matching profile.
+- **Default Profiles:** `asis-local-heavy` (qwen3-coder:30b, 24GB RAM, CUDA), `asis-local-medium` (qwen2.5-coder:14b, 12GB RAM), `asis-local-light` (qwen3:14b, 8GB RAM), `asis-offload-phone` / `asis-offload-watch` for low-capability devices.
+- **Scoring:** `ModelProfile.score_for(device_caps)` scores by RAM/CPU/GPU match; `CapabilityRouter.select_model_profile(device_caps)` returns best match.
+
+### C.O.R.E. RescsDeviceProxy & Device-Scoped RESCS Access (v0.3.1)
+
+- **Implemented:** `RescsDeviceProxy` in C.O.R.E. (`core/services/rescs_proxy.py`) enforces device-scoped namespace enforcement.
+- **Namespace Rewriting:** Rewrites namespaces to `personal.device.{device_id}.{namespace}` format. Enforces reserved prefix protection (`core.`, `rescs.`, `asis.`, `tiviss.`).
+- **Owner Validation:** Rewrites owner fields to `personal.device.{device_id}.{owner}` format.
+- **RESCS API Validation:** RESCS API (`rescs/security.py`) validates device ownership via:
+  - `validate_device_namespace(namespace, device_id)` — validates/prefixes namespace
+  - `validate_device_owner(owner, device_id)` — validates/prefixes owner
+  - `assert_device_ownership(resource_owner, resource_namespace, device_id)` — asserts both belong to device
+- **Defense in Depth:** Namespaces rewritten at C.O.R.E. gateway **and** validated at RESCS API.
+
 ### C.O.R.E. ↔ A.S.C.S.
 
-- **Current:** none. A.S.C.S. is a fully standalone coding agent.
-- **Future:** A.S.I.S./T.I.V.I.S.S. reach coding capability through C.O.R.E. No contract exists yet.
+- **Current (Direct ASIS ↔ ASCS):** **IMPLEMENTED** — A.S.I.S. invokes A.S.C.S. via `ascs_integration` toolset (`ascs_integration`, `ascs_handover`, `ascs_status`). A.S.C.S. exposes `export_handover_state()` for session continuity. Invocation modes: `subprocess` (default, `risa` CLI) and `api` (Python API `run_graph_agent`).
+- **Future (C.O.R.E.-mediated):** A.S.I.S./T.I.V.I.S.S. reach coding capability through C.O.R.E. No contract exists yet; must be defined before wiring ([Integration Contracts](../interfaces/integration-contracts.md)).
 
 ### C.O.R.E. ↔ RadarS.A.R.D.
 

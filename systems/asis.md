@@ -71,6 +71,72 @@ A.S.I.S. ──(optional uplink, standalone by default)──▶ CORE-HOST (via 
 A.S.I.S. ──(future, via C.O.R.E.)──▶ R.E.S.C.S.
 ```
 
+## 6. A.S.I.S. ↔ A.S.C.S. Integration (IMPLEMENTED)
+
+A.S.I.S. can now invoke A.S.C.S. as a coding capability through the `ascs_integration` toolset, enabling seamless handover of coding tasks.
+
+### 6.1 `ascs_integration` Toolset
+
+Three tools are registered in the ASIS coding router (`asis/app/routers.py`):
+
+| Tool | Purpose |
+|------|---------|
+| `ascs_integration` | Execute coding tasks via A.S.C.S. with configurable invocation mode |
+| `ascs_handover` | Receive ASCS handover state and continue the task in ASIS |
+| `ascs_status` | Check ASCS availability, version, and active sessions |
+
+### 6.2 Invocation Modes
+
+The `ascs_integration` tool supports two invocation modes (configurable via `ASIS_ASCS_INVOKE_MODE`):
+
+| Mode | Description |
+|------|-------------|
+| `subprocess` (default) | Runs `risa` CLI command — clean isolation, captures stdout/stderr/exit codes |
+| `api` | Uses Python API directly (`agent.core.loop.run_graph_agent`) — better event streaming, requires shared venv |
+
+### 6.3 Handover Protocol
+
+ASCS exposes `export_handover_state()` on `AgentLoop` which serializes the current session state for ASIS takeover:
+
+```python
+state = loop.export_handover_state()
+# Returns dict with: task, plan, completed_actions, observations, partial_results,
+# context_index_ref, experience_tags, workspace, timestamp
+```
+
+The `ascs_handover` tool receives this state and builds a continuation context for ASIS.
+
+### 6.3 Configuration
+
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `ASIS_ASCS_ENABLED` | `false` | Enable ASCS integration |
+| `ASIS_ASCS_INVOKE_MODE` | `subprocess` | `subprocess` \| `api` |
+| `ASIS_ASCS_WORKSPACE` | `""` | Default workspace path |
+| `ASIS_ASCS_MODE` | `AUTO` | ASCS mode: `PLAN` \| `BUILD` \| `AUTO` |
+| `ASIS_ASCS_INTELLIGENCE` | `high` | Intelligence tier |
+| `ASIS_ASCS_MODEL` | `qwen3-coder:30b` | Ollama model |
+| `ASIS_ASCS_MAX_ITERATIONS` | `50` | Max iterations |
+| `ASIS_ASCS_HANDOVER_ENABLED` | `true` | Enable handover state extraction |
+
+### 6.4 Usage
+
+```python
+# ASIS invokes ASCS
+result = await ascs_integration.execute(
+    task="implement user authentication",
+    mode="AUTO",
+    workspace="/path/to/repo",
+    invoke_mode="subprocess"
+)
+
+# On completion, ASCS task_state.json enables handover
+handover_state = ascs_handover.execute(handover_state=result["handover_state"])
+# ASIS continues with full context
+```
+
+---
+
 ## Related
 
 - [System Boundaries](../architecture/system-boundaries.md)
