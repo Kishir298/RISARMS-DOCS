@@ -10,12 +10,12 @@ You edit files, run tests, and report files changed/deleted + test results. Do N
 **In-scope (7 top-level entries):**
 
 - `ASIS/` — A Smart Intelligence System (primary AI layer)
-- `ASCS/` — A Smart Coding System (standalone coding agent, ASIS integration IMPLEMENTED)
+- `ASCS/` — A Smart Coding System (standalone coding agent, ASIS integration PLANNED)
 - `CORE-HOST/` — C.O.R.E. server/runtime (`core` package), v0.3.1 with CapabilityRouter + RescsDeviceProxy
 - `CORE-CLIENT/` — C.O.R.E. external-device client (`client` package)
 - `RESCS/` — Cloud storage system, v0.3.1 with device-scoped validation
 - `TIVISS/` — Separate AI agent (v0.3: OllamaProvider, SQLiteMemoryStore, Web/Calc/Translation/Voice config)
-- `DOCS/` — Architecture source of truth (this repo docs)
+- `RISARMS-DOCS/` — Architecture source of truth (this repo docs)
 
 **Explicitly excluded:**
 
@@ -46,9 +46,9 @@ Rules:
 ## 3. Taxonomy
 
 - **Status vocabulary:** `IMPLEMENTED` / `IN DEVELOPMENT` / `PLANNED` / `FUTURE` (see `DOCS/architecture/overview.md`). Never describe unbuilt as built.
-- **Top-level layout:** see `DOCS/README.md §7 Repository structure`.
-- **Per-system ownership:** see `DOCS/systems/` and `DOCS/architecture/system-boundaries.md`.
-- **Interactions:** all cross-system traffic flows through C.O.R.E. (see `DOCS/architecture/system-interactions.md`).
+- **Top-level layout:** see `RISARMS-DOCS/README.md §7 Repository structure`.
+- **Per-system ownership:** see `RISARMS-DOCS/systems/` and `RISARMS-DOCS/architecture/system-boundaries.md`.
+- **Interactions:** all cross-system traffic flows through C.O.R.E. (see `RISARMS-DOCS/architecture/system-interactions.md`).
 - **Stale-tree rule:** `__pycache__`-only legacy trees with 0× `.py` (e.g. ex-`ASIS/core/`, ex-`ASIS/02_voice/`) may be deleted with `Remove-Item -Recurse` after verifying `(Get-ChildItem -Filter *.py).Count -eq 0`.
 - **Orphan-venv rule:** `Lib/site-packages`-only fragments may be deleted; project scripts (e.g. `CORE-HOST/Scripts/windows/`) must be kept. Verify with `Test-Path` first.
 - **Audit-report rule:** root `.pytest_cache/`, root `AUDIT_REPORT.md`, `DOCS/AUDIT_*.md` are disposable artifacts when user says "remove audit_report from everywhere". Never delete `.git/`.
@@ -81,12 +81,12 @@ Reference: `DOCS/README.md`, `DOCS/architecture/`, `DOCS/systems/`, `DOCS/interf
 
 ## 6. Canonical Reference Documents
 
-- `DOCS/R.I.S.A.R.M.S brief.txt` — High-level system overview (R.I.S.A.R.M.S, C.O.R.E, R.E.S.C.S, A.S.I.S, T.I.V.I.S.S, RadarS.A.R.D)
-- `DOCS/README.md` — Repository structure and navigation
-- `DOCS/architecture/overview.md` — System status vocabulary and architecture
-- `DOCS/systems/` — Per-system ownership and interfaces
-- `DOCS/architecture/system-interactions.md` — Cross-system communication flows
-- `DOCS/architecture/system-boundaries.md` — Independence rules and boundaries
+- `RISARMS-DOCS/R.I.S.A.R.M.S brief.txt` — High-level system overview (R.I.S.A.R.M.S, C.O.R.E, R.E.S.C.S, A.S.I.S, T.I.V.I.S.S, RadarS.A.R.D)
+- `RISARMS-DOCS/README.md` — Repository structure and navigation
+- `RISARMS-DOCS/architecture/overview.md` — System status vocabulary and architecture
+- `RISARMS-DOCS/systems/` — Per-system ownership and interfaces
+- `RISARMS-DOCS/architecture/system-interactions.md` — Cross-system communication flows
+- `RISARMS-DOCS/architecture/system-boundaries.md` — Independence rules and boundaries
 
 ## 7. Repository Sync Protocol
 
@@ -97,14 +97,14 @@ git -C ASCS pull
 git -C ASIS pull
 git -C CORE-CLIENT pull
 git -C CORE-HOST pull
-git -C DOCS pull
+git -C RISARMS-DOCS pull
 git -C RESCS pull
 git -C TIVISS pull
 ```
 
 Or single command (PowerShell):
 ```powershell
-git -C ASCS pull; git -C ASIS pull; git -C CORE-CLIENT pull; git -C CORE-HOST pull; git -C DOCS pull; git -C RESCS pull; git -C TIVISS pull
+git -C ASCS pull; git -C ASIS pull; git -C CORE-CLIENT pull; git -C CORE-HOST pull; git -C RISARMS-DOCS pull; git -C RESCS pull; git -C TIVISS pull
 ```
 
 Verify all report "Already up to date" or fast-forward. Note any conflicts.

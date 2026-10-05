@@ -1,4 +1,4 @@
-# 0009 — Handover Model for T.I.V.I.S.S.
+# 0009 â€” Handover Model for T.I.V.I.S.S.
 
 **Status:** Accepted
 **Date:** 2026-09-30
@@ -94,5 +94,5 @@ All namespaces are device-scoped via R.E.S.C.S. device validation (N13).
 ## References
 
 - [0007 -- A.S.C.S. Standalone Coding Agent](0007-ascs-standalone-coding-agent.md)
-- [N13 -- Device-Scoped Validation](https://github.com/.../N13)
-- [N14 -- Ownership Integration](https://github.com/.../N14)
+- N13 -- Device-Scoped Validation (internal doc)
+- N14 -- Ownership Integration (internal doc)

@@ -6,3 +6,5 @@ Roadmap, contribution, testing, and versioning guides.
 - [Contribution](./contribution.md)
 - [Testing](./testing.md)
 - [Versioning](./versioning.md)
+- [External Validation Runbook](./external-validation-runbook.md)
+- [Agent Skills](./skills.md)

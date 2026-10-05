@@ -25,12 +25,12 @@ A version is only coherent when these agree:
 
 | System | Version | Consistency |
 |---|---|---|
-| **C.O.R.E. (CORE-HOST)** | `0.3.0` | Consistent (pyproject, version module, config) |
-| **CORE-CLIENT** | `0.3.0` | Consistent, stdlib-only |
+| **C.O.R.E. (CORE-HOST)** | `0.4.0` | Consistent (pyproject, version module, config) |
+| **CORE-CLIENT** | `0.4.0` | Consistent, stdlib-only |
 | **R.E.S.C.S.** | `0.3.0` | Consistent (pyproject + CHANGELOG) |
 | **A.S.I.S.** | `0.1.0` | Consistent for `asis` package; + identities subsystem (parser/memory/persona/calibration/CLI) |
 | **A.S.C.S.** | `0.3.0` | Consistent; note distribution name `coding-agent` vs package `agent` vs command `risa` |
-| **T.I.V.I.S.S.** | `0.2` caps on 0.1.0 foundation | Local clone at `TIVISS/` (CLI, export/import, logging, voice, core_tcp/rescs_http offline-tested) |
+| **T.I.V.I.S.S.** | `0.2.0` | Local clone at `TIVISS/` (CLI, export/import, logging, voice, core_tcp/rescs_http offline-tested) |
 | **Portals** | `v0.4.0` | Presentation-only on 0.3.0 (CORE-HOST + CLIENT portals) |
 | **Radar** | — | Code-free |
 

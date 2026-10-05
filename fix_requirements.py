@@ -1,5 +1,3 @@
-import re
-
 with open('requirements.txt', 'r') as f:
     content = f.read()
 

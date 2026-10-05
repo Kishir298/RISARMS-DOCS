@@ -15,6 +15,17 @@ A.S.C.S. is recognized as a **member system of the R.I.S.A.R.M.S. ecosystem** wi
 - When integration happens, it follows the standard rule: A.S.I.S./T.I.V.I.S.S. reach coding capability **through C.O.R.E.**, never by invoking A.S.C.S. directly. The contract must be defined first ([Integration Contracts](../interfaces/integration-contracts.md)), per contract-first integration.
 - A.S.C.S. must not grow ecosystem coordination, storage, or security-infrastructure responsibilities; those owners are unchanged ([System Boundaries](../architecture/system-boundaries.md)).
 
+## Exception: Local ASIS↔ASCS Tool Integration (2026-10-05)
+
+An explicitly supported exception to the C.O.R.E.-mediated rule is granted for **local coding tool invocation**:
+
+- A.S.I.S. `ascs_integration` tool may invoke A.S.C.S. via subprocess (`risa` CLI) or Python API (`run_graph_agent`).
+- A.S.C.S. `risa` CLI and `run_graph_agent` are the supported entry points.
+- Handover protocol (`task_state.json`, `context_index.json`) is the contract.
+- No C.O.R.E. mediation required for this specific tool boundary.
+- Rationale: Low-latency coding workflow; both packages independently installable.
+- This exception does not authorize A.S.I.S. or T.I.V.I.S.S. to import A.S.C.S. internals, share state, or bypass C.O.R.E. for any other purpose.
+
 ## Alternatives
 
 - **Leave A.S.C.S. undocumented** — rejected: the docs must reflect the actual repository network, and an unrecorded system invites accidental coupling.

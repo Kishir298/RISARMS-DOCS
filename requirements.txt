@@ -1,36 +1,24 @@
 # RISARMS Ecosystem - Unified Requirements with Three Install Commands
-# Location: C:\Users\rishi\Desktop\RISARMS\DOCS\requirements.txt
+# Location: C:\Users\rishi\Desktop\RISARMS\RISARMS-DOCS\requirements.txt
 #
-# THREE INSTALL COMMANDS:
+# THREE INSTALL COMMANDS (use generated manifest files, NOT pip --exclude):
 # =============================================================================
 #
-# COMMAND 1 - EVERYTHING (all packages + all extras from all 6 repos):
-#   pip install -r C:\Users\rishi\Desktop\RISARMS\DOCS\requirements.txt
+# COMMAND 1 - EVERYTHING (all packages + all extras from all 7 repos):
+#   pip install -r C:\Users\rishi\Desktop\RISARMS\RISARMS-DOCS\requirements.txt
 #
 # COMMAND 2 - EVERYTHING EXCEPT CORE-HOST:
-#   pip install -r C:\Users\rishi\Desktop\RISARMS\DOCS\requirements.txt --exclude=CORE-HOST
+#   pip install -r C:\Users\rishi\Desktop\RISARMS\RISARMS-DOCS\requirements-no-host.txt
 #
 # COMMAND 3 - EVERYTHING EXCEPT CORE-CLIENT:
-#   pip install -r C:\Users\rishi\Desktop\RISARMS\DOCS\requirements.txt --exclude=CORE-CLIENT
+#   pip install -r C:\Users\rishi\Desktop\RISARMS\RISARMS-DOCS\requirements-no-client.txt
 #
-# NOTE: pip --exclude is not standard. Use one of these methods:
-#   Method 1 - Manual: Copy the relevant section to a temp file and pip install -r temp.txt
-#   Method 2 - Script: Use the helper script below
-#   Method 3 - Manual install: Copy/paste the relevant section
-#
-# HELPER SCRIPT (save as install.py and run: python install.py [all|no-host|no-client]):
-# import sys, re
-# section = sys.argv[1] if len(sys.argv) > 1 else 'all'
-# with open(__file__) as f: content = f.read()
-# section_content = re.search(f'# SECTION: {re.escape(section)}(.*?)(?=# SECTION:|$)', content, re.DOTALL)
-# if section_content:
-#     lines = [l for l in section_content.group(1).split('\n') if l and not l.startswith('#')]
-#     with open('temp_req.txt', 'w') as f: f.write('\n'.join(lines))
-#     print(f'Created temp_req.txt for section: {section}')
-#     print('Run: pip install -r temp_req.txt')
+# GENERATED MANIFEST FILES (run this script to regenerate):
+#   requirements.txt              - all packages
+#   requirements-no-host.txt      - excludes CORE-HOST/RESCS deps
+#   requirements-no-client.txt    - excludes CORE-CLIENT deps (same as all)
 #
 # =============================================================================
-
 # SECTION: all
 # =============================================================================
 # CORE RUNTIME - All projects
@@ -51,8 +39,6 @@ python-multipart==0.0.32
 # EXTRAS - All optional dependencies from all projects
 textual>=0.70
 textual-dev>=0.70
-tomli>=2.0
-tomli-w>=1.0
 numpy
 scipy
 sounddevice
@@ -78,6 +64,7 @@ pytest-asyncio>=0.23
 httpx==0.28.1
 ruff
 black
+
 
 # SECTION: except-core-host
 # =============================================================================
@@ -87,20 +74,10 @@ python-dotenv>=1.0
 sympy>=1.13
 requests>=2.31
 windows-curses>=2.3; sys_platform == "win32"
-# PyYAML>=6.0  <-- EXCLUDED (core-host)
-# fastapi==0.141.1  <-- EXCLUDED (core-host/RESCS)
-# uvicorn[standard]==0.52.4  <-- EXCLUDED (core-host/RESCS)
-# sqlalchemy==2.0.52  <-- EXCLUDED (core-host/RESCS)
-# psycopg[binary]==3.3.4  <-- EXCLUDED (core-host/RESCS)
-# pydantic==2.13.5  <-- EXCLUDED (core-host/RESCS)
-# pydantic-settings==2.15.0  <-- EXCLUDED (core-host/RESCS)
-# python-multipart==0.0.32  <-- EXCLUDED (core-host/RESCS)
 
-# EXTRAS - All optional (same as all)
+# EXTRAS - All optional dependencies from all projects
 textual>=0.70
 textual-dev>=0.70
-tomli>=2.0
-tomli-w>=1.0
 numpy
 scipy
 sounddevice
@@ -126,6 +103,7 @@ pytest-asyncio>=0.23
 httpx==0.28.1
 ruff
 black
+
 
 # SECTION: except-core-client
 # =============================================================================
@@ -144,11 +122,9 @@ pydantic==2.13.5
 pydantic-settings==2.15.0
 python-multipart==0.0.32
 
-# EXTRAS - All optional (same as all)
+# EXTRAS - All optional dependencies from all projects
 textual>=0.70
 textual-dev>=0.70
-tomli>=2.0
-tomli-w>=1.0
 numpy
 scipy
 sounddevice

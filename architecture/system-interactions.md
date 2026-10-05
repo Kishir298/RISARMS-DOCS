@@ -22,7 +22,7 @@ graph TB
     DEVICES["External Devices"]
 
     ASIS -->|requests (contract defined, no traffic)| CORE
-    ASIS -.->|coding + handover (IMPLEMENTED)| ASCS
+    ASIS -.->|coding + handover (PLANNED)| ASCS
     TIVISS -->|requests (future)| CORE
     RADAR -->|reports (future)| CORE
     ASCS -.->|future: reached via CORE| CORE
@@ -40,7 +40,7 @@ graph TB
 | Edge | Meaning | Status |
 |---|---|---|
 | A.S.I.S. → C.O.R.E. | A.S.I.S. requests services/storage/device action through C.O.R.E. | **PLANNED** (interfaces defined in A.S.I.S.; mock-only, no live traffic) |
-| A.S.I.S. ↔ A.S.C.S. | Coding capability + handover protocol | **IMPLEMENTED** (`ascs_integration` toolset + `export_handover_state()`) |
+| A.S.I.S. ↔ A.S.C.S. | Coding capability + handover protocol | **PLANNED** (`ascs_integration` toolset + `export_handover_state()`) |
 | T.I.V.I.S.S. → C.O.R.E. | Same path, future agent | **FUTURE** |
 | RadarS.A.R.D. → C.O.R.E. | Detection/alert reporting | **FUTURE** |
 | A.S.C.S. ↔ C.O.R.E. | Coding capability mediated by C.O.R.E. | **FUTURE** (A.S.C.S. is standalone today; ASIS integration direct) |
@@ -117,7 +117,7 @@ sequenceDiagram
 
 ### C.O.R.E. ↔ A.S.C.S.
 
-- **Current (Direct ASIS ↔ ASCS):** **IMPLEMENTED** — A.S.I.S. invokes A.S.C.S. via `ascs_integration` toolset (`ascs_integration`, `ascs_handover`, `ascs_status`). A.S.C.S. exposes `export_handover_state()` for session continuity. Invocation modes: `subprocess` (default, `risa` CLI) and `api` (Python API `run_graph_agent`).
+- **Current (Direct ASIS ↔ ASCS):** **PLANNED** — A.S.I.S. invokes A.S.C.S. via `ascs_integration` toolset (`ascs_integration`, `ascs_handover`, `ascs_status`). A.S.C.S. exposes `export_handover_state()` for session continuity. Invocation modes: `subprocess` (default, `risa` CLI) and `api` (Python API `run_graph_agent`). This direct path exists but is not the canonical integration path.
 - **Future (C.O.R.E.-mediated):** A.S.I.S./T.I.V.I.S.S. reach coding capability through C.O.R.E. No contract exists yet; must be defined before wiring ([Integration Contracts](../interfaces/integration-contracts.md)).
 
 ### C.O.R.E. ↔ RadarS.A.R.D.

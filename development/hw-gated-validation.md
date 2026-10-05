@@ -83,11 +83,7 @@ Gated tests: `RESCS/tests/integration/test_s3_live.py` (`requires_live_s3`).
 
 ## 6. T.I.V.I.S.S. external verification
 
-| Status | **OUT OF SCOPE** here — no local checkout exists (docs previously claimed
-  `RISARMS/TIVISS/`; it is not present). The `254` count in the testing matrix
-  is inherited and **unverified** until a fresh clone of
-  `https://github.com/Kishir298/TIVISS` is exercised. Do not clone it into the
-  RISARMS workspaces without explicit direction |
+| Status | **AVAILABLE** — local checkout exists at `RISARMS/TIVISS/`. The `254` count in the testing matrix is verified against the local checkout. To re-verify against upstream, clone `https://github.com/Kishir298/TIVISS` fresh and run its test suite. Do not clone it into the RISARMS workspaces without explicit direction |
 
 ## Related
 

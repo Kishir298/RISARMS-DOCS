@@ -72,11 +72,11 @@ The arrows are explained precisely in [System Interactions](architecture/system-
 | System | Status | Notes |
 |---|---|---|
 | **C.O.R.E.** | v0.3.1 **IMPLEMENTED** | v0.3.0 external-device platform + v0.3.1: CapabilityRouter with ModelProfile (device-capability-based model selection), RescsDeviceProxy (device-scoped namespace enforcement). Physical Windows ↔ Mac LAN validation and 24/7 operational validation remain **NOT YET PERFORMED**. |
-| **R.E.S.C.S.** | v0.3.1 **IMPLEMENTED** | v0.3.0 versioned HTTP API + v0.3.1: device-scoped namespace/owner validation (`validate_device_namespace`, `validate_device_owner`, `assert_device_ownership`), RESCS_API_KEY_OWNER enforcement. Live PostgreSQL/Supabase, real S3 and deployed C.O.R.E. ↔ R.E.S.C.S. interop are **Ready for External Validation**. |
-| **A.S.I.S.** | **IN DEVELOPMENT** | Rebuilt `asis` package: CLI, AI provider layer (Ollama), memory, tools, permissions, events, voice pipeline, first test suite. **ASCS integration IMPLEMENTED**: `ascs_integration` toolset (subprocess + API modes), `ascs_handover` for session continuity, `ascs_status` for monitoring. Legacy `core/` + `02_voice/` trees deprecated. C.O.R.E. uplink optional; R.E.S.C.S. future. |
+| **R.E.S.C.S.** | v0.3.1 **IMPLEMENTED** | v0.3.0 versioned HTTP API + v0.3.1: device-scoped namespace/owner validation (`validate_device_namespace`, `validate_device_owner`, `assert_device_ownership`), RESCS_API_KEY_OWNER enforcement. Live PostgreSQL/Supabase, real S3 and deployed C.O.R.E. ↔ R.E.S.C.S. interop are **PLANNED** — software contract implemented, external validation pending. |
+| **A.S.I.S.** | **IN DEVELOPMENT** | Rebuilt `asis` package: CLI, AI provider layer (Ollama), memory, tools, permissions, events, voice pipeline, first test suite. **ASCS integration PLANNED**: `ascs_integration` toolset (subprocess + API modes), `ascs_handover` for session continuity, `ascs_status` for monitoring — direct local-tool exception documented in ADR 0007; C.O.R.E.-mediated path is FUTURE. Legacy `core/` + `02_voice/` trees deprecated. C.O.R.E. uplink optional; R.E.S.C.S. future. |
 | **T.I.V.I.S.S.** | **IN DEVELOPMENT** (v0.3) | v0.3 capabilities: **OllamaProvider** (real Ollama HTTP API with streaming, tool calling, thinking tag stripping), **SQLiteMemoryStore** (dual DB: `conversation_logs.db` + `semantic_memory.db`), Web/Calculator/Translation/Voice config mirroring ASIS. Foundation v0.1 (identity, ownership, runtime, memory, permissions, handover). Local clone at `TIVISS/`; real handover intentionally not implemented. |
 | **RadarS.A.R.D.** | **PLANNED / FUTURE** | No code exists anywhere. |
-| **A.S.C.S.** | **IMPLEMENTED** (standalone) | v0.3.0 local coding agent (951 passed / 6 skipped 2026-09-23). **ASIS integration IMPLEMENTED**: `export_handover_state()` for session continuity. C.O.R.E.-mediated use by A.S.I.S./T.I.V.I.S.S. is future intent. |
+| **A.S.C.S.** | **IMPLEMENTED** (standalone) | v0.3.0 local coding agent (951 passed / 6 skipped 2026-09-23). **ASIS integration PLANNED**: `export_handover_state()` for session continuity — direct local-tool exception in ADR 0007; C.O.R.E.-mediated use by A.S.I.S./T.I.V.I.S.S. is future intent. |
 
 The authoritative per-system detail is in [`systems/`](systems/). **Nothing in this repository describes unbuilt functionality as implemented.**
 
@@ -155,10 +155,11 @@ RISARMS/
 ├── ASIS/           <- https://github.com/Kishir298/ASIS
 ├── ASCS/           <- https://github.com/Kishir298/ASCS
 ├── TIVISS/         <- https://github.com/Kishir298/TIVISS (v0.3 capabilities: OllamaProvider, SQLiteMemoryStore, local clone present)
+├── Flavora/        <- https://github.com/Kishir298/Flavora (local-first food companion; offline IndexedDB sync, independent repo)
 └── DOCS/           <- this repository (remote: RISARMS-DOCS)
 ```
 
-> [!NOTE] **Out-of-scope sibling:** a local-first food companion `Flavora/` may sit beside these directories on a developer machine. It is **not** an ecosystem member and is **not** governed by this architecture — do not infer membership by proximity.
+> [!NOTE] **Ecosystem sibling:** `Flavora/` is an independent repository with its own IndexedDB-backed offline mutation replay and idempotency model. It is not governed by the C.O.R.E. architecture but documents its sync protocol here for reference. It does not participate in C.O.R.E. routing or R.E.S.C.S. storage.
 
 > [!IMPORTANT] **Independence rule:** R.E.S.C.S., A.S.I.S., A.S.C.S. and T.I.V.I.S.S. are independent projects. They live *beside* C.O.R.E., not inside it. Integration happens through defined interfaces and communication contracts, never through code sharing.
 
