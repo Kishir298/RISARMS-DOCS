@@ -171,6 +171,7 @@ This repository is written to be read by **people and by future coding agents**.
 - **For a system's responsibility**, read its page in [`systems/`](systems/).
 - **To determine who owns what**, read [System Boundaries](architecture/system-boundaries.md) and [Trust Boundaries](security/trust-boundaries.md).
 - **To integrate systems**, read [Interface Contracts](interfaces/communication.md) and [Integration Contracts](interfaces/integration-contracts.md).
+- **To monitor systems**, read [Prometheus Metrics](monitoring/prometheus.md).
 - **Before changing anything**, read [Development Contributions](development/contribution.md) and the relevant [Decision Records](decisions/README.md).
 - **To know what is allowed to change**, use the status markers: `IMPLEMENTED` functionality is real; `PLANNED`/`FUTURE` functionality is not yet built and must never be described as built.
 
