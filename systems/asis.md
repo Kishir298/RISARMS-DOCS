@@ -1,6 +1,6 @@
 # A.S.I.S. — A Smart Intelligence System
 
-> [!NOTE] **Status:** **IN DEVELOPMENT** — rebuilt `asis` package ships CLI (stateful multi-turn), Ollama provider, inference/conversation/context engines, local SQLite memory (query-scoped recall), tool system (calculator 30 ops, 136-lang translation, web search/fetch, coding tools, 7 CORE tools; native function-calling primary, up to ASIS_TOOL_MAX_CALLS_PER_TURN per turn), permissions (confirmation-gated), events, and voice pipeline sharing app chat loop. Suite: 53 files / 789 passed / 10 skipped (2026-09-23, verify with pytest -q). Legacy `core/` + `02_voice/` trees deprecated, pending removal. C.O.R.E. uplink is a real optional adapter (via CORE-CLIENT, standalone by default; physical LAN validation NOT PERFORMED). R.E.S.C.S. remains future/placeholder. A.S.I.S. is an **independent project**.
+> [!NOTE] **Status:** **IN DEVELOPMENT** — rebuilt `asis` package (v0.1.0) ships CLI, Ollama provider, inference/conversation/context engines, local SQLite memory, tool system, permissions, events, voice pipeline, and the Pi policy/worker/handoff update. Verified: **941 passed / 24 skipped** (macOS Python 3.12, 2026-11-09). Legacy `core/` + `02_voice/` trees deprecated. C.O.R.E. uplink is a real optional adapter via `CORE/CORE-CLIENT`, standalone by default; physical LAN validation NOT PERFORMED. R.E.S.C.S. remains future/placeholder. A.S.I.S. is an **independent project**.
 
 ## 1. What A.S.I.S. is
 
@@ -26,7 +26,7 @@ A.S.I.S. **does not directly own** C.O.R.E.'s responsibilities: message routing,
 
 > [!IMPORTANT] A.S.I.S. is an independent project. It must **never** be placed inside CORE. It uses C.O.R.E. through interfaces. Rationale: ADR [0002](../decisions/0002-asis-independent-from-core.md).
 
-- Location: `RISARMS/ASIS/` (sibling of `CORE-HOST/`, `CORE-CLIENT/`, `RESCS/`, `ASCS/`, `TIVISS/`, `DOCS/`)
+- Location: `RISARMS/ASIS/` (sibling of `CORE/`, `RESCS/`, `ASCS/`, `TIVISS/`, `RISARMS-DOCS/`); mirrored at `CORE/services/ASIS/` for the combined release
 - Own git repository (origin `https://github.com/Kishir298/ASIS.git`, branch `main`; `legacy-before-rebuild` branch preserves the pre-rebuild state)
 - Stack: Python ≥ 3.11, setuptools package `asis`; extras for AI (`ollama`, `requests`), voice (`faster-whisper`, `silero-vad`, `sounddevice`, torch stack, openwakeword), dev (pytest/ruff/black)
 - Entry points: `asis` console script (`asis.cli.main:entry`) and `python -m asis`
@@ -55,7 +55,7 @@ A.S.I.S. **does not directly own** C.O.R.E.'s responsibilities: message routing,
 - Pipeline/factory abstraction (mock default; faster-whisper/STT, pyttsx3/TTS, Silero VAD, wake-word optional). Shares `AssistantApp.chat()`; real-engine hardware validation NOT PERFORMED.
 
 ### Tests
-- Top-level `tests/` suite (53 files, 789 passed / 10 skipped 2026-09-23): config, ai/conversation/memory, calculator (62), translation (54), web (89), tools/permissions, coding, voice, CLI/interactive, offline, CORE adapter/tools (7 files); runs via `python3 -m pytest -q`.
+- Top-level `tests/` suite: **941 passed / 24 skipped** on macOS Python 3.12 (2026-11-09; 965 collected). Coverage includes config, AI/conversation/memory, calculator, translation, web, tools/permissions, coding, voice, CLI/interactive, offline, CORE adapter/tools, Pi policy, and release contract/portal checks. Runs via `.venv/bin/python -m pytest -q`.
 
 ## 4. Legacy material (deprecated, pending removal)
 
@@ -63,7 +63,7 @@ Pre-rebuild Forza-era trees (`core/`, `02_voice/`, `monitoring/`) are **deprecat
 
 ## 5. A.S.I.S. ↔ C.O.R.E. ↔ R.E.S.C.S. integration (CORE real-optional, RESCS future)
 
-- `integrations/core` — `RealCoreAdapter` + `CoreConnectionManager` over `CORE-CLIENT/CoreDeviceClient` (TCP+TLS, `CORE_HANDSHAKE`→auth→`DEVICE_REGISTER`→online). Opt-in via `ASIS_CORE_ENABLED=true`; standalone by default. Local operation survives host loss; reconnect bounded/stop-aware; `CORE_UNAVAILABLE` on failure. Physical LAN validation NOT PERFORMED.
+- `integrations/core` — `RealCoreAdapter` + `CoreConnectionManager` over `CORE/CORE-CLIENT/CoreDeviceClient` (TCP+TLS, `CORE_HANDSHAKE`→auth→`DEVICE_REGISTER`→online). Opt-in via `ASIS_CORE_ENABLED=true`; standalone by default. Local operation survives host loss; reconnect bounded/stop-aware; `CORE_UNAVAILABLE` on failure. Physical LAN validation NOT PERFORMED.
 - `integrations/rescs` — placeholder adapter (`available()->False`); future storage flows via C.O.R.E., never direct.
 
 ```text

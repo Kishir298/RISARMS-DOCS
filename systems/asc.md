@@ -2,7 +2,7 @@
 
 > [!NOTE] **File note:** this page lives at `systems/asc.md` (abbreviation `asc`) for historical link stability; it documents **A.S.C.S.**
 
-> [!NOTE] **Status:** **IMPLEMENTED as a standalone tool** (v0.3.0, 949 passed / 6 skipped 2026-09-18 + opt-in live tests). A.S.C.S. is a local, private, autonomous coding agent built on Ollama: it plans, writes, runs and verifies code inside an explicit workspace, with three session modes, a web UI and a terminal TUI. **ASIS integration is IMPLEMENTED** — ASIS can invoke ASCS via `ascs_integration` tool with handover protocol; ASCS exposes `export_handover_state()` for session continuity. Full C.O.R.E.-mediated integration remains **PLANNED/FUTURE**.
+> [!NOTE] **Status:** **IMPLEMENTED as a standalone tool** (v0.3.0, **991 passed / 6 skipped** on macOS Python 3.12, 2026-11-09; opt-in live tests). A.S.C.S. is a local, private, autonomous coding agent built on Ollama: it plans, writes, runs and verifies code inside an explicit workspace, with three session modes, a web UI, a terminal TUI, and a Linux/Pi headless generation-only path. **ASIS integration is IMPLEMENTED** — ASIS can invoke ASCS via `ascs_integration` with handover; ASCS exposes `export_handover_state()`. Full C.O.R.E.-mediated integration remains **PLANNED/FUTURE**.
 
 ## 1. What A.S.C.S. is
 
@@ -12,12 +12,12 @@ Its declared long-term role in R.I.S.A.R.M.S. is as a coding capability that A.S
 
 ## 2. Project facts
 
-- Location: `RISARMS/ASCS/` (sibling of `CORE-HOST/` + `CORE-CLIENT/`, `RESCS/`, `ASIS/`, `TIVISS/`, `DOCS/`)
-- Own git repository (origin `https://github.com/Kishir298/ASCS.git`, branch `main`, 82 commits)
+- Location: `RISARMS/ASCS/` (sibling of `CORE/`, `RESCS/`, `ASIS/`, `TIVISS/`, `RISARMS-DOCS/`); mirrored at `CORE/services/ASCS/` for the combined release
+- Own git repository (origin `https://github.com/Kishir298/ASCS.git`, branch `main`)
 - Package: `agent` (distribution name `coding-agent`), version `0.3.0`
-- Entry point: `risa` (e.g. `risa --auto "…"`, `risa --tasks "…"`, `risa --ui`, `risa --tui`, `risa --doctor`)
-- Runtime: **Windows-only** (web UI/TUI + Ollama; 32 GB target); **dev testing is cross-platform** (pytest passes on macOS/Linux)
-- Tests: 949 passed / 6 skipped 2026-09-18 (live Ollama tests opt-in via `RISALIVE=1`, skipped by default; verify with `pytest -q`)
+- Entry point: `risa` (e.g. `risa --auto "…"`, `risa --tasks "…"`, `risa --ui`, `risa --tui`, `risa --doctor`, `risa --pi`)
+- Runtime: desktop web UI/TUI is **Windows-oriented** (32 GB target); the Pi path is **Linux ARM64 headless generation-only** (no tools/TUI); **dev testing is cross-platform**
+- Tests: **991 passed / 6 skipped** on macOS Python 3.12 (2026-11-09; live Ollama tests opt-in via `RISALIVE=1`, skipped by default)
 
 ## 3. What is implemented
 
@@ -34,6 +34,14 @@ Its declared long-term role in R.I.S.A.R.M.S. is as a coding capability that A.S
 | Project context (workspace, toolchain, context index; dual chunk limits 30B/14B) | IMPLEMENTED |
 | Experience store (phase 5 learning groundwork) | IMPLEMENTED (early) |
 | Verification engine (tool success vs objective success) | IMPLEMENTED |
+
+### Pi headless path (v0.3.0 update)
+
+`risa --pi` adds an experimental Linux ARM64 generation-only path with admission
+policy (`agent/pi.py`): cgroup v2 memory checks, model digest/quantization
+approval, a single inference slot, no tools and no TUI. It is intended for the
+Pi deployment, not for desktop use. macOS/Linux unit tests mock the platform
+guard; real cgroup/systemd/ARM64 behavior is unvalidated.
 
 ## 5. Integration with ASIS (IMPLEMENTED)
 

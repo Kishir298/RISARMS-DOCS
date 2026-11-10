@@ -133,12 +133,12 @@ The full ownership table is in [System Boundaries](system-boundaries.md#1-respon
 
 | System | Now | Next |
 |---|---|---|
-| **C.O.R.E.** | v0.3.0 software IMPLEMENTED (verify with pytest -q) + v0.4.0 localhost host/client portals (offline-tested, LAN validation pending): TLS device transport, token auth, device registry/persistence, agent scheduling, HTTP R.E.S.C.S. adapter, data distribution | Physical Windows ↔ Mac LAN validation; 24/7 operational validation |
-| **R.E.S.C.S.** | v0.3.0: versioned HTTP API, enforced API-key auth, records/files, streaming + resumable uploads, lifecycle/governance, C.O.R.E. contract | Live PostgreSQL/Supabase + real S3 validation; deployed C.O.R.E. ↔ R.E.S.C.S. interop |
-| **A.S.I.S.** | Rebuilt `asis` package (CLI, Ollama provider, memory, 30-op calculator, 136-lang translation, web tools, coding mode, permissions, voice pipeline; 693 tests) + legacy `core/`/`02_voice/` trees deprecated, pending removal | Physical LAN validation; R.E.S.C.S. via C.O.R.E. (future) |
-| **T.I.V.I.S.S.** | Local agent at `TIVISS/` (v0.2: CLI, export/import, logging, voice abstraction, real stdlib transports offline-tested; still no live traffic) | Resolve the handover model |
+| **C.O.R.E.** | v0.5.0 combined project (839 host + 200 client tests passed on macOS 3.12): Pi service integration, signed R.E.S.C.S. scope, `/api/ai-status`, safe-chat worker, portals, TLS device transport, agent scheduling | Physical Pi/ARM64 validation; Windows ↔ Mac LAN; 24/7 operational validation |
+| **R.E.S.C.S.** | v0.4.0 (312 passed / 4 skipped): versioned HTTP API, signed CORE owner scope, mount guard, Pi installer/systemd, records/files, uploads, lifecycle/governance, C.O.R.E. contract | Live PostgreSQL/Supabase + real S3; deployed C.O.R.E. ↔ R.E.S.C.S.; real Pi/ARM64 |
+| **A.S.I.S.** | Rebuilt `asis` package (941 passed / 24 skipped): CLI, Ollama provider, memory, calculator, translation, web tools, coding mode, permissions, voice, Pi policy/worker | Physical Pi/ARM64 and LAN validation; R.E.S.C.S. via C.O.R.E. (future) |
+| **T.I.V.I.S.S.** | Local agent at `TIVISS/` (v0.2.0; 279 passed): OllamaProvider, SQLite memory, CLI, export/import, logging, voice abstraction, stdlib transports offline-tested; still no live traffic | Resolve the handover model |
 | **RadarS.A.R.D.** | — | Define sensor/detection scope |
-| **A.S.C.S.** | Standalone v0.3.0 coding agent (949 passed / 6 skipped 2026-09-18; live opt-in RISALIVE=1) | Ecosystem integration through C.O.R.E. (future) |
+| **A.S.C.S.** | Standalone v0.3.0 coding agent (991 passed / 6 skipped): desktop Windows-oriented; Linux/Pi headless generation-only; ASIS direct integration implemented | C.O.R.E.-mediated integration (future); real Pi/ARM64 |
 
 ## 7. Filesystem reality
 
@@ -146,17 +146,24 @@ The documentation governs these directories:
 
 ```text
 RISARMS/
-├── CORE-HOST/      <- C.O.R.E. server/runtime (package `core`)
-├── CORE-CLIENT/    <- C.O.R.E. external-device client (package `client`, stdlib-only)
+├── CORE/           <- combined C.O.R.E. project
+│   ├── CORE-HOST/  <- server/runtime (package `core`)
+│   ├── CORE-CLIENT/<- external-device client (package `client`, stdlib-only)
+│   ├── services/   <- ASIS, ASCS, RESCS, TIVISS copies
+│   ├── deployment/ <- Pi deployment scripts
+│   ├── install/    <- release wheels
+│   └── validation/ <- release evidence
 ├── RESCS/
 ├── ASIS/
 ├── ASCS/
-└── DOCS/           <- this repository (remote: RISARMS-DOCS; TIVISS is cloned locally at `TIVISS/`)
+├── TIVISS/
+├── old-versions/   <- local archive, not a git repository
+└── RISARMS-DOCS/   <- this repository (remote: RISARMS-DOCS)
 ```
 
 > [!NOTE] **Out-of-scope sibling:** `Flavora/` (local-first food companion) may sit beside these directories on disk. It is not an ecosystem member and is not governed by this architecture.
 
-> [!IMPORTANT] **Independence rule:** R.E.S.C.S., A.S.I.S., A.S.C.S. and T.I.V.I.S.S. are independent projects and must never be placed inside CORE. Integration occurs through interfaces and communication contracts, governed by [Integration Contracts](../interfaces/integration-contracts.md). Referenced in ADR [0001](../decisions/0001-rescs-independent-from-core.md), [0002](../decisions/0002-asis-independent-from-core.md) and [0007](../decisions/0007-ascs-standalone-coding-agent.md).
+> [!IMPORTANT] **Independence rule:** R.E.S.C.S., A.S.I.S., A.S.C.S. and T.I.V.I.S.S. are independent projects whose owning repos live beside CORE. `CORE/services/*` holds release mirrors for combined deployment; the standalone repos remain the source of truth. Integration occurs through interfaces and communication contracts, governed by [Integration Contracts](../interfaces/integration-contracts.md). Referenced in ADR [0001](../decisions/0001-rescs-independent-from-core.md), [0002](../decisions/0002-asis-independent-from-core.md) and [0007](../decisions/0007-ascs-standalone-coding-agent.md).
 
 ## Next steps
 

@@ -1,6 +1,6 @@
 # C.O.R.E. — Communication, Organization and Resource Engine
 
-> [!NOTE] **Status:** v0.3.0 **IMPLEMENTED** (all intended software components exist and are covered by automated tests). Physical Windows ↔ Mac LAN validation and extended 24/7 operational validation are **NOT YET PERFORMED** — they are deployment-validation tasks, not missing software. Compatibility with 0.2.x clients is preserved by design.
+> [!NOTE] **Status:** v0.5.0 **IMPLEMENTED** (combined `CORE-HOST` + `CORE-CLIENT` project, all intended software components covered by automated tests). Package version is 0.5.0; wire/protocol compatibility remains 0.4.0. Physical Pi/ARM64, Windows ↔ Mac LAN, and extended 24/7 operational validation are **NOT YET PERFORMED** — they are deployment-validation tasks, not missing software. Compatibility with older clients is preserved by design.
 
 ## 1. What C.O.R.E. is
 
@@ -8,7 +8,7 @@ C.O.R.E. is the **central management and control engine** of R.I.S.A.R.M.S. It i
 
 **It is NOT the primary AI.** Intelligence belongs to A.S.I.S. and T.I.V.I.S.S. C.O.R.E. provides the substrate they operate on.
 
-**It runs on the control laptop** (Windows 11 host, which may co-host R.E.S.C.S.) and serves connected R.I.S.A.R.M.S. devices (Macs, phones, tablets, watches).
+**It runs on the control host** (Windows 11 laptop or Raspberry Pi/ARM64, which may co-host R.E.S.C.S.) and serves connected R.I.S.A.R.M.S. devices (Macs, phones, tablets, watches).
 
 ### Responsibilities
 
@@ -17,7 +17,7 @@ C.O.R.E. is the **central management and control engine** of R.I.S.A.R.M.S. It i
 - Routing (including device-to-device routing through C.O.R.E.)
 - Device registry (identity, presence, reconnection, persistence)
 - Resource management and Organization engine
-- Services (9 services in v0.3.0) and agent scheduling
+- Services (9 services) and agent scheduling
 - Data distribution between devices and R.E.S.C.S.
 - Runtime / lifecycle management and runtime history
 - Events, dependencies, configuration, health monitoring (14 checks), logging
@@ -34,13 +34,13 @@ C.O.R.E. is the **central management and control engine** of R.I.S.A.R.M.S. It i
 
 ## 2. Filesystem and project
 
-- Locations: `RISARMS/CORE-HOST/` (server/runtime, package `core`) + `RISARMS/CORE-CLIENT/` (stdlib-only external-device client, package `client`, Option A login). Former single `RISARMS/CORE/` references mean this HOST+CLIENT split.
-- Own git repositories (`CORE-HOST` + `CORE-CLIENT`, branch `main`)
+- Location: `RISARMS/CORE/` — one combined project containing `CORE-HOST/` (server/runtime, package `core`) and `CORE-CLIENT/` (stdlib-only external-device client, package `client`, Option A login), plus `services/`, `deployment/`, `install/`, and `validation/`
+- Git repository: `CORE/` (publishes to the `CORE-HOST` GitHub remote; the old standalone `CORE-CLIENT` repo was left untouched)
 - Language: Python (>= 3.10), package name `core`
-- Runtime requirements: `PyYAML` only; no web framework
-- CLI entry point: `python -m core` → `core.cli.main.main()`
+- Runtime requirements: `PyYAML`; optional monitoring extra adds `prometheus-client` + `fastapi`
+- CLI entry point: `core-host` (or `python -m core`); client entry point: `core-client`
 - Application entry point: `core.application.app.CoreApplication`
-- **Version markers agree at `0.3.0`**: `pyproject.toml`, `core/version.py` (`__version__`/`CORE_VERSION`), and `config/core.yaml`
+- **Package version `0.5.0`** in `pyproject.toml`; `core/version.py` and the wire protocol intentionally remain `0.4.0` for compatibility
 
 ## 3. Version history — the operating distinction
 
@@ -49,10 +49,12 @@ C.O.R.E. is the **central management and control engine** of R.I.S.A.R.M.S. It i
 | **v0.1** | Established the architectural foundation and behavioral contracts (subsystem layout, interfaces, models, tests) | Superseded, still compatible |
 | **v0.2** | Made the architecture operational: TCP transport, routing-to-service execution, runtime orchestration, events/health integration, configuration-driven runtime, security integration, R.E.S.C.S. adapter groundwork, real CLI | **IMPLEMENTED** (`0.2.0` → `0.2.1`); clients remain supported via protocol negotiation |
 | **v0.3** | External-device platform: TLS transport, token authentication, device registration/persistence, device discovery and device-to-device routing, capability-driven agent scheduling, HTTP R.E.S.C.S. adapter, data distribution, provisioning CLI/client | **IMPLEMENTED** (`0.3.0`); physical LAN validation pending |
+| **v0.4** | Localhost host/client portals; capability router/model profiles; device-scoped R.E.S.C.S. proxy | **IMPLEMENTED** (`0.4.0`) |
+| **v0.5** | Combined host/client project; Pi service integration; signed R.E.S.C.S. owner scope; `/api/ai-status`; tool-free `CORE_SAFE_CHAT` worker | **IMPLEMENTED** (`0.5.0`); physical Pi/ARM64 validation pending |
 
-v0.3.0 is not "v0.2 finished": it adds an external-device platform on top of the v0.2 operational core. Version negotiation (`core/version.py`) keeps `0.2.0`/`0.2.1` clients working; deprecated APIs are scheduled for removal only in a future breaking version.
+v0.3.0 is not "v0.2 finished": it adds an external-device platform on top of the v0.2 operational core. Version negotiation (`core/version.py`) keeps older clients working; deprecated APIs are scheduled for removal only in a future breaking version.
 
-## 4. Subsystem structure (v0.3.0)
+## 4. Subsystem structure (v0.5.0)
 
 ```text
 core/
@@ -67,17 +69,21 @@ core/
 ├── events/        Event model, EventBus, event types
 ├── health/        HealthStatus, HealthResult, HealthMonitor (14 checks)
 ├── logging/       CoreLogger
+├── monitoring/    Optional Prometheus exports
 ├── organization/  OrganizationEngine, ResourceIngestor (R.E.S.C.S. ingestion)
+├── portal/        Localhost host portal
 ├── rescs/         RescsAdapter abstraction
 ├── resources/     Resource model, ResourceRegistry
 ├── routing/       Router
 ├── runtime/       Runtime, state machine, RuntimeHistory
 ├── scheduler/     AgentScheduler, agent profiles, assignments
 ├── security/      SecurityManager, SecurityPolicy, auth providers
-└── services/      ServiceManager, ServiceDispatcher
+├── services/      ServiceManager, ServiceDispatcher
+└── web/           Owner portal gateway, RESCS storage adapter, safe-chat worker
 ```
-Host layout: `CORE-HOST/core/` (above) + `CORE-HOST/config/` (`core.yaml` dev, `core.lan.example.yaml` LAN deployment).
-Client lives separately: `CORE-CLIENT/client/core_device_client.py` — minimal stdlib external-device client with Option A login semantics (never imports `core`).
+Host layout: `CORE/CORE-HOST/core/` + `CORE/CORE-HOST/config/` (`core.yaml` dev, `core.lan.example.yaml` LAN deployment).
+Client: `CORE/CORE-CLIENT/client/core_device_client.py` — minimal stdlib external-device client with Option A login semantics (never imports `core`).
+Combined project also carries `services/{ASIS,ASCS,RESCS,TIVISS}`, `deployment/pi/`, `install/` wheels, and `validation/` release evidence.
 ```
 
 ### 4.1 Purpose of each subsystem (highlights beyond the v0.1 foundation)
@@ -132,15 +138,15 @@ These are deployment-validation items, not missing software:
 
 ## 5. Test coverage
 
-- **52 test files; README-documented result: 722 passed (2026-09-23)** (verify with `pytest -q` against the current checkout).
-- Coverage includes application orchestration, communication/TLS/framing, protocol negotiation, authentication, device registration/persistence/reconnect, discovery, presence, routing, services, resources, organization/reconciliation, R.E.S.C.S. adapters, scheduler, data distribution, health, events, integration behavior, and 0.2.x legacy compatibility.
+- **66 host test files; 839 passed / 1 skipped on macOS Python 3.12 (2026-11-09).** Release authors reported 840 passed on Linux x86_64 Python 3.12. Client: **20 test files, 200 passed**.
+- Coverage includes application orchestration, communication/TLS/framing, protocol negotiation, authentication, device registration/persistence/reconnect, discovery, presence, routing, services, resources, organization/reconciliation, R.E.S.C.S. adapters, scheduler, data distribution, health, events, integration behavior, Pi policy, and legacy compatibility.
 
-## 5b. Web portals (v0.4.0)
+## 5b. Web portals (v0.5.0)
 
 Localhost-only presentation planes (no new authorities):
 
-- **Host portal** (`CORE-HOST/core/portal/`, default `http://127.0.0.1:8765`, configurable via the `web:` config section): 16 sections — Overview, Devices, Network, Resources, Services, Agents, R.E.S.C.S., Health, Events, Routing, Data Distribution, Sessions, Security, Configuration, Logs, Diagnostics. Starts with the host (`py -m core` prints the URL); CLI remains fully available.
-- **Client portal** (`CORE-CLIENT/client/portal/`, default `http://127.0.0.1:8766`): 8 sections — Dashboard, Devices, R.E.S.C.S., Services, AI, Network, Session, Settings. Works offline (remote sections report `C.O.R.E. HOST OFFLINE`); starts with the client CLI unless `--no-portal`.
+- **Host portal** (`CORE/CORE-HOST/core/portal/`, default `http://127.0.0.1:8765`, configurable via the `web:` config section): 16 sections — Overview, Devices, Network, Resources, Services, Agents, R.E.S.C.S., Health, Events, Routing, Data Distribution, Sessions, Security, Configuration, Logs, Diagnostics. Starts with the host (`core-host` prints the URL); CLI remains fully available.
+- **Client portal** (`CORE/CORE-CLIENT/client/portal/`, default `http://127.0.0.1:8766`): 8 sections — Dashboard, Devices, R.E.S.C.S., Services, AI, Network, Session, Settings. Works offline (remote sections report `C.O.R.E. HOST OFFLINE`); starts with the client CLI unless `--no-portal`.
 - **Capability detection** is deterministic (HIGH/MEDIUM/LOW/UNKNOWN from RAM + CPU cores; Qwen model profiles centralized in one policy module; no LLM involved).
 - **AI offload** routes through the existing `AgentScheduler` (`agent` service `infer` operation): placement truthfully returned, never fabricated model output.
 - **Security**: recursive response redaction (credentials, session tokens shown only as `ACTIVE`, TLS keys, RESCS/S3 secrets never leave the backend); localhost binding default; location is opt-in manual/device-reported with precision controls; Haversine distance only with both coordinates.
@@ -187,6 +193,17 @@ The 13-phase v0.2 build order was completed; the phase definitions (objectives, 
 | Windows autostart (Task Scheduler / NSSM docs) | IMPLEMENTED (endurance not validated) |
 | Physical LAN validation | **NOT YET PERFORMED** |
 | 24/7 operational validation | **NOT YET PERFORMED** |
+
+### 6.3 v0.5.0 capability summary
+
+| Capability | Status |
+|---|---|
+| Combined `CORE-HOST` + `CORE-CLIENT` repository and root CI | IMPLEMENTED |
+| Pi deployment scripts, wheels, and validation evidence | IMPLEMENTED (syntax/entry-point checks only) |
+| Signed R.E.S.C.S. owner scope (`X-RESCS-Signature`) | IMPLEMENTED |
+| `/api/ai-status` health surface | IMPLEMENTED |
+| Tool-free `CORE_SAFE_CHAT` worker (account-isolated Ollama) | IMPLEMENTED |
+| Physical Pi/ARM64, cgroup v2, systemd boot, SSD removal | **NOT YET PERFORMED** |
 
 ## 7. Related documentation
 

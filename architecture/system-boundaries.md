@@ -43,7 +43,7 @@ This document defines **who owns which responsibility**. The rule throughout R.I
 
 Equally important is what each system does **not** own:
 
-- **C.O.R.E does not own** the AI brain, the storage, the anomaly sensors, agent identity, or autonomous coding. It coordinates them. It does not contain R.E.S.C.S., A.S.I.S. or A.S.C.S. code.
+- **C.O.R.E does not own** the AI brain, the storage, the anomaly sensors, agent identity, or autonomous coding. It coordinates them. `CORE/services/*` contains release mirrors, not the owning source or responsibility.
 - **R.E.S.C.S. does not own** the message bus, routing, or runtime; it serves storage. It must not grow a UI or an intelligence layer.
 - **A.S.I.S. does not own** C.O.R.E.'s responsibilities (message routing, resource registry, runtime, security infrastructure). It may only *use* them.
 - **T.I.V.I.S.S. does not** copy A.S.I.S.; it owns a distinct identity and handover model.
@@ -56,16 +56,22 @@ Equally important is what each system does **not** own:
 
 ```text
 RISARMS/
-├── CORE-HOST/      <- owned by C.O.R.E. development (server/runtime, package `core`)
-├── CORE-CLIENT/    <- owned by C.O.R.E. development (external-device client, package `client`, stdlib-only)
+├── CORE/           <- owned by C.O.R.E. development
+│   ├── CORE-HOST/  <- server/runtime (package `core`)
+│   ├── CORE-CLIENT/<- external-device client (package `client`, stdlib-only)
+│   └── services/   <- release/deployment copies of independent services
 ├── RESCS/          <- owned by R.E.S.C.S. development (independent)
 ├── ASIS/           <- owned by A.S.I.S. development (independent)
 ├── ASCS/           <- owned by A.S.C.S. development (independent)
 ├── TIVISS/         <- owned by T.I.V.I.S.S. development (independent, foundation-only)
-└── DOCS/           <- this documentation (remote: RISARMS-DOCS)
+├── old-versions/   <- local archive (not a git repository)
+└── RISARMS-DOCS/   <- this documentation (remote: RISARMS-DOCS)
 ```
 
-C.O.R.E. must never contain `RESCS/`, `ASIS/` or `ASCS/`. Integration is contract-based. Rationale: ADR [0001](../decisions/0001-rescs-independent-from-core.md), ADR [0002](../decisions/0002-asis-independent-from-core.md), ADR [0005](../decisions/0005-storage-integration-via-adapter.md), ADR [0007](../decisions/0007-ascs-standalone-coding-agent.md).
+The owning source repositories are the standalone `RESCS/`, `ASIS/`, `ASCS/`, and
+`TIVISS/`. `CORE/services/*` contains release mirrors for installation and
+deployment; edits belong in the owning repository and are synced into CORE.
+Integration is contract-based. Rationale: ADR [0001](../decisions/0001-rescs-independent-from-core.md), ADR [0002](../decisions/0002-asis-independent-from-core.md), ADR [0005](../decisions/0005-storage-integration-via-adapter.md), ADR [0007](../decisions/0007-ascs-standalone-coding-agent.md).
 
 ## 4. Boundary rules for agents
 

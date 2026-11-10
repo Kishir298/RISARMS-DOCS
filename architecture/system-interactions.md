@@ -39,13 +39,13 @@ graph TB
 
 | Edge | Meaning | Status |
 |---|---|---|
-| A.S.I.S. → C.O.R.E. | A.S.I.S. requests services/storage/device action through C.O.R.E. | **PLANNED** (interfaces defined in A.S.I.S.; mock-only, no live traffic) |
-| A.S.I.S. ↔ A.S.C.S. | Coding capability + handover protocol | **PLANNED** (`ascs_integration` toolset + `export_handover_state()`) |
+| A.S.I.S. → C.O.R.E. | A.S.I.S. requests services/storage/device action through C.O.R.E. | **IMPLEMENTED (opt-in)** `RealCoreAdapter` + `CoreConnectionManager`; offline-tested, no live LAN traffic yet |
+| A.S.I.S. ↔ A.S.C.S. | Coding capability + handover protocol | **IMPLEMENTED** (`ascs_integration` toolset + `export_handover_state()`); direct local path |
 | T.I.V.I.S.S. → C.O.R.E. | Same path, future agent | **FUTURE** |
 | RadarS.A.R.D. → C.O.R.E. | Detection/alert reporting | **FUTURE** |
 | A.S.C.S. ↔ C.O.R.E. | Coding capability mediated by C.O.R.E. | **FUTURE** (A.S.C.S. is standalone today; ASIS integration direct) |
 | C.O.R.E. internal (Services/Router/Communication) | Internal dispatch within C.O.R.E. | **IMPLEMENTED** (message → router → service flow tested) |
-| C.O.R.E. → R.E.S.C.S. | Storage requests via `RescsAdapter` (`InMemory` / `File` / `Http`) | **IMPLEMENTED** in C.O.R.E. (`HttpRescsAdapter` + consuming contract tests); deployed cross-host interop not yet exercised |
+| C.O.R.E. → R.E.S.C.S. | Storage requests via `RescsAdapter` (`InMemory` / `File` / `Http`) with signed owner scope | **IMPLEMENTED** (`HttpRescsAdapter` + signed-scope contract + real loopback script); deployed cross-host interop not yet exercised |
 | C.O.R.E. → Devices | External-device transport | **IMPLEMENTED** (TCP + TLS + token auth + device protocol); physical LAN validation pending |
 | C.O.R.E. (CapabilityRouter) → ModelProfile | Device-capability-based model selection | **IMPLEMENTED (v0.3.1)** |
 | C.O.R.E. (RescsDeviceProxy) → R.E.S.C.S. | Device-scoped namespace enforcement | **IMPLEMENTED (v0.3.1)** |
@@ -78,20 +78,20 @@ sequenceDiagram
     CORE->>ASIS: response
 ```
 
-> [!NOTE] **Which parts are real today?** Inside C.O.R.E., `message → router → communication → service → response` is **IMPLEMENTED and tested**. The R.E.S.C.S. adapter chain (`HttpRescsAdapter` against R.E.S.C.S.'s implemented `/api/v1` API, with a machine-readable contract on both sides) is **IMPLEMENTED in software** and exercised by integration-test fixtures — but the A.S.I.S. entry point does not exist and deployed cross-host interop has not been run. The only missing segments of the canonical flow are therefore the A.S.I.S. request origin and physical deployment validation; do not represent the full A.S.I.S. → cloud round trip as live.
+> [!NOTE] **Which parts are real today?** Inside C.O.R.E., `message → router → communication → service → response` is **IMPLEMENTED and tested**. The R.E.S.C.S. adapter chain (`HttpRescsAdapter` against R.E.S.C.S.'s implemented `/api/v1` API, with a machine-readable contract and signed owner scope on both sides) is **IMPLEMENTED in software**, exercised by integration-test fixtures and a real CORE ↔ RESCS loopback script — but deployed cross-host interop has not been run. A.S.I.S. has an opt-in real C.O.R.E. uplink (`RealCoreAdapter` + `CoreConnectionManager`), but no live LAN traffic has been exercised. The remaining gap is physical deployment validation; do not represent the full A.S.I.S. → cloud round trip as live.
 
 ## 3. Implemented vs planned, by pair
 
 ### C.O.R.E. ↔ R.E.S.C.S.
 
-- **Implemented (software):** R.E.S.C.S. ships a versioned `/api/v1` API with enforced `X-API-Key` auth and a machine-readable contract (`GET /api/v1/contract`, error-code table, reserved namespaces). C.O.R.E. ships `InMemoryRescsAdapter`, `FileRescsAdapter` and `HttpRescsAdapter` with fallback and health, and persists device identity/runtime history through this boundary. Contract-consuming tests exist on both sides.
-- **Remaining:** deployed cross-host interop (CORE ↔ RESCS over a real network against live PostgreSQL/Supabase) has not been exercised; that is external validation, not missing code.
+- **Implemented (software):** R.E.S.C.S. ships a versioned `/api/v1` API with enforced `X-API-Key` auth, signed CORE owner scope (`X-RESCS-Signature`), a `/srv/core` mount guard, and a machine-readable contract (`GET /api/v1/contract`, error-code table, reserved namespaces). C.O.R.E. ships `InMemoryRescsAdapter`, `FileRescsAdapter` and `HttpRescsAdapter` with fallback and health, and persists device identity/runtime history through this boundary. A real CORE↔RESCS loopback script (`scripts/validate_core_loopback.py`) passes.
+- **Remaining:** deployed cross-host interop (CORE ↔ RESCS over a real network against live PostgreSQL/Supabase) and physical Pi/ARM64 validation have not been exercised; that is external validation, not missing code.
 - Contract: [Integration Contracts](../interfaces/integration-contracts.md) and `RESCS/docs/core-integration-contract.md`.
 
 ### C.O.R.E. ↔ A.S.I.S.
 
-- **Current:** A.S.I.S. runs as a standalone client (CLI, chat-capable AI layer, local memory). Its `integrations/core` package defines a `CoreClient` interface plus a `MockCoreAdapter`, but **no C.O.R.E.-side adapter for A.S.I.S. exists and no traffic flows**.
-- **Planned:** A.S.I.S. issues request `Message`s to C.O.R.E. services through a defined contract; C.O.R.E. routes them (storage → R.E.S.C.S. adapter, device control → device transport). Note C.O.R.E.'s agent scheduler already reserves `asis-local`/`asis-offload` profiles — a naming hook, not an integration.
+- **Current (opt-in):** A.S.I.S. runs standalone by default. Its `integrations/core` package provides `RealCoreAdapter` + `CoreConnectionManager` over `CORE/CORE-CLIENT/CoreDeviceClient` (TCP+TLS handshake → auth → `DEVICE_REGISTER` → online), plus a mock adapter. Enable with `ASIS_CORE_ENABLED=true`; local operation survives host loss and reconnects are bounded. **Offline-tested; no live LAN traffic.**
+- **Remaining:** physical LAN deployment validation and a fuller C.O.R.E.-mediated service contract. C.O.R.E.'s scheduler reserves `asis-local`/`asis-offload` profiles.
 
 ### C.O.R.E. ↔ External Devices
 

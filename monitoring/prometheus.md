@@ -1,6 +1,8 @@
 # Prometheus Metrics
 
-All RISARMS systems expose Prometheus metrics at `/metrics` endpoint.
+C.O.R.E., A.S.I.S., A.S.C.S. and T.I.V.I.S.S. expose Prometheus metrics at
+`/metrics` when their monitoring extra/web UI is enabled. R.E.S.C.S. 0.4.0 does
+not ship a built-in metrics endpoint.
 
 ## Endpoint Access
 
@@ -11,8 +13,7 @@ curl http://localhost:8765/metrics
 # CORE-CLIENT (if running portal)
 curl http://localhost:8766/metrics
 
-# RESCS
-curl http://localhost:8081/metrics
+# RESCS 0.4.0 does not ship built-in Prometheus metrics; use health/access logs
 
 # ASIS (if running web UI)
 curl http://localhost:8787/metrics
@@ -45,12 +46,8 @@ curl http://localhost:8787/metrics
 | `core_client_reconnects_total` | Counter | Reconnects |
 
 ### RESCS
-| Metric | Type | Description |
-|--------|------|-------------|
-| `rescs_http_requests_total` | Counter | HTTP requests |
-| `rescs_records_created_total` | Counter | Records created |
-| `rescs_files_uploaded_total` | Counter | Files uploaded |
-| `rescs_quota_exceeded_total` | Counter | Quota exceeded |
+Not implemented in 0.4.0. RESCS exposes health endpoints and structured access
+logs; add a metrics exporter separately if required.
 
 ### ASIS
 | Metric | Type | Description |
@@ -96,14 +93,6 @@ groups:
         annotations:
           summary: "CORE-HOST has no active connections"
 
-      - alert: RescsQuotaExceeded
-        expr: increase(rescs_quota_exceeded_total[5m]) > 0
-        for: 1m
-        labels:
-          severity: warning
-        annotations:
-          summary: "RESCS quota exceeded"
-
       - alert: AscsTaskFailureRate
         expr: rate(ascs_tasks_total{status="failed"}[5m]) > 0.1
         for: 5m
@@ -119,7 +108,7 @@ groups:
 scrape_configs:
   - job_name: 'risarms'
     static_configs:
-      - targets: ['core-host:8765', 'core-client:8766', 'rescs:8081']
+      - targets: ['core-host:8765', 'core-client:8766']
         labels:
           environment: 'production'
 ```

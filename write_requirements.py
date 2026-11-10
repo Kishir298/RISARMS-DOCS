@@ -1,174 +1,101 @@
-# Write requirements.txt in binary mode, line by line
-with open('requirements.txt', 'wb') as f:
-    # Write header
-    f.write(b'# RISARMS Ecosystem - Unified Requirements with Three Install Commands\n')
-    f.write(b'# Location: C:\\Users\\rishi\\Desktop\\RISARMS\\DOCS\\requirements.txt\n')
-    f.write(b'#\n')
-    f.write(b'# THREE INSTALL COMMANDS:\n')
-    f.write(b'# =============================================================================\n')
-    f.write(b'\n')
-    f.write(b'# COMMAND 1 - EVERYTHING (all packages + all extras from all 6 repos):\n')
-    f.write(b'#   pip install -r C:\\Users\\rishi\\Desktop\\RISARMS\\DOCS\\requirements.txt\n')
-    f.write(b'\n')
-    f.write(b'# COMMAND 2 - EVERYTHING EXCEPT CORE-HOST:\n')
-    f.write(b'#   pip install -r C:\\Users\\rishi\\Desktop\\RISARMS\\DOCS\\requirements.txt --exclude=CORE-HOST\n')
-    f.write(b'\n')
-    f.write(b'# COMMAND 3 - EVERYTHING EXCEPT CORE-CLIENT:\n')
-    f.write(b'#   pip install -r C:\\Users\\rishi\\Desktop\\RISARMS\\DOCS\\requirements.txt --exclude=CORE-CLIENT\n')
-    f.write(b'\n')
-    f.write(b'# NOTE: pip --exclude is not standard. Use one of these methods:\n')
-    f.write(b'#   Method 1 - Manual: Copy the relevant section to a temp file and pip install -r temp.txt\n')
-    f.write(b'#   Method 2 - Script: Use the helper script below\n')
-    f.write(b'#   Method 3 - Manual install: Copy/paste the relevant section\n')
-    f.write(b'\n')
-    f.write(b'# HELPER SCRIPT (save as install.py and run: python install.py [all|no-host|no-client]):\n')
-    f.write(b'# import sys, re\n')
-    f.write(b'# section = sys.argv[1] if len(sys.argv) > 1 else "all"\n')
-    f.write(b'# with open(__file__) as f: content = f.read()\n')
-    f.write(b'# section_content = re.search(f"# SECTION: {re.escape(section)}(.*?)(?=# SECTION:|$)", content, re.DOTALL)\n')
-    f.write(b'# if section_content:\n')
-    f.write(b'#     lines = [l for l in section_content.group(1).split("\n") if l and not l.startswith("#")]\n')
-    f.write(b'#     with open("temp_req.txt", "w") as f: f.write("\n".join(lines))\n')
-    f.write(b'#     print(f"Created temp_req.txt for section: {section}")\n')
-    f.write(b'#     print("Run: pip install -r temp_req.txt")\n')
-    f.write(b'\n')
-    f.write(b'# =============================================================================\n')
-    f.write(b'\n')
-    f.write(b'# SECTION: all\n')
-    f.write(b'# =============================================================================\n')
-    f.write(b'# CORE RUNTIME - All projects\n')
-    f.write(b'platformdirs>=4\n')
-    f.write(b'python-dotenv>=1.0\n')
-    f.write(b'sympy>=1.13\n')
-    f.write(b'requests>=2.31\n')
-    f.write(b'windows-curses>=2.3; sys_platform == "win32"\n')
-    f.write(b'PyYAML>=6.0\n')
-    f.write(b'fastapi==0.141.1\n')
-    f.write(b'uvicorn[standard]==0.52.4\n')
-    f.write(b'sqlalchemy==2.0.52\n')
-    f.write(b'psycopg[binary]==3.3.4\n')
-    f.write(b'pydantic==2.13.5\n')
-    f.write(b'pydantic-settings==2.15.0\n')
-    f.write(b'python-multipart==0.0.32\n')
-    f.write(b'\n')
-    f.write(b'# EXTRAS - All optional dependencies from all projects\n')
-    f.write(b'textual>=0.70\n')
-    f.write(b'textual-dev>=0.70\n')
-    f.write(b'numpy\n')
-    f.write(b'scipy\n')
-    f.write(b'sounddevice\n')
-    f.write(b'soundfile\n')
-    f.write(b'silero-vad\n')
-    f.write(b'faster-whisper\n')
-    f.write(b'torch\n')
-    f.write(b'torchaudio\n')
-    f.write(b'speechbrain\n')
-    f.write(b'openwakeword\n')
-    f.write(b'pyttsx3\n')
-    f.write(b'pycaw; sys_platform == "win32"\n')
-    f.write(b'comtypes; sys_platform == "win32"\n')
-    f.write(b'pywin32; sys_platform == "win32"\n')
-    f.write(b'pypdf>=4\n')
-    f.write(b'python-docx>=1.1\n')
-    f.write(b'boto3>=1.28\n')
-    f.write(b'\n')
-    f.write(b'# DEVELOPMENT / TEST DEPENDENCIES\n')
-    f.write(b'pytest>=8\n')
-    f.write(b'pytest-cov>=5\n')
-    f.write(b'pytest-asyncio>=0.23\n')
-    f.write(b'httpx==0.28.1\n')
-    f.write(b'ruff\n')
-    f.write(b'black\n')
-    f.write(b'\n')
-    f.write(b'# SECTION: except-core-host\n')
-    f.write(b'# =============================================================================\n')
-    f.write(b'# CORE RUNTIME - EXCEPT CORE-HOST (excludes PyYAML and fastapi stack)\n')
-    f.write(b'platformdirs>=4\n')
-    f.write(b'python-dotenv>=1.0\n')
-    f.write(b'sympy>=1.13\n')
-    f.write(b'requests>=2.31\n')
-    f.write(b'windows-curses>=2.3; sys_platform == "win32"\n')
-    f.write(b'# PyYAML>=6.0  <-- EXCLUDED (core-host)\n')
-    f.write(b'# fastapi==0.141.1  <-- EXCLUDED (core-host/RESCS)\n')
-    f.write(b'# uvicorn[standard]==0.52.4  <-- EXCLUDED (core-host/RESCS)\n')
-    f.write(b'# sqlalchemy==2.0.52  <-- EXCLUDED (core-host/RESCS)\n')
-    f.write(b'# psycopg[binary]==3.3.4  <-- EXCLUDED (core-host/RESCS)\n')
-    f.write(b'# pydantic==2.13.5  <-- EXCLUDED (core-host/RESCS)\n')
-    f.write(b'# pydantic-settings==2.15.0  <-- EXCLUDED (core-host/RESCS)\n')
-    f.write(b'# python-multipart==0.0.32  <-- EXCLUDED (core-host/RESCS)\n')
-    f.write(b'\n')
-    f.write(b'# EXTRAS - All optional (same as all)\n')
-    f.write(b'textual>=0.70\n')
-    f.write(b'textual-dev>=0.70\n')
-    f.write(b'numpy\n')
-    f.write(b'scipy\n')
-    f.write(b'sounddevice\n')
-    f.write(b'soundfile\n')
-    f.write(b'silero-vad\n')
-    f.write(b'faster-whisper\n')
-    f.write(b'torch\n')
-    f.write(b'torchaudio\n')
-    f.write(b'speechbrain\n')
-    f.write(b'openwakeword\n')
-    f.write(b'pyttsx3\n')
-    f.write(b'pycaw; sys_platform == "win32"\n')
-    f.write(b'comtypes; sys_platform == "win32"\n')
-    f.write(b'pywin32; sys_platform == "win32"\n')
-    f.write(b'pypdf>=4\n')
-    f.write(b'python-docx>=1.1\n')
-    f.write(b'boto3>=1.28\n')
-    f.write(b'\n')
-    f.write(b'# DEVELOPMENT / TEST DEPENDENCIES\n')
-    f.write(b'pytest>=8\n')
-    f.write(b'pytest-cov>=5\n')
-    f.write(b'pytest-asyncio>=0.23\n')
-    f.write(b'httpx==0.28.1\n')
-    f.write(b'ruff\n')
-    f.write(b'black\n')
-    f.write(b'\n')
-    f.write(b'# SECTION: except-core-client\n')
-    f.write(b'# =============================================================================\n')
-    f.write(b'# CORE RUNTIME - EXCEPT CORE-CLIENT (core-client has no direct deps, same as all)\n')
-    f.write(b'platformdirs>=4\n')
-    f.write(b'python-dotenv>=1.0\n')
-    f.write(b'sympy>=1.13\n')
-    f.write(b'requests>=2.31\n')
-    f.write(b'windows-curses>=2.3; sys_platform == "win32"\n')
-    f.write(b'PyYAML>=6.0\n')
-    f.write(b'fastapi==0.141.1\n')
-    f.write(b'uvicorn[standard]==0.52.4\n')
-    f.write(b'sqlalchemy==2.0.52\n')
-    f.write(b'psycopg[binary]==3.3.4\n')
-    f.write(b'pydantic==2.13.5\n')
-    f.write(b'pydantic-settings==2.15.0\n')
-    f.write(b'python-multipart==0.0.32\n')
-    f.write(b'\n')
-    f.write(b'# EXTRAS - All optional (same as all)\n')
-    f.write(b'textual>=0.70\n')
-    f.write(b'textual-dev>=0.70\n')
-    f.write(b'numpy\n')
-    f.write(b'scipy\n')
-    f.write(b'sounddevice\n')
-    f.write(b'soundfile\n')
-    f.write(b'silero-vad\n')
-    f.write(b'faster-whisper\n')
-    f.write(b'torch\n')
-    f.write(b'torchaudio\n')
-    f.write(b'speechbrain\n')
-    f.write(b'openwakeword\n')
-    f.write(b'pyttsx3\n')
-    f.write(b'pycaw; sys_platform == "win32"\n')
-    f.write(b'comtypes; sys_platform == "win32"\n')
-    f.write(b'pywin32; sys_platform == "win32"\n')
-    f.write(b'pypdf>=4\n')
-    f.write(b'python-docx>=1.1\n')
-    f.write(b'boto3>=1.28\n')
-    f.write(b'\n')
-    f.write(b'# DEVELOPMENT / TEST DEPENDENCIES\n')
-    f.write(b'pytest>=8\n')
-    f.write(b'pytest-cov>=5\n')
-    f.write(b'pytest-asyncio>=0.23\n')
-    f.write(b'httpx==0.28.1\n')
-    f.write(b'ruff\n')
-    f.write(b'black\n')
-    print('File written successfully')
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent
+
+COMMON = [
+    "platformdirs>=4",
+    "python-dotenv>=1.0",
+    "sympy>=1.13",
+    "requests>=2.31",
+]
+
+CORE_HOST = [
+    "PyYAML>=6.0",
+    "fastapi>=0.115,<1",
+    "uvicorn[standard]>=0.30,<1",
+    "sqlalchemy>=2.0,<3",
+    "psycopg[binary]>=3.1",
+    "pydantic>=2.0",
+    "pydantic-settings>=2.0,<3",
+    "python-multipart>=0.0.18",
+    "prometheus-client>=0.20",
+]
+
+RESCS = [
+    "boto3>=1.28",
+]
+
+OPTIONAL = [
+    "textual>=0.70",
+    "textual-dev>=0.70",
+    "tomli>=2.0",
+    "tomli-w>=1.0",
+    "numpy",
+    "scipy",
+    "sounddevice",
+    "soundfile",
+    "silero-vad",
+    "faster-whisper",
+    "torch",
+    "torchaudio",
+    "speechbrain",
+    "openwakeword",
+    "pyttsx3",
+    'pycaw; sys_platform == "win32"',
+    'comtypes; sys_platform == "win32"',
+    'pywin32; sys_platform == "win32"',
+    "windows-curses>=2.3; sys_platform == \"win32\"",
+    "pypdf>=4",
+    "python-docx>=1.1",
+]
+
+DEV = [
+    "pytest>=8",
+    "pytest-cov>=5",
+    "pytest-asyncio>=0.23",
+    "httpx>=0.27",
+    "ruff",
+    "black",
+]
+
+
+def manifest(include_host: bool, include_rescs: bool) -> str:
+    lines = []
+    lines.append("# RISARMS ecosystem unified requirements")
+    lines.append("# Generated by write_requirements.py; do not edit by hand.")
+    lines.append("# Workspace: /Users/chhavitayalpatil/Desktop/RISARMS")
+    lines.append("#")
+    lines.append("# Run from this directory:")
+    lines.append("#   pip install -r requirements.txt")
+    lines.append("#   pip install -r requirements-no-host.txt")
+    lines.append("#   pip install -r requirements-no-client.txt")
+    lines.append("")
+    lines.append("# Runtime dependencies")
+    lines.extend(COMMON)
+    if include_host:
+        lines.extend(CORE_HOST)
+    if include_rescs:
+        lines.extend(RESCS)
+    lines.append("")
+    lines.append("# Optional tooling and voice/document dependencies")
+    lines.extend(OPTIONAL)
+    lines.append("")
+    lines.append("# Development and test dependencies")
+    lines.extend(DEV)
+    lines.append("")
+    return "\n".join(lines)
+
+
+def main() -> None:
+    files = {
+        "requirements.txt": manifest(True, True),
+        "requirements-no-host.txt": manifest(False, False),
+        "requirements-no-client.txt": manifest(True, True),
+    }
+    for name, content in files.items():
+        (ROOT / name).write_text(content, encoding="utf-8")
+        print(f"wrote {name}")
+
+
+if __name__ == "__main__":
+    main()

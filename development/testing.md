@@ -14,18 +14,19 @@
 
 | System | Suite | Notes |
 |---|---|---|
-| CORE-HOST | 52 test files; **723 passed** (2026-09-24, pytest, v0.4.0) | Host spine; run `py -m pytest` in CORE-HOST |
-| CORE-CLIENT | **123 passed** (2026-09-24, 13 files, v0.4.0) | Client + portal; run `py -m pytest` in CORE-CLIENT |
-| R.E.S.C.S. | Comprehensive unit + API + integration suite, **308 passed / 4 skipped** (2026-09-24) | Bounded chunk intake, LIKE-escape, S3 close; run `.venv/bin/python -m pytest` |
-| A.S.I.S. | 56 files / **812 collected, EXIT 0** (2026-09-24, .venv py3.12) | Rebuilt `asis` + `asis/identities` + `/identity` CLI |
-| A.S.C.S. | **957 collected, EXIT 0** (2026-09-24, offline) + opt-in live suite | `.ascs` guards + UI token; live gated `RISALIVE=1` |
-| T.I.V.I.S.S. | **254 passed** (2026-09-23, local checkout at `TIVISS/`) | Failure-first checks, atomic handover, bounded events |
+| CORE-HOST | 66 test files; **839 passed / 1 skipped** (2026-11-09, macOS Python 3.12, v0.5.0) | Host spine; run `.venv/bin/python -m pytest` in `CORE/CORE-HOST` |
+| CORE-CLIENT | **200 passed** (2026-11-09, macOS Python 3.12, v0.5.0) | Client + portal; run `.venv/bin/python -m pytest` in `CORE/CORE-CLIENT` |
+| R.E.S.C.S. | **312 passed / 4 skipped** (2026-11-09, macOS Python 3.12, v0.4.0) | Live PostgreSQL/S3 skipped without credentials; run `.venv/bin/python -m pytest` |
+| A.S.I.S. | **941 passed / 24 skipped** (2026-11-09, macOS Python 3.12, v0.1.0) | Pi policy and release contract included |
+| A.S.C.S. | **991 passed / 6 skipped** (2026-11-09, macOS Python 3.12, v0.3.0) + opt-in live suite | Pi policy tests mock the Linux guard; live gated `RISALIVE=1` |
+| T.I.V.I.S.S. | **279 passed** (2026-11-09, macOS Python 3.12, v0.2.0) | Failure-first checks, atomic handover, bounded events |
 
-All run via `pytest -q` from their own roots — never from `RISARMS/` root (no root suite; root `.pytest_cache/` deleted). Counts drift between docs (e.g. ASCS 943 vs 949 vs 951; ASIS 693 vs 789) — re-verify with `pytest -q` in each repo; do not treat hardcoded counts as authoritative. Portal suites included in host/client counts. Hardware/cloud-gated validations (physical LAN, live S3/PG, endurance, live voice/model) have their own runbook: [hw-gated-validation.md](hw-gated-validation.md).
+All run via `pytest -q` from their own roots — never from `RISARMS/` root (no root suite). The release authors' Linux x86_64 run reported CORE-HOST 840 passed; the one-test difference is platform-specific. Hardware/cloud-gated validations (physical Pi/ARM64, LAN, live S3/PG, endurance, live voice/model) have their own runbook: [hw-gated-validation.md](hw-gated-validation.md). The full Pi release evidence is in [pi-release-2026-11-06.md](pi-release-2026-11-06.md).
 
 ## 3. What is missing (PLANNED)
 
 - **Deployed cross-host integration spine**: C.O.R.E. ↔ R.E.S.C.S. ↔ devices exercised over a physical network (the software-side spine is covered; physical LAN validation is pending).
+- **Physical Raspberry Pi/ARM64 deployment**: cgroup v2, systemd boot, `/srv/core` mount, SSD removal, and the Pi installer are not exercised in this workspace.
 - **24/7 endurance tests** for C.O.R.E. on the Windows host.
 - **Live-cloud tests** for R.E.S.C.S. against real PostgreSQL/Supabase/S3 (PostgreSQL compatibility is already integration-tested).
 - **A.S.I.S. ↔ C.O.R.E. contract tests** — blocked until that integration exists.

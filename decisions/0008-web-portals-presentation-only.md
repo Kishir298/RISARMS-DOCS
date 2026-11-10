@@ -47,5 +47,5 @@ Host and client portals are **presentation/control interfaces only**:
 
 ## Status
 
-Accepted. Implemented in v0.4.0 (`CORE-HOST/core/portal/`,
-`CORE-CLIENT/client/portal/`).
+Accepted. Implemented in v0.4.0 (`CORE/CORE-HOST/core/portal/`,
+`CORE/CORE-CLIENT/client/portal/`).

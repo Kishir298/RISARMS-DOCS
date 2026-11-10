@@ -58,12 +58,12 @@ The arrows are explained precisely in [System Interactions](architecture/system-
 
 ## 4. Each subsystem at a glance
 
-- **C.O.R.E.** is the central control engine. It owns communication, message protocols, routing, organization, resources, services, runtime/lifecycle, events, dependencies, configuration, health, logging and security infrastructure. It is **not** the primary AI. It runs on the Windows control host and serves external devices. → [systems/core.md](systems/core.md)
-- **R.E.S.C.S.** is the cloud/data storage system: persistent records, file/object storage, retrieval, lifecycle/governance and cloud-backed data. It is an **independent project** (`RESCS/` next to `CORE/`, never inside it). → [systems/rescs.md](systems/rescs.md)
+- **C.O.R.E.** is the central control engine. It owns communication, message protocols, routing, organization, resources, services, runtime/lifecycle, events, dependencies, configuration, health, logging and security infrastructure. It is **not** the primary AI. It runs on the Windows control host and on Linux/Pi deployments, and serves external devices. → [systems/core.md](systems/core.md)
+- **R.E.S.C.S.** is the cloud/data storage system: persistent records, file/object storage, retrieval, lifecycle/governance and cloud-backed data. It is an **independent project** (`RESCS/` next to `CORE/`); `CORE/services/RESCS/` is a release mirror. → [systems/rescs.md](systems/rescs.md)
 - **A.S.I.S.** is the primary AI/intelligence layer: natural-language understanding, reasoning, response generation and voice. It is an **independent project** (`ASIS/` next to `CORE/`). It uses C.O.R.E. (and storage through C.O.R.E.) rather than owning C.O.R.E. responsibilities. → [systems/asis.md](systems/asis.md)
-- **T.I.V.I.S.S.** is a separate AI agent with its own identity, configuration, memory, permissions and ownership model — intended to eventually be handed over to another person. It must **not** become a renamed copy of A.S.I.S. Its v0.1.0 foundation is cloned locally at `TIVISS/` but remains foundation-only (no live traffic, no real handover). → [systems/tiviss.md](systems/tiviss.md)
+- **T.I.V.I.S.S.** is a separate AI agent with its own identity, configuration, memory, permissions and ownership model — intended to eventually be handed over to another person. It must **not** become a renamed copy of A.S.I.S. Its v0.2.0 foundation is cloned locally at `TIVISS/` and remains foundation-only (no live traffic, no real handover). → [systems/tiviss.md](systems/tiviss.md)
 - **RadarS.A.R.D.** is the security/anomaly sensor layer. It detects and reports; C.O.R.E. coordinates the resulting events, logging, health state and responses. → [systems/radar-sard.md](systems/radar-sard.md)
-- **A.S.C.S.** is a local autonomous coding agent (Ollama-based). It is fully implemented as a standalone tool and is intended to eventually be usable by A.S.I.S./T.I.V.I.S.S. through C.O.R.E.; no integration exists yet. → [systems/asc.md](systems/asc.md)
+- **A.S.C.S.** is a local autonomous coding agent (Ollama-based). It is fully implemented as a standalone tool and has a Linux/Pi headless generation-only path; full A.S.I.S./T.I.V.I.S.S. integration through C.O.R.E. remains future intent. → [systems/asc.md](systems/asc.md)
 
 ## 5. Current development status
 
@@ -71,18 +71,18 @@ The arrows are explained precisely in [System Interactions](architecture/system-
 
 | System | Status | Notes |
 |---|---|---|
-| **C.O.R.E.** | v0.3.1 **IMPLEMENTED** | v0.3.0 external-device platform + v0.3.1: CapabilityRouter with ModelProfile (device-capability-based model selection), RescsDeviceProxy (device-scoped namespace enforcement). Physical Windows ↔ Mac LAN validation and 24/7 operational validation remain **NOT YET PERFORMED**. |
-| **R.E.S.C.S.** | v0.3.1 **IMPLEMENTED** | v0.3.0 versioned HTTP API + v0.3.1: device-scoped namespace/owner validation (`validate_device_namespace`, `validate_device_owner`, `assert_device_ownership`), RESCS_API_KEY_OWNER enforcement. Live PostgreSQL/Supabase, real S3 and deployed C.O.R.E. ↔ R.E.S.C.S. interop are **PLANNED** — software contract implemented, external validation pending. |
-| **A.S.I.S.** | **IN DEVELOPMENT** | Rebuilt `asis` package: CLI, AI provider layer (Ollama), memory, tools, permissions, events, voice pipeline, first test suite. **ASCS integration PLANNED**: `ascs_integration` toolset (subprocess + API modes), `ascs_handover` for session continuity, `ascs_status` for monitoring — direct local-tool exception documented in ADR 0007; C.O.R.E.-mediated path is FUTURE. Legacy `core/` + `02_voice/` trees deprecated. C.O.R.E. uplink optional; R.E.S.C.S. future. |
-| **T.I.V.I.S.S.** | **IN DEVELOPMENT** (v0.3) | v0.3 capabilities: **OllamaProvider** (real Ollama HTTP API with streaming, tool calling, thinking tag stripping), **SQLiteMemoryStore** (dual DB: `conversation_logs.db` + `semantic_memory.db`), Web/Calculator/Translation/Voice config mirroring ASIS. Foundation v0.1 (identity, ownership, runtime, memory, permissions, handover). Local clone at `TIVISS/`; real handover intentionally not implemented. |
+| **C.O.R.E.** | v0.5.0 **IMPLEMENTED** | Combined `CORE-HOST` + `CORE-CLIENT` project with Pi service integration, signed R.E.S.C.S. owner scope, `/api/ai-status`, and tool-free `CORE_SAFE_CHAT` worker. Verified: 839 host + 200 client tests passed (macOS Python 3.12). Physical Pi/ARM64, Windows ↔ Mac LAN, and 24/7 operational validation remain **NOT YET PERFORMED**. |
+| **R.E.S.C.S.** | v0.4.0 **IMPLEMENTED** | Pi storage foundation: signed CORE owner scope (`X-RESCS-Signature`), required `/srv/core` mount guard, systemd/installer, real CORE loopback validation. Verified: 312 passed / 4 skipped. Live PostgreSQL/Supabase, real S3, deployed C.O.R.E. ↔ R.E.S.C.S. interop, and real Pi/ARM64 remain external validation. The local 0.3.1 line is archived separately; namespace/key uniqueness is unchanged. |
+| **A.S.I.S.** | **IN DEVELOPMENT** | Rebuilt `asis` package with Pi policy/worker/handoff support. Verified: 941 passed / 24 skipped (macOS Python 3.12). **ASCS integration IMPLEMENTED** via `ascs_integration` toolset (subprocess + API modes), `ascs_handover`, `ascs_status` — direct local-tool exception documented in ADR 0007; C.O.R.E.-mediated path is FUTURE. C.O.R.E. uplink optional; R.E.S.C.S. future. |
+| **T.I.V.I.S.S.** | **IN DEVELOPMENT** (v0.2.0) | v0.2.0 capabilities: **OllamaProvider** (real Ollama HTTP API with streaming, tool calling, thinking tag stripping), **SQLiteMemoryStore** (dual DB: `conversation_logs.db` + `semantic_memory.db`), Web/Calculator/Translation/Voice config mirroring ASIS. Foundation (identity, ownership, runtime, memory, permissions, handover). Verified: 279 passed. Local clone at `TIVISS/`; real handover intentionally not implemented. |
 | **RadarS.A.R.D.** | **PLANNED / FUTURE** | No code exists anywhere. |
-| **A.S.C.S.** | **IMPLEMENTED** (standalone) | v0.3.0 local coding agent (951 passed / 6 skipped 2026-09-23). **ASIS integration PLANNED**: `export_handover_state()` for session continuity — direct local-tool exception in ADR 0007; C.O.R.E.-mediated use by A.S.I.S./T.I.V.I.S.S. is future intent. |
+| **A.S.C.S.** | **IMPLEMENTED** (standalone) | v0.3.0 local coding agent with Linux/Pi headless generation-only path. Verified: 991 passed / 6 skipped. Desktop UI/TUI runtime remains Windows-oriented; Pi mode has no tools or TUI. **ASIS integration IMPLEMENTED**: `export_handover_state()` for session continuity — direct local-tool exception in ADR 0007; C.O.R.E.-mediated use is future intent. |
 
 The authoritative per-system detail is in [`systems/`](systems/). **Nothing in this repository describes unbuilt functionality as implemented.**
 
 ## 6. C.O.R.E. roadmap state
 
-C.O.R.E. v0.1 established the architecture and behavioral contracts. The **13-phase v0.2 build order is complete** (shipped as v0.2.0 → v0.2.1, with legacy compatibility preserved), and **v0.3.0** layered the external-device platform on top: TLS transport, token authentication, device lifecycle/persistence, agent scheduling, the HTTP R.E.S.C.S. adapter, data distribution and provisioning. Remaining work is deployment validation (physical LAN, 24/7 operation), not software. See [systems/core.md](systems/core.md#6-roadmap).
+C.O.R.E. v0.1 established the architecture, and v0.2 made it operational. **v0.3.0** added the external-device platform (TLS transport, token authentication, device lifecycle/persistence, agent scheduling, HTTP R.E.S.C.S. adapter, data distribution, provisioning); **v0.4.0** added the localhost host/client portals; **v0.5.0** combines the host and client into `CORE/`, adds Pi service integration, signed R.E.S.C.S. owner scope, `/api/ai-status`, and a tool-free safe-chat worker. Package version is 0.5.0; wire protocol compatibility remains 0.4.0. Remaining work is deployment validation (physical Pi/ARM64, LAN, 24/7 operation), not software. See [systems/core.md](systems/core.md#6-roadmap) and the [Pi release note](development/pi-release-2026-11-06.md).
 
 ## 7. Repository structure
 
@@ -131,7 +131,8 @@ RISARMS-DOCS/
 │   ├── versioning.md
 │   ├── testing.md
 │   ├── contribution.md
-│   └── hw-gated-validation.md
+│   ├── hw-gated-validation.md
+│   └── pi-release-2026-11-06.md
 │
 └── decisions/
     ├── README.md
@@ -142,26 +143,33 @@ RISARMS-DOCS/
     ├── 0005-storage-integration-via-adapter.md
     ├── 0006-security-architecture.md
     ├── 0007-ascs-standalone-coding-agent.md
-    └── 0008-web-portals-presentation-only.md
+    ├── 0008-web-portals-presentation-only.md
+    └── 0009-handover-model.md
 ```
 
 The ecosystem the documentation governs:
 
 ```text
 RISARMS/
-├── CORE-HOST/      <- https://github.com/Kishir298/CORE-HOST (server/runtime, package `core`)
-├── CORE-CLIENT/    <- https://github.com/Kishir298/CORE-CLIENT (stdlib-only external-device client, package `client`)
-├── RESCS/          <- https://github.com/Kishir298/RESCS
+├── CORE/           <- https://github.com/Kishir298/CORE-HOST (combined project)
+│   ├── CORE-HOST/  <- server/runtime, package `core`
+│   ├── CORE-CLIENT/<- stdlib-only external-device client, package `client`
+│   ├── services/   <- ASIS, ASCS, RESCS, TIVISS service copies
+│   ├── deployment/ <- Pi deployment scripts/config
+│   ├── install/    <- release wheels (core, core-client, rescs)
+│   └── validation/ <- release evidence
+├── RESCS/          <- https://github.com/Kishir298/RESCS (0.4.0)
 ├── ASIS/           <- https://github.com/Kishir298/ASIS
 ├── ASCS/           <- https://github.com/Kishir298/ASCS
-├── TIVISS/         <- https://github.com/Kishir298/TIVISS (v0.3 capabilities: OllamaProvider, SQLiteMemoryStore, local clone present)
-├── Flavora/        <- https://github.com/Kishir298/Flavora (local-first food companion; offline IndexedDB sync, independent repo)
-└── DOCS/           <- this repository (remote: RISARMS-DOCS)
+├── TIVISS/         <- https://github.com/Kishir298/TIVISS (v0.2.0)
+├── old-versions/   <- local archive (CORE 0.4.0, RESCS 0.3.1); not a git repository
+├── RISARMS-DOCS/   <- this repository (remote: RISARMS-DOCS)
+└── Flavora/        <- excluded sibling; not an ecosystem member
 ```
 
-> [!NOTE] **Ecosystem sibling:** `Flavora/` is an independent repository with its own IndexedDB-backed offline mutation replay and idempotency model. It is not governed by the C.O.R.E. architecture but documents its sync protocol here for reference. It does not participate in C.O.R.E. routing or R.E.S.C.S. storage.
+> [!NOTE] **Excluded sibling:** `Flavora/` is an independent repository and is outside this workspace's in-scope repositories. It does not participate in C.O.R.E. routing or R.E.S.C.S. storage.
 
-> [!IMPORTANT] **Independence rule:** R.E.S.C.S., A.S.I.S., A.S.C.S. and T.I.V.I.S.S. are independent projects. They live *beside* C.O.R.E., not inside it. Integration happens through defined interfaces and communication contracts, never through code sharing.
+> [!IMPORTANT] **Independence rule:** R.E.S.C.S., A.S.I.S., A.S.C.S. and T.I.V.I.S.S. are independent projects whose owning repos live *beside* C.O.R.E. `CORE/services/*` contains release mirrors for combined deployment only. Integration happens through defined interfaces and communication contracts, never through shared source ownership.
 
 ## 8. How to use this documentation
 

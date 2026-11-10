@@ -1,6 +1,6 @@
 # Services Contract
 
-> [!NOTE] **Purpose:** Defines the lifecycle and behavior of services — the executable unit C.O.R.E. manages. The C.O.R.E. service layer (9 services in v0.3.0, including the agent scheduler service) is **IMPLEMENTED**; cross-system services reuse these semantics but are **PLANNED**.
+> [!NOTE] **Purpose:** Defines the lifecycle and behavior of services — the executable unit C.O.R.E. manages. The C.O.R.E. service layer (9 services in v0.5.0, including the agent scheduler service) is **IMPLEMENTED**; cross-system services reuse these semantics but are **PLANNED**.
 
 ## 1. What a service is
 

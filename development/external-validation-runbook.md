@@ -27,6 +27,7 @@ prerequisites are met.
 | 4 | 24/7 Endurance (RESCS) | Hardware | Dedicated non-primary machine | 24 hours |
 | 5 | Live Voice + Model (ASIS/ASCS) | Hardware | Mic/speaker, GPU, 32GB+ RAM | 2-4 hours |
 | 6 | TIVISS Upstream Verification | Network | Fresh clone of upstream | 10 min |
+| 7 | Physical Pi/ARM64 (CORE + RESCS) | Hardware | Raspberry Pi, 64-bit OS, SSD at `/srv/core` | 2-4 hours |
 
 ---
 
@@ -34,18 +35,18 @@ prerequisites are met.
 
 ### Prerequisites
 - Windows host + Mac/Linux client on same LAN
-- Firewall rule `C.O.R.E. TCP 5000` verified per `CORE-HOST/docs/windows-firewall.md`
+- Firewall rule `C.O.R.E. TCP 5000` verified per `CORE/CORE-HOST/docs/windows-firewall.md`
 - Fresh TLS cert: private `core.key` (host-only), public `core.crt` copied to client
 - CORE-HOST + CORE-CLIENT `--help` smoke test passes
 
 ### Procedure
 ```bash
 # On Windows host (CORE-HOST)
-cd CORE-HOST
+cd CORE/CORE-HOST
 venv\Scripts\python -m core --host 0.0.0.0 --port 5000 --tls --certfile core.crt --keyfile core.key
 
 # On client machine (CORE-CLIENT)
-cd CORE-CLIENT
+cd CORE/CORE-CLIENT
 .venv/bin/python -m client.core_device_client \
   --host <WINDOWS_HOST_IP> \
   --port 5000 \
@@ -200,7 +201,7 @@ python3 -m pytest -q -v
 ```
 
 ### Acceptance Criteria
-- Upstream test suite passes (254+ tests)
+- Upstream test suite passes (279+ tests; local clone verified at 279)
 - No regressions vs local clone
 
 ---
@@ -245,6 +246,37 @@ git clone https://github.com/Kishir298/TIVISS && cd TIVISS && python3 -m pytest 
 
 ---
 
+## 7. Physical Raspberry Pi / ARM64 — CORE + RESCS
+
+### Prerequisites
+- Raspberry Pi 4/5 (ARM64), Raspberry Pi OS 64-bit, cgroup v2, systemd
+- Dedicated SSD mounted at `/srv/core`
+- Release artifacts from `CORE/install/` and `RESCS/`
+
+### Procedure
+```bash
+# On the Pi
+sudo bash CORE/deployment/pi/install.sh
+# Verify services and boot persistence
+systemctl status core-host rescs
+curl http://127.0.0.1:8081/health
+# From CORE/CORE-HOST, exercise the real loopback
+.venv/bin/python ../../RESCS/scripts/validate_core_loopback.py
+```
+
+### Validation Checklist
+- [ ] Installer completes on clean ARM64 hardware
+- [ ] `core-host` and `rescs` start on boot
+- [ ] `/srv/core` mount guard blocks a missing mount
+- [ ] CORE ↔ RESCS loopback passes
+- [ ] Reboot and power-loss restart are clean
+- [ ] No credentials appear in logs
+
+### Acceptance Criteria
+All checklist boxes ticked; reboot persistence verified; loopback passes on-device.
+
+---
+
 ## Recording Results
 
 When validations are performed, record:
@@ -264,5 +296,5 @@ Store results in `validation-results/<date>-<validation>/` for audit trail.
 
 - [Testing](testing.md) — Local test suite status
 - [Hardware-Gated Validation](hw-gated-validation.md) — Original blocker matrix
-- [LAN Readiness](CORE-HOST/docs/lan-readiness.md) — Host-side preflight
+- [LAN Readiness](../../CORE/CORE-HOST/docs/lan-readiness.md) — Host-side preflight
 - [ADR 0007](../decisions/0007-ascs-standalone-coding-agent.md) — ASIS↔ASCS local-tool exception

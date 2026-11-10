@@ -1,6 +1,6 @@
 # T.I.V.I.S.S. — Though I'm Vanquished, I'm Still Stronger
 
-> [!NOTE] **Status:** Agent **IN DEVELOPMENT** (v0.3 capabilities on GitHub: `https://github.com/Kishir298/TIVISS`, cloned locally at `RISARMS/TIVISS/`). Beyond the v0.1.0 foundation (identity, ownership, runtime, memory, permissions, handover state model), TIVISS now has: an interactive CLI (`tiviss` REPL + `--message`, `python -m tiviss`), **OllamaProvider** (real Ollama HTTP API with streaming and tool calling), **SQLiteMemoryStore** (dual SQLite databases: `conversation_logs.db` for append-only conversation history and `semantic_memory.db` for structured long-term memory with categories, importance, confidence), versioned secret-free state export/import, structured JSON-lines logging, provider timeouts, a replaceable voice abstraction (mocks + real engine hooks), and real stdlib-only transports — `core_tcp` (TCP+TLS external-device protocol) and `rescs_http` (RESCS records API, `tiviss.*` namespaces) — all tested offline against fakes. New configuration for Web/Calculator/Translation/Voice pipelines mirrors ASIS. No live traffic is claimed until exercised against real C.O.R.E./R.E.S.C.S. hosts. The real-world handover mechanism is intentionally not implemented yet.
+> [!NOTE] **Status:** Agent **IN DEVELOPMENT** (package v0.2.0 on GitHub: `https://github.com/Kishir298/TIVISS`, cloned locally at `RISARMS/TIVISS/`). Verified: **279 passed** (2026-11-09). Beyond the foundation (identity, ownership, runtime, memory, permissions, handover state model), TIVISS has: an interactive CLI (`tiviss` REPL + `--message`, `python -m tiviss`), **OllamaProvider**, **SQLiteMemoryStore** (dual databases), versioned secret-free state export/import, structured JSON-lines logging, provider timeouts, a replaceable voice abstraction, and stdlib-only `core_tcp` / `rescs_http` transports tested offline against fakes. New configuration for Web/Calculator/Translation/Voice pipelines mirrors ASIS. No live traffic is claimed until exercised against real C.O.R.E./R.E.S.C.S. hosts. The real-world handover mechanism is intentionally not implemented yet.
 
 ## 1. What T.I.V.I.S.S. is
 
@@ -51,7 +51,7 @@ Until these are resolved, T.I.V.I.S.S. remains in its remote foundation phase an
 
 > [!IMPORTANT] T.I.V.I.S.S. must not be confused with A.S.I.S. or with [A.S.C.S.](asc.md): three distinct systems with distinct identities.
 
-## 6. Implemented Features (v0.3)
+## 6. Implemented Features (v0.2.0)
 
 ### 6.1 OllamaProvider (Real Model Provider)
 
