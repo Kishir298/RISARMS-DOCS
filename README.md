@@ -30,6 +30,7 @@ This repository is the documentation home of the ecosystem. It contains:
 - **Interface contracts** — required fields and behavior of communication, messaging, routing, services and integration ([`interfaces/`](interfaces/communication.md))
 - **Security architecture** — identity, authentication, authorization and trust boundaries ([`security/`](security/overview.md))
 - **Development guidance** — roadmap, versioning, testing and contribution policy ([`development/`](development/roadmap.md))
+- **Cross-platform release engineering** — per-repo commands, manifests, release pipelines, artifact naming and validation levels ([`development/cross-platform-release.md`](development/cross-platform-release.md))
 - **Architecture Decision Records** — the reasoning behind important architectural choices ([`decisions/`](decisions/README.md))
 
 ## 3. Ecosystem architecture

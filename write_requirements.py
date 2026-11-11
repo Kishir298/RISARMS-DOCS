@@ -58,6 +58,13 @@ DEV = [
     "black",
 ]
 
+# Cross-platform packaging toolchain used by the per-repo release workflows.
+BUILD = [
+    "build>=1.2",
+    "pyinstaller>=6.10",
+    "cyclonedx-bom>=4.1",
+]
+
 
 def manifest(include_host: bool, include_rescs: bool) -> str:
     lines = []
@@ -79,6 +86,9 @@ def manifest(include_host: bool, include_rescs: bool) -> str:
     lines.append("")
     lines.append("# Optional tooling and voice/document dependencies")
     lines.extend(OPTIONAL)
+    lines.append("")
+    lines.append("# Packaging and release toolchain (PyInstaller builds, SBOM generation)")
+    lines.extend(BUILD)
     lines.append("")
     lines.append("# Development and test dependencies")
     lines.extend(DEV)
