@@ -152,7 +152,7 @@ The ecosystem the documentation governs:
 
 ```text
 RISARMS/
-├── CORE/           <- https://github.com/Kishir298/CORE-HOST (combined project)
+├── CORE/           <- https://github.com/Kishir298/CORE (combined project)
 │   ├── CORE-HOST/  <- server/runtime, package `core`
 │   ├── CORE-CLIENT/<- stdlib-only external-device client, package `client`
 │   ├── services/   <- ASIS, ASCS, RESCS, TIVISS service copies
