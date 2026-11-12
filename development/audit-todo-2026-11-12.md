@@ -6,7 +6,7 @@
 
 ## P0 — Security / correctness
 
-- [x] **0.1 Review the standalone `CORE-CLIENT` vs `CORE/CORE-CLIENT` divergence.** `CORE/CORE-CLIENT` is canonical; the standalone checkout is a legacy mirror. Exact model matching, portal tests, and CI gates were aligned in both copies. Retiring the duplicate remains open as item 5.1.
+- [ ] **0.1 Review the standalone `CORE-CLIENT` vs `CORE/CORE-CLIENT` divergence.** Partially done: `CORE/CORE-CLIENT` is canonical and the standalone checkout is a legacy mirror. Exact model matching, portal tests, and CI gates were aligned in both copies. A sync check or retirement of the duplicate remains open as item 5.1.
 - [x] **0.2 Add explicit negative tests for the portal security boundary.** Both copies now cover foreign/credentialed/path/query/wrong-port `Host`, missing/wrong-scheme/wrong-host/wrong-port/userinfo/path/query/fragment `Origin`, missing `X-Core-Request`, wrong content type, non-object/empty/oversized/invalid-length JSON, and the IPv6 positive case. Missing `Origin` is allowed only with `X-Core-Request`.
 - [ ] **0.3 Validate the Windows cancellation fix on a real long-running stream.** The regression test uses a short-lived local server and now covers repeated cancels. Confirm cancel returns promptly while Ollama is generating on Windows and that the detached socket does not leak handles over a long session.
 - [x] **0.4 Decide whether `CORE/config/core.lan.yaml` should be updated locally.** The ignored machine-local file now points TLS paths at `CORE\CORE-HOST\tls` and validates as YAML.
@@ -16,7 +16,7 @@
 - [ ] **1.1 Physical Raspberry Pi / ARM64 validation.** `CORE` host/client, `ASCS` Pi generation path, and `RESCS` signed-scope/mount validation still need real hardware runs. The `fcntl`-dependent tests are skipped on Windows and must run on Linux.
 - [ ] **1.2 Windows ↔ Mac LAN/TLS validation.** Exercise the real TLS listener, certificate trust, firewall rule, reconnect, and portal loopback assumptions on two machines.
 - [ ] **1.3 Extended 24/7 operation.** Run endurance, reconnect-storm, disk-full, and log-rotation checks; the current suites are deterministic unit/integration tests, not soak tests.
-- [x] **1.4 Add a CI matrix for Windows and Linux.** `CORE` runs full Windows suites for host and client alongside Linux; `ASCS` runs a Windows full suite alongside Ubuntu for the `fcntl`/Pi tests. `ASIS`, `RESCS`, and `TIVISS` still only gate lint, so a full Windows test job there remains open.
+- [ ] **1.4 Add a CI matrix for Windows and Linux.** Partially done: `CORE` runs full Windows suites for host and client alongside Linux, and `ASCS` runs a Windows full suite alongside Ubuntu for the `fcntl`/Pi tests. `ASIS`, `RESCS`, and `TIVISS` still only gate lint, so full Windows test jobs there remain open.
 - [ ] **1.5 Add a regression test for `_recv_exact` deadline expiry with a partially received frame.** The local frame-deadline work has one timeout-recovery test; add the deadline-exceeded path and the no-data timeout path.
 
 ## P1 — Repository hygiene
