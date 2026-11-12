@@ -26,6 +26,7 @@
 - [ ] **2.4 Decide what to do with the stale `RISARMS-DOCS/` folder.** The real docs repository is `DOCS/`; the old folder contains only two markdown files and is not a git repository. Archive or delete it after confirming nothing unique remains.
 - [ ] **2.5 Remove duplicate `.gitignore` entries.** Several repos list `*.key`, `.pytest_cache/`, and `__pycache__/` more than once. Cosmetic, but it makes future audits noisier.
 - [ ] **2.6 Version workspace-level files.** Root `requirements.txt`, `skills/`, and the build/audit to-dos are outside any git repository. Move them into `DOCS/` or create a small workspace repository if they should be tracked.
+- [ ] **2.7 Review remaining workspace-root clutter.** Classify `Regression Tests Added (\`tests`, `requirements/`, the empty `rescs_storage/` and `rescs_test_storage/`, the stale `RISARMS-DOCS/` folder, and the separate `Rewiseorist/` repository before deleting or moving anything. Do not remove unknown user work.
 
 ## P2 — Documentation / naming
 

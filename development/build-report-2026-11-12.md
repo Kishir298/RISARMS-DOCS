@@ -24,6 +24,7 @@ No pull conflicts occurred. `TIVISS` and the standalone `CORE-CLIENT` checkout w
 - The editable install was refreshed with `python -m pip install -e CORE/CORE-HOST`; `core` reports `0.5.0` and imports from `CORE\CORE-HOST\core`.
 - Active references were updated in `DOCS/AGENT.md`, `DOCS/README.md`, `DOCS/development/contribution.md`, root `requirements.txt`, and `skills/risarms-repo-sync/SKILL.md`.
 - Internal `CORE-HOST/` references inside `CORE/.github/`, `CORE/BUILDING.md`, `CORE/RELEASE-MANIFEST.json`, and release evidence were intentionally left unchanged because they refer to the internal subdirectory.
+- Removed the bytecode-only `CORE/core/` and empty `CORE/client/` legacy trees after confirming `CORE/core/` contained 0 `.py` files (the `AGENT.md` stale-tree rule).
 
 ## 3. Fixes and changed files
 
