@@ -164,7 +164,7 @@ RISARMS/
 ├── ASCS/           <- https://github.com/Kishir298/ASCS
 ├── TIVISS/         <- https://github.com/Kishir298/TIVISS (v0.2.0)
 ├── old-versions/   <- local archive (CORE 0.4.0, RESCS 0.3.1); not a git repository
-├── RISARMS-DOCS/   <- this repository (remote: RISARMS-DOCS)
+├── DOCS/           <- this repository (remote: RISARMS-DOCS)
 └── Flavora/        <- excluded sibling; not an ecosystem member
 ```
 
