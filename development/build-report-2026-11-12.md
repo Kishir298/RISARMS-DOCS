@@ -63,6 +63,7 @@ No pull conflicts occurred. `TIVISS` and the standalone `CORE-CLIENT` checkout w
 
 ### Workspace root (not a git repository)
 
+- `AGENT.md` — stub now points at six parallel sub-agents and cleans up the double-period typo.
 - `requirements.txt` — editable install paths now use `CORE/CORE-HOST` and `CORE/CORE-CLIENT`; standalone checkout marked optional.
 - `skills/risarms-repo-sync/SKILL.md` — six active repos, `CORE` replaces `CORE-HOST`, updated table and output template.
 - `TODO_BUILD_2026-11-12.md` — ranked build plan with final status.
