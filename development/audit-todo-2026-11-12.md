@@ -20,7 +20,7 @@
 
 ## P1 — Repository hygiene
 
-- [ ] **2.1 Reduce the broad ruff backlog.** Default `ruff check` reports roughly 482 findings in `CORE/CORE-HOST`, 99 in `CORE/CORE-CLIENT`, 236 in `ASCS`, 167 in `RESCS`, 527 in `ASIS`, 147 in `TIVISS`, and 71 in standalone `CORE-CLIENT`. Either adopt a shared `ruff` config with an explicit rule set and baseline, or fix incrementally by directory. The `--select F` gate is green.
+- [ ] **2.1 Reduce the broad ruff backlog.** Default `ruff check` reports roughly 482 findings in `CORE/CORE-HOST`, 99 in `CORE/CORE-CLIENT`, 236 in `ASCS`, 167 in `RESCS`, 527 in `ASIS`, 147 in `TIVISS`, and 68 in standalone `CORE-CLIENT`. Either adopt a shared `ruff` config with an explicit rule set and baseline, or fix incrementally by directory. The `--select F` gate is green.
 - [ ] **2.2 Review and commit or discard the 22 modified `TIVISS` files.** They were preserved during this build and are unrelated to the CORE rename. Split them into logical commits after review.
 - [ ] **2.3 Fix or remove stale generator scripts in `DOCS/`.** `DOCS/write_full.py` still points at `RISARMS-DOCS\requirements.txt` and says "7 repos"; `DOCS/write_req.py` uses the nonstandard `pip --exclude` flag. Decide whether these are maintained tools or disposable one-offs.
 - [ ] **2.4 Decide what to do with the stale `RISARMS-DOCS/` folder.** The real docs repository is `DOCS/`; the old folder contains only two markdown files and is not a git repository. Archive or delete it after confirming nothing unique remains.
