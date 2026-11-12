@@ -109,3 +109,109 @@ The broader default `ruff check` still reports large pre-existing style backlogs
 ## 7. Remaining work
 
 See [audit-todo-2026-11-12.md](audit-todo-2026-11-12.md).
+
+---
+
+# Phase 2 follow-up build — 2026-11-12
+
+**Scope:** canonical client alignment, portal security tests, Windows/CI hardening, `TIVISS` cleanup, workspace/docs/requirements hygiene, ruff ratchet, staged commits and pushes. Hardware and soak validation could not be performed in this environment.
+
+## 8. Canonical client and model matching
+
+- `CORE/CORE-CLIENT` is the canonical client. The standalone `CORE-CLIENT` checkout is retained as a legacy mirror and is now aligned where practical; its `README.md` carries a legacy banner.
+- `find_model` now requires exact tags in both copies. An untagged request resolves to `:latest`; the old prefix match that could select a different quantized model is gone.
+- The standalone copy received the same exact-match fix and updated capability tests.
+
+## 9. Portal security boundary tests
+
+A negative matrix now exists in both `CORE/CORE-CLIENT/tests/test_audit_regressions.py` and standalone `CORE-CLIENT/tests/test_audit_regressions.py`:
+
+- `Host`: foreign host, embedded credentials, path, query, and wrong port rejected; loopback and IPv6 loopback accepted.
+- `Origin`: missing, wrong scheme, wrong host, wrong port, userinfo, path, query, and fragment rejected.
+- Missing `X-Core-Request`, wrong content type, non-object JSON, empty body, oversized body, and invalid `Content-Length` rejected.
+- Missing `Origin` is intentionally allowed only when `X-Core-Request` is present. Browsers cannot set that custom header cross-origin without a preflight, so it is the CSRF control for non-browser and same-origin callers.
+
+## 10. Windows cancellation and CI
+
+- Both inference suites now cover repeated `ChatStream.close()` calls; the test servers suppress Windows `ConnectionAbortedError` socket noise.
+- `CORE/.github/workflows/ci.yml` runs full Windows suites for `CORE-HOST` and `CORE-CLIENT` in addition to the existing Linux jobs.
+- `ASCS/.github/workflows/ci.yml` runs the full Windows suite while Ubuntu keeps the `fcntl`/Pi tests.
+- Every repository now gates on `ruff check --select E9,F,I` in CI (and in release workflows where one exists).
+
+## 11. `TIVISS` local work
+
+The 22 modified files were reviewed and split into three commits:
+
+1. `.gitignore` — local database and journal patterns.
+2. Style/typing — import sorting and modern typing only, no behavior changes.
+3. CI — ratchet the ruff gate to `E9,F,I`.
+
+The full suite passes: **279 passed**.
+
+## 12. Workspace, docs, and requirements hygiene
+
+- Root `requirements.txt` was rebuilt as a complete ecosystem inventory: **47 unique dependencies** from every `pyproject.toml`/requirements manifest, including `tomli`, `tomli-w`, `prometheus-client`, `rich`, `transformers`, `build`, `pyinstaller`, and `cyclonedx-bom`.
+- Root `requirements-dev.txt` was rebuilt with **7 dev/test tools**. A duplicate `ruff` entry and an invalid `pytest==9.1.1; extra == ...` marker were removed; both files parse with `packaging.requirements.Requirement`.
+- `CORE/config/core.lan.yaml` (ignored local config) now points TLS paths at `CORE\CORE-HOST\tls`; the YAML validates.
+- Unique files from the stale `RISARMS-DOCS/` folder were archived under `DOCS/development/archive/` (`architecture-2026-10-12.md`, `ecosystem-audit-2026-10-12.md`, plus an archive `README.md`), then the stale folder was removed.
+- Removed stray workspace artifacts: `Regression Tests Added (`tests`, root `requirements/development.txt`, and the empty `rescs_storage/` and `rescs_test_storage/`. `Rewiseorist/` was left untouched.
+- Removed stale `DOCS` generators and manifests: `write_full.py`, `write_req.py`, `write_requirements.py`, `extract_sections.py`, `fix_requirements.py`, `requirements-no-host.txt`, and `requirements-no-client.txt`.
+- `DOCS/requirements.txt` now points at the root `requirements.txt` instead of duplicating a stale list.
+- `CORE/config/core.lan.yaml` remains ignored and machine-local; it is not committed.
+
+## 13. Ruff ratchet
+
+`ruff check --select E9,F,I` is green in every repository:
+
+| Repository | `E9,F,I` | Default `ruff check` |
+|---|---|---|
+| `CORE/CORE-HOST` | pass | pass |
+| `CORE/CORE-CLIENT` | pass | pass |
+| `CORE-CLIENT` (standalone) | pass | pass |
+| `ASCS` | pass | pass |
+| `RESCS` | pass | pass |
+| `ASIS` | pass | 504 findings (documented backlog) |
+| `TIVISS` | pass | 147 findings (documented backlog) |
+
+The `ASIS` and `TIVISS` broad-rule backlogs are recorded in the Phase 2 audit list rather than mass-fixed.
+
+## 14. Phase 2 test results
+
+| Repository | Command | Result |
+|---|---|---|
+| `CORE/CORE-HOST` | `python -m pytest -q --tb=short` | **837 passed, 7 skipped** |
+| `CORE/CORE-CLIENT` | `python -m pytest -q --tb=short` | **235 passed, 1 skipped** |
+| `CORE-CLIENT` (standalone) | `.venv\Scripts\python -m pytest -q --tb=short` | **185 passed** |
+| `ASCS` | `.venv\Scripts\python -m pytest -q --tb=short` | **982 passed, 22 skipped** |
+| `ASIS` | `.venv\Scripts\python -m pytest -q --tb=short` | **948 passed, 19 skipped** |
+| `RESCS` | `.venv\Scripts\python -m pytest -q --tb=short` | **314 passed, 4 skipped** |
+| `TIVISS` | `.venv\Scripts\python -m pytest -q --tb=short` | **279 passed** |
+
+## 15. Phase 2 commits
+
+| Repository | Commits |
+|---|---|
+| `CORE` | `5d6f1bf` portal/repeated-cancel tests · `5702373` Windows CI + ruff gate · `c1eaaaa` import sorting |
+| `CORE-CLIENT` (standalone) | `4f9dbbd` exact model tags · `b4628fb` portal rejection matrix · `7b218df` CI gate + import sorting |
+| `ASCS` | `cb4289d` Windows CI + ruff gate · `d8900a9` import sorting |
+| `ASIS` | `1501bcf` ruff gate · `00564c6` import sorting |
+| `RESCS` | `079df86` ruff gate · `f1f1918` import sorting |
+| `TIVISS` | `bfce61c` `.gitignore` · `42d777b` style/typing · `06acf81` CI gate |
+| `DOCS` | this report, the updated audit list, the Phase 2 audit list, and the archive cleanup |
+
+All commits are normal fast-forward pushes; no history was rewritten and no force-push was used.
+
+## 16. Safety
+
+- Secret-pattern scans of the staged diffs found no private keys, tokens, passwords, or cloud credentials.
+- `.gitignore` coverage was audited in every repository: `.env*`, TLS keys/certs, device files, and SQLite databases/journals are ignored. Tracked matches were code/docs only.
+- Root `requirements.txt`, `requirements-dev.txt`, and the workspace TODO files live outside any git repository; they are recorded here because they cannot be pushed.
+- `Rewiseorist/` remains a separate repository and was not modified.
+
+## 17. Not performed (environment limits)
+
+- Physical Raspberry Pi / ARM64 validation for `CORE`, `ASCS`, and `RESCS`.
+- Windows ↔ Mac LAN/TLS validation (certificate trust, firewall, reconnect).
+- 24/7 endurance, reconnect-storm, disk-full, and log-rotation soak testing.
+
+See [audit-todo-2026-11-12-phase2.md](audit-todo-2026-11-12-phase2.md) for the remaining ranked work.
