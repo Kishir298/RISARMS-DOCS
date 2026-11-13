@@ -10,7 +10,7 @@
 
 R.I.S.A.R.M.S. is the name for the *entire ecosystem* — not a single program. It is a set of modular systems that are independently developed but designed to operate as one coherent whole.
 
-The ecosystem is composed of six systems:
+The ecosystem is composed of six systems plus a unified desktop application:
 
 | System | Expansion | Role |
 |---|---|---|
@@ -65,6 +65,7 @@ The arrows are explained precisely in [System Interactions](architecture/system-
 - **T.I.V.I.S.S.** is a separate AI agent with its own identity, configuration, memory, permissions and ownership model — intended to eventually be handed over to another person. It must **not** become a renamed copy of A.S.I.S. Its v0.2.0 foundation is cloned locally at `TIVISS/` and remains foundation-only (no live traffic, no real handover). → [systems/tiviss.md](systems/tiviss.md)
 - **RadarS.A.R.D.** is the security/anomaly sensor layer. It detects and reports; C.O.R.E. coordinates the resulting events, logging, health state and responses. → [systems/radar-sard.md](systems/radar-sard.md)
 - **A.S.C.S.** is a local autonomous coding agent (Ollama-based). It is fully implemented as a standalone tool and has a Linux/Pi headless generation-only path; full A.S.I.S./T.I.V.I.S.S. integration through C.O.R.E. remains future intent. → [systems/asc.md](systems/asc.md)
+- **RISARMS-UI** is the canonical cross-platform desktop application. It presents C.O.R.E., ASIS, ASCS, RESCS and TIVISS, keeps local profiles/history/records/files usable offline, and consumes CORE-HOST over HTTPS/WSS. It is a presentation client, not a new integration layer. → [systems/risarms-ui.md](systems/risarms-ui.md)
 
 ## 5. Current development status
 
@@ -72,10 +73,11 @@ The arrows are explained precisely in [System Interactions](architecture/system-
 
 | System | Status | Notes |
 |---|---|---|
-| **C.O.R.E.** | v0.5.0 **IMPLEMENTED** | Combined `CORE-HOST` + `CORE-CLIENT` project with Pi service integration, signed R.E.S.C.S. owner scope, `/api/ai-status`, and tool-free `CORE_SAFE_CHAT` worker. Verified: 839 host + 200 client tests passed (macOS Python 3.12). Physical Pi/ARM64, Windows ↔ Mac LAN, and 24/7 operational validation remain **NOT YET PERFORMED**. |
-| **R.E.S.C.S.** | v0.4.0 **IMPLEMENTED** | Pi storage foundation: signed CORE owner scope (`X-RESCS-Signature`), required `/srv/core` mount guard, systemd/installer, real CORE loopback validation. Verified: 312 passed / 4 skipped. Live PostgreSQL/Supabase, real S3, deployed C.O.R.E. ↔ R.E.S.C.S. interop, and real Pi/ARM64 remain external validation. The local 0.3.1 line is archived separately; namespace/key uniqueness is unchanged. |
+| **C.O.R.E.** | v0.5.0 **IMPLEMENTED** | Combined `CORE-HOST` + `CORE-CLIENT` project with Pi service integration, signed R.E.S.C.S. owner scope, `/api/ai-status`, desktop device credentials, session renewal, WSS tickets and job idempotency. Verified: 865 host tests passed / 1 skipped (macOS Python 3.14). Physical Pi/ARM64, Windows ↔ Mac LAN, and 24/7 operational validation remain **NOT YET PERFORMED**. |
+| **RISARMS-UI** | v0.6.0 **IMPLEMENTED** (source) | Canonical Tkinter desktop app with local profiles, offline SQLite store, keychain device credentials, explicit record/file sync, ASIS/ASCS/TIVISS workspaces, owner administration and PyInstaller build/CI configuration. Verified: **205 UI tests passed**; GUI launch, physical Windows/Linux runs and signed installers remain **NOT YET PERFORMED**. |
+| **R.E.S.C.S.** | v0.4.0 **IMPLEMENTED** | Pi storage foundation: signed CORE owner scope (`X-RESCS-Signature`), required `/srv/core` mount guard, systemd/installer, real CORE loopback validation. Verified: 314 passed / 4 skipped. Live PostgreSQL/Supabase, real S3, deployed C.O.R.E. ↔ R.E.S.C.S. interop, and real Pi/ARM64 remain external validation. The local 0.3.1 line is archived separately; namespace/key uniqueness is unchanged. |
 | **A.S.I.S.** | **IN DEVELOPMENT** | Rebuilt `asis` package with Pi policy/worker/handoff support. Verified: 941 passed / 24 skipped (macOS Python 3.12). **ASCS integration IMPLEMENTED** via `ascs_integration` toolset (subprocess + API modes), `ascs_handover`, `ascs_status` — direct local-tool exception documented in ADR 0007; C.O.R.E.-mediated path is FUTURE. C.O.R.E. uplink optional; R.E.S.C.S. future. |
-| **T.I.V.I.S.S.** | **IN DEVELOPMENT** (v0.2.0) | v0.2.0 capabilities: **OllamaProvider** (real Ollama HTTP API with streaming, tool calling, thinking tag stripping), **SQLiteMemoryStore** (dual DB: `conversation_logs.db` + `semantic_memory.db`), Web/Calculator/Translation/Voice config mirroring ASIS. Foundation (identity, ownership, runtime, memory, permissions, handover). Verified: 279 passed. Local clone at `TIVISS/`; real handover intentionally not implemented. |
+| **T.I.V.I.S.S.** | **IN DEVELOPMENT** (v0.2.0) | v0.2.0 capabilities: **OllamaProvider** (real Ollama HTTP API with streaming, tool calling, thinking tag stripping), **SQLiteMemoryStore** (dual DB: `conversation_logs.db` + `semantic_memory.db`), Web/Calculator/Translation/Voice config mirroring ASIS. Foundation (identity, ownership, runtime, memory, permissions, handover). Verified: 285 passed. Local clone at `TIVISS/`; real handover intentionally not implemented. |
 | **RadarS.A.R.D.** | **PLANNED / FUTURE** | No code exists anywhere. |
 | **A.S.C.S.** | **IMPLEMENTED** (standalone) | v0.3.0 local coding agent with Linux/Pi headless generation-only path. Verified: 991 passed / 6 skipped. Desktop UI/TUI runtime remains Windows-oriented; Pi mode has no tools or TUI. **ASIS integration IMPLEMENTED**: `export_handover_state()` for session continuity — direct local-tool exception in ADR 0007; C.O.R.E.-mediated use is future intent. |
 
@@ -83,7 +85,7 @@ The authoritative per-system detail is in [`systems/`](systems/). **Nothing in t
 
 ## 6. C.O.R.E. roadmap state
 
-C.O.R.E. v0.1 established the architecture, and v0.2 made it operational. **v0.3.0** added the external-device platform (TLS transport, token authentication, device lifecycle/persistence, agent scheduling, HTTP R.E.S.C.S. adapter, data distribution, provisioning); **v0.4.0** added the localhost host/client portals; **v0.5.0** combines the host and client into `CORE/`, adds Pi service integration, signed R.E.S.C.S. owner scope, `/api/ai-status`, and a tool-free safe-chat worker. Package version is 0.5.0; wire protocol compatibility remains 0.4.0. Remaining work is deployment validation (physical Pi/ARM64, LAN, 24/7 operation), not software. See [systems/core.md](systems/core.md#6-roadmap) and the [Pi release note](development/pi-release-2026-11-06.md).
+C.O.R.E. v0.1 established the architecture, and v0.2 made it operational. **v0.3.0** added the external-device platform (TLS transport, token authentication, device lifecycle/persistence, agent scheduling, HTTP R.E.S.C.S. adapter, data distribution, provisioning); **v0.4.0** added the localhost host/client portals; **v0.5.0** combines the host and client into `CORE/`, adds Pi service integration, signed R.E.S.C.S. owner scope, `/api/ai-status`, and a tool-free safe-chat worker. The desktop control channel adds scoped device credentials, session renewal, single-use WSS tickets and idempotent job creation. Package version is 0.5.0; wire protocol compatibility remains 0.4.0. Remaining work is deployment validation (physical Pi/ARM64, LAN, 24/7 operation), not software. See [systems/core.md](systems/core.md#6-roadmap), [desktop application](development/desktop-app.md) and the [Pi release note](development/pi-release-2026-11-06.md).
 
 ## 7. Repository structure
 
@@ -109,6 +111,7 @@ RISARMS-DOCS/
 │   ├── asis.md
 │   ├── asc.md
 │   ├── tiviss.md
+│   ├── risarms-ui.md
 │   └── radar-sard.md
 │
 ├── interfaces/
@@ -133,6 +136,7 @@ RISARMS-DOCS/
 │   ├── testing.md
 │   ├── contribution.md
 │   ├── hw-gated-validation.md
+│   ├── desktop-app.md
 │   └── pi-release-2026-11-06.md
 │
 └── decisions/
@@ -145,7 +149,8 @@ RISARMS-DOCS/
     ├── 0006-security-architecture.md
     ├── 0007-ascs-standalone-coding-agent.md
     ├── 0008-web-portals-presentation-only.md
-    └── 0009-handover-model.md
+    ├── 0009-handover-model.md
+    └── 0010-risarms-ui-canonical-desktop-client.md
 ```
 
 The ecosystem the documentation governs:
@@ -163,6 +168,7 @@ RISARMS/
 ├── ASIS/           <- https://github.com/Kishir298/ASIS
 ├── ASCS/           <- https://github.com/Kishir298/ASCS
 ├── TIVISS/         <- https://github.com/Kishir298/TIVISS (v0.2.0)
+├── RISARMS-ui/     <- https://github.com/Kishir298/RISARMS-ui (canonical desktop app)
 ├── old-versions/   <- local archive (CORE 0.4.0, RESCS 0.3.1); not a git repository
 ├── RISARMS-DOCS/   <- this repository (remote: RISARMS-DOCS)
 └── Flavora/        <- excluded sibling; not an ecosystem member

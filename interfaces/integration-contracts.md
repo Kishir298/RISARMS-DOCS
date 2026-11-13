@@ -70,7 +70,30 @@ Deployed cross-host interop (C.O.R.E. → R.E.S.C.S. over a real network against
 
 The device-facing contract is implemented in C.O.R.E. and out of scope for this page's detail; see [core.md](../systems/core.md) (handshake, registration, discovery, error messages, TLS/token requirements, limits) and [Trust Boundaries](../security/trust-boundaries.md).
 
-## 6. Evolving the contracts
+## 6. C.O.R.E. ↔ RISARMS-UI desktop contract — IMPLEMENTED (software)
+
+RISARMS-UI is a presentation client. It does not call ASIS, ASCS, RESCS or
+TIVISS directly; all work is routed through CORE-HOST.
+
+- **Authentication:** password login returns the profile, CSRF token and,
+  when requested, a scoped device credential. The credential is stored only in
+  the OS keychain and can be revoked by the account or owner.
+- **Session lifecycle:** server sessions last 12 hours and can be renewed;
+  password changes and access revocation invalidate sessions and publish a
+  revocation event.
+- **Control channel:** `POST /api/ws-ticket` returns a single-use 60-second
+  ticket. Caddy terminates TLS and proxies `/api/ws` to the loopback event
+  listener; clients fall back to polling when the channel is unavailable.
+- **Idempotency:** `POST /api/jobs` accepts `Idempotency-Key`; retries return
+  the original job instead of starting duplicate work.
+- **Capability discovery:** `GET /api/health` advertises
+  `ws_ticket_v1`, `session_renewal_v1`, `device_credentials_v1`,
+  `device_management_v1` and `job_idempotency_v1`.
+- **Authorization:** roles, CSRF, owner re-authentication, record/file scoping
+  and audit logging remain enforced by CORE-HOST. Hiding UI pages is never the
+  security boundary.
+
+## 7. Evolving the contracts
 
 - Any change to a cross-system contract is a **decision** — record it under [Decisions](../decisions/README.md).
 - Version contracts explicitly ([Versioning](../development/versioning.md)). R.E.S.C.S. serves its contract as data so capability discovery stays versioned.

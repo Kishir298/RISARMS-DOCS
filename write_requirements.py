@@ -9,6 +9,11 @@ COMMON = [
     "requests>=2.31",
 ]
 
+DESKTOP = [
+    "keyring>=24.0",
+    "websockets>=12.0",
+]
+
 CORE_HOST = [
     "PyYAML>=6.0",
     "fastapi>=0.115,<1",
@@ -79,6 +84,7 @@ def manifest(include_host: bool, include_rescs: bool) -> str:
     lines.append("")
     lines.append("# Runtime dependencies")
     lines.extend(COMMON)
+    lines.extend(DESKTOP)
     if include_host:
         lines.extend(CORE_HOST)
     if include_rescs:

@@ -1,5 +1,5 @@
 # Systems
-System specs for Core, ASCS, ASIS, RESCS, TIVISS, and RADAR-SARD.
+System specs for Core, ASCS, ASIS, RESCS, TIVISS, RADAR-SARD and the unified desktop application.
 
 - [Parent](../README.md)
 - [Core](./core.md)
@@ -8,3 +8,4 @@ System specs for Core, ASCS, ASIS, RESCS, TIVISS, and RADAR-SARD.
 - [ASCS](./asc.md)
 - [TIVISS](./tiviss.md)
 - [RadarSARD](./radar-sard.md)
+- [RISARMS-UI](./risarms-ui.md)
