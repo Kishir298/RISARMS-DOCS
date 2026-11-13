@@ -24,7 +24,7 @@
 | Revocation events | Complete / verified | Messaging + device revocation tests |
 | Job idempotency | Complete / verified | Existing contract tests |
 | Human-to-human messaging (`/api/messages`) | Complete / verified | 7 new tests in `tests/test_messages.py` |
-| Messaging over WSS push | Implemented / unverified | Server publishes `message.received`; live WSS delivery not re-tested end-to-end |
+| Messaging over WSS push | Complete / verified | Real `core web` process with two clients: `message.received` received over WSS, see `tests/integration/test_core_messaging_e2e.py` in RISARMS-ui |
 | Windows/macOS LAN validation | Blocked | No second machine or certificate chain |
 
 ## 2. RISARMS-ui desktop application
@@ -38,7 +38,9 @@
 | WSS control channel + restoration | Implemented / unverified | Channel logic unit-tested with a fake stream; no live server run |
 | Offline record sync | Complete / verified | Existing + updated sync tests |
 | Offline file sync (durable queue) | Complete / verified | `test_messaging.py` style store tests, `sync_files` |
-| Human messaging UI | Complete / verified (logic) | Store/queue tests; UI rendering not exercised without Tk |
+| Human messaging UI | Complete / verified (logic) | Store/queue tests plus a real two-client HTTP+WSS test; UI rendering not exercised without Tk |
+| Single background sync worker | Implemented / partially verified | A guard prevents the timer and reconnect event from syncing concurrently; the guard needs a Tk loop to exercise |
+| Dependency self-check (`--doctor`) | Complete / verified | Reads `importlib.metadata.version("core-client")` so the repo's legacy `client` package cannot mask a missing dependency |
 | Messaging delivery states | Complete / verified | `queued` is never reported as delivered |
 | Cloud Files folders/quota/details/progress | Implemented / unverified | No GUI run |
 | Light/dark theme, keyboard navigation | Implemented / unverified | Existing theme module; no accessibility audit |
@@ -49,10 +51,10 @@
 
 | Project | Status | Evidence |
 |---|---|---|
-| ASIS | Complete / verified at its own suite | Latest main CI was green; not re-run here |
-| ASCS | Complete / verified | 993 passed; `doctor --offline` added for install smoke |
-| RESCS | Complete / verified | 318 passed; CLI configuration errors now actionable |
-| TIVISS | Complete / verified | 285 passed; local CORE-TCP commit preserved by merge |
+| ASIS | Complete / verified at its own suite | Latest main CI was green; not re-run here. Its release matrix had an invalid `macos-15-intel` label, now corrected on a review branch |
+| ASCS | Complete / verified | 993 passed; `doctor --offline` smoke verified locally (exit 0) and CI **green** on `c2f4464` |
+| RESCS | Complete / verified | 318 passed; CLI configuration errors actionable; CI **green** on `cdbd6fa`; live tests now report unavailable services instead of failing the run |
+| TIVISS | Complete / verified | 285 passed; CI **green** on `2ec78e1` (3.11–3.13) |
 
 ## 4. Cross-cutting
 
@@ -67,7 +69,12 @@
 
 ## 5. Open items carried forward
 
-1. Produce and inspect real installers on GitHub runners.
+1. Produce and inspect real installers on GitHub runners. The release workflow
+   now builds Linux from a Tk-enabled distribution interpreter, verifies the
+   Windows installer toolchain before building, and can honour
+   `workflow_dispatch`, so this is a missing *run*, not missing code.
+2. CORE feature-branch CI was still queued at the time of writing; re-check the
+   run before merging.
 2. Validate Ollama cancellation on Windows with a real model.
 3. Portal CSRF/Origin behavior against a proxied deployment.
 4. Exact model tag behavior across ASIS/ASCS/TIVISS.

@@ -96,11 +96,16 @@ backoff. The attempt re-authenticates with the stored device credential, then
 restores the single-use-ticket WSS channel **before** reporting `Online`. A 401,
 403 or `session.revoked` event halts automatic recovery and requires a fresh
 sign-in. Queued records, uploads and messages drain after `connection.restored`.
+A single-flight guard stops the periodic timer and the reconnect event from
+starting two synchronization workers over the same queues.
 
 ## 7. Verification
 
-- UI suite: **222 collected, all passing** (macOS Python 3.14 venv), including
-  `tests/test_reconnection.py` and `tests/test_messaging.py`.
+- UI suite: **227 passed** (macOS Python 3.14 venv), including
+  `tests/test_reconnection.py`, `tests/test_messaging.py`,
+  `tests/test_desktop_doctor.py` and a real two-client messaging test in
+  `tests/integration/test_core_messaging_e2e.py` that launches CORE-HOST and
+  receives `message.received` over WSS.
 - CORE-HOST suite: **870 passed / 4 skipped**.
 - RESCS: **318 passed / 4 skipped**; ASCS: **993 passed / 16 skipped**;
   TIVISS: **285 passed**.
