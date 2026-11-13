@@ -4,7 +4,7 @@
 
 ## 1. Role + Scope
 
-**Role:** You are a BUILD MODE coding agent operating in `/Users/chhavitayalpatil/Desktop/RISARMS` (macOS). You edit files, run tests, and report files changed/deleted + test results. Do NOT commit unless explicitly requested.
+**Role:** You are a BUILD MODE coding agent operating in `C:\Users\rishi\Desktop\RISARMS` (Windows). You edit files, run tests, and report files changed/deleted + test results. Do NOT commit unless explicitly requested.
 
 **In-scope (6 active top-level entries):**
 
@@ -13,7 +13,7 @@
 - `CORE/` — combined C.O.R.E. project, v0.5.0: `CORE-HOST/` (`core` package), `CORE-CLIENT/` (`client` package), `services/`, `deployment/`, `install/`, `validation/`
 - `RESCS/` — Cloud storage system, v0.4.0 with Pi signed-scope/mount validation
 - `TIVISS/` — Separate AI agent (v0.2.0: OllamaProvider, SQLiteMemoryStore, Web/Calc/Translation/Voice config, offline-tested transports)
-- `RISARMS-DOCS/` — Architecture source of truth (this repo docs)
+- `DOCS/` — Architecture source of truth (this repo docs; remote `RISARMS-DOCS`)
 
 **Explicitly excluded:**
 
@@ -43,23 +43,23 @@ Rules:
 
 ## 3. Taxonomy
 
-- **Status vocabulary:** `IMPLEMENTED` / `IN DEVELOPMENT` / `PLANNED` / `FUTURE` (see `RISARMS-DOCS/architecture/overview.md`). Never describe unbuilt as built.
-- **Top-level layout:** see `RISARMS-DOCS/README.md §7 Repository structure`.
-- **Per-system ownership:** see `RISARMS-DOCS/systems/` and `RISARMS-DOCS/architecture/system-boundaries.md`.
-- **Interactions:** all cross-system traffic flows through C.O.R.E. (see `RISARMS-DOCS/architecture/system-interactions.md`).
+- **Status vocabulary:** `IMPLEMENTED` / `IN DEVELOPMENT` / `PLANNED` / `FUTURE` (see `DOCS/architecture/overview.md`). Never describe unbuilt as built.
+- **Top-level layout:** see `DOCS/README.md §7 Repository structure`.
+- **Per-system ownership:** see `DOCS/systems/` and `DOCS/architecture/system-boundaries.md`.
+- **Interactions:** all cross-system traffic flows through C.O.R.E. (see `DOCS/architecture/system-interactions.md`).
 - **Stale-tree rule:** `__pycache__`-only legacy trees with 0× `.py` (e.g. ex-`ASIS/core/`, ex-`ASIS/02_voice/`) may be deleted with `Remove-Item -Recurse` after verifying `(Get-ChildItem -Filter *.py).Count -eq 0`.
 - **Orphan-venv rule:** `Lib/site-packages`-only fragments may be deleted; project scripts (e.g. `CORE/CORE-HOST/Scripts/windows/`) must be kept. Verify the path first.
-- **Audit-report rule:** root `.pytest_cache/`, root `AUDIT_REPORT.md`, `RISARMS-DOCS/AUDIT_*.md` are disposable artifacts when user says "remove audit_report from everywhere". Never delete `.git/`.
+- **Audit-report rule:** root `.pytest_cache/`, root `AUDIT_REPORT.md`, `DOCS/AUDIT_*.md` are disposable artifacts when user says "remove audit_report from everywhere". Never delete `.git/`.
 
 ## 4. Master Prompt
 
 ```text
-You are in BUILD MODE. Work in /Users/chhavitayalpatil/Desktop/RISARMS.
-Scope: ASIS, ASCS, CORE, RESCS, TIVISS, RISARMS-DOCS.
+You are in BUILD MODE. Work in C:\Users\rishi\Desktop\RISARMS.
+Scope: ASIS, ASCS, CORE, RESCS, TIVISS, DOCS.
 Method: 6 parallel sub-agents (one per in-scope root).
 For each task: read target files first, make minimal edits, run scoped pytest/ruff, verify no .py deleted before any recursive remove, never touch .git history.
 Do NOT commit. Return files changed/deleted + test results.
-Canonical guide: RISARMS-DOCS/AGENT.md.
+Canonical guide: DOCS/AGENT.md.
 ```
 
 ## 5. Build Handoff
@@ -75,16 +75,16 @@ Each BUILD turn must return:
 4. **Remaining:** E501 line-length and SIM117 `with`-nest items are known non-blocking; F401 must be 0.
 5. **No commit** performed.
 
-Reference: `RISARMS-DOCS/README.md`, `RISARMS-DOCS/architecture/`, `RISARMS-DOCS/systems/`, `RISARMS-DOCS/interfaces/`, `RISARMS-DOCS/security/`, `RISARMS-DOCS/development/`.
+Reference: `DOCS/README.md`, `DOCS/architecture/`, `DOCS/systems/`, `DOCS/interfaces/`, `DOCS/security/`, `DOCS/development/`.
 
 ## 6. Canonical Reference Documents
 
-- `RISARMS-DOCS/R.I.S.A.R.M.S brief.txt` — High-level system overview (R.I.S.A.R.M.S, C.O.R.E, R.E.S.C.S, A.S.I.S, T.I.V.I.S.S, RadarS.A.R.D)
-- `RISARMS-DOCS/README.md` — Repository structure and navigation
-- `RISARMS-DOCS/architecture/overview.md` — System status vocabulary and architecture
-- `RISARMS-DOCS/systems/` — Per-system ownership and interfaces
-- `RISARMS-DOCS/architecture/system-interactions.md` — Cross-system communication flows
-- `RISARMS-DOCS/architecture/system-boundaries.md` — Independence rules and boundaries
+- `DOCS/R.I.S.A.R.M.S brief.txt` — High-level system overview (R.I.S.A.R.M.S, C.O.R.E, R.E.S.C.S, A.S.I.S, T.I.V.I.S.S, RadarS.A.R.D)
+- `DOCS/README.md` — Repository structure and navigation
+- `DOCS/architecture/overview.md` — System status vocabulary and architecture
+- `DOCS/systems/` — Per-system ownership and interfaces
+- `DOCS/architecture/system-interactions.md` — Cross-system communication flows
+- `DOCS/architecture/system-boundaries.md` — Independence rules and boundaries
 
 ## 7. Repository Sync Protocol
 
@@ -94,21 +94,21 @@ Before any BUILD MODE work, sync all 6 ecosystem repos:
 git -C ASCS pull
 git -C ASIS pull
 git -C CORE pull
-git -C RISARMS-DOCS pull
+git -C DOCS pull
 git -C RESCS pull
 git -C TIVISS pull
 ```
 
 Or single command:
 ```bash
-git -C ASCS pull; git -C ASIS pull; git -C CORE pull; git -C RISARMS-DOCS pull; git -C RESCS pull; git -C TIVISS pull
+git -C ASCS pull; git -C ASIS pull; git -C CORE pull; git -C DOCS pull; git -C RESCS pull; git -C TIVISS pull
 ```
 
 Verify all report "Already up to date" or fast-forward. Note any conflicts.
 
 **Enhanced verification (recommended):**
 ```bash
-for dir in ASCS ASIS CORE RESCS RISARMS-DOCS TIVISS; do
+for dir in ASCS ASIS CORE RESCS DOCS TIVISS; do
   echo "=== $dir ==="
   git -C "$dir" status --short
 done

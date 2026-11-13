@@ -35,7 +35,7 @@ C.O.R.E. is the **central management and control engine** of R.I.S.A.R.M.S. It i
 ## 2. Filesystem and project
 
 - Location: `RISARMS/CORE/` — one combined project containing `CORE-HOST/` (server/runtime, package `core`) and `CORE-CLIENT/` (stdlib-only external-device client, package `client`, Option A login), plus `services/`, `deployment/`, `install/`, and `validation/`
-- Git repository: `CORE/` (publishes to the `CORE-HOST` GitHub remote; the old standalone `CORE-CLIENT` repo was left untouched)
+- Git repository: `CORE/` (publishes to the `CORE` GitHub remote; the old standalone `CORE-CLIENT` repo was left untouched)
 - Language: Python (>= 3.10), package name `core`
 - Runtime requirements: `PyYAML`; optional monitoring extra adds `prometheus-client` + `fastapi`
 - CLI entry point: `core-host` (or `python -m core`); client entry point: `core-client`

@@ -157,7 +157,7 @@ The ecosystem the documentation governs:
 
 ```text
 RISARMS/
-├── CORE/           <- https://github.com/Kishir298/CORE-HOST (combined project)
+├── CORE/           <- https://github.com/Kishir298/CORE (combined project)
 │   ├── CORE-HOST/  <- server/runtime, package `core`
 │   ├── CORE-CLIENT/<- stdlib-only external-device client, package `client`
 │   ├── services/   <- ASIS, ASCS, RESCS, TIVISS service copies
@@ -170,7 +170,7 @@ RISARMS/
 ├── TIVISS/         <- https://github.com/Kishir298/TIVISS (v0.2.0)
 ├── RISARMS-ui/     <- https://github.com/Kishir298/RISARMS-ui (canonical desktop app)
 ├── old-versions/   <- local archive (CORE 0.4.0, RESCS 0.3.1); not a git repository
-├── RISARMS-DOCS/   <- this repository (remote: RISARMS-DOCS)
+├── DOCS/           <- this repository (remote: RISARMS-DOCS)
 └── Flavora/        <- excluded sibling; not an ecosystem member
 ```
 
