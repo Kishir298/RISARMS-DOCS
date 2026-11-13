@@ -50,16 +50,25 @@ To produce artifacts without this host:
 
 ## 5. CI results recorded in this session
 
-| Repo | Branch | Commit | Workflow | Conclusion |
-|---|---|---|---|---|
-| RISARMS-ui | `feat/risarms-ui-desktop` | `1bdbeea` | CI (3.10–3.14) | **success** |
-| TIVISS | `fix/ci-test-dependencies` | `2ec78e1` | CI (3.11–3.13) | **success** |
-| ASCS | `fix/doctor-offline-smoke` | `c2f4464` | CI (3.12/3.13, Windows, smoke×3) | **success** |
-| RESCS | `fix/cli-configuration-diagnostics` | `cdbd6fa` | CI (3.11–3.13) | **success** |
-| CORE | `feat/desktop-control-channel` | `4720e69` | CI (3.10–3.14) | see §6 |
+| Repo | Branch | Commit | Workflow | Jobs | Conclusion |
+|---|---|---|---|---|---|
+| RISARMS-ui | `feat/risarms-ui-desktop` | `7ac3db4` | CI | **5/5** (3.10–3.14) | **success** |
+| TIVISS | `fix/ci-test-dependencies` | `2ec78e1` | CI | **3/3** (3.11–3.13) | **success** |
+| ASCS | `fix/doctor-offline-smoke` | `2e285b8` | CI | **6/6** (3.12, 3.13, Windows full, smoke ubuntu/windows/macos) | **success** |
+| RESCS | `fix/cli-configuration-diagnostics` | `cdbd6fa` | CI | **6/6** (3.11–3.13, smoke ubuntu/windows/macos) | **success** |
+| RESCS | same branch | `26e95ce` | CI | 5 success, `Smoke (macos-latest)` **cancelled** after 15m with no steps executed | failed on infrastructure only |
+| CORE | `feat/desktop-control-channel` | `4720e69`, `8446af5` | CI | every `core-host` job failed at step 7 (`ruff check`); every `core-client` job passed | failure → fixed in `760988b` |
+| CORE | same branch | `760988b` | CI | lint fix | see §6 |
 
 Job-level logs remain unreadable here (no `gh`, anonymous log download is 403),
-so conclusions come from the runs API, which is authoritative for pass/fail.
+but the runs/jobs API does expose job names, steps and conclusions, which is how
+the CORE lint failure and the RESCS runner cancellation were identified.
+
+The RESCS macOS smoke job was cancelled before executing a step, so it says
+nothing about the code. The same commands were run on this macOS host instead:
+`rescs --help` OK, `rescs setup --config …` OK,
+`rescs --config … doctor` → `Configuration, storage guard and server imports
+passed; no network probes performed.` exit **0**.
 
 ## 6. Remaining blockers
 
