@@ -1,8 +1,10 @@
 # RISARMS-UI — Unified Desktop Application
 
-> [!NOTE] **Status:** v0.6.0 **IMPLEMENTED** (source and automated tests).
-> Signed installers, physical Windows/Linux runs and long-duration desktop
-> validation are **NOT YET PERFORMED**. Builds are unsigned by default.
+> [!NOTE] **Status:** v0.6.0 **IMPLEMENTED** (source and automated tests: 222
+> passing). Signed installers, physical Windows/Linux runs and long-duration
+> desktop validation are **NOT YET PERFORMED**. Builds are unsigned by default.
+> Installer generation is implemented and unverified — see
+> [Installer Creation](../development/installers.md).
 
 ## 1. Purpose
 
@@ -30,14 +32,15 @@ contracts.
 | Area | Behavior |
 |---|---|
 | Local profiles | Separate local passphrase from the server account; no recovery service; application lock is not disk encryption |
-| Connection | HTTPS login, remembered revocable device credential, automatic reconnect, 12-hour server sessions with renewal, WSS control channel with polling fallback |
+| Connection | HTTPS login, remembered revocable device credential, automatic reconnect with bounded backoff, 12-hour server sessions with renewal, WSS control channel with polling fallback |
+| Messages | Direct text messages between approved accounts, local conversation history, queued/delivered/read states, offline queue drained on reconnect |
 | ASIS | Server-routed or local Ollama chat; safe-chat worker on the host |
 | ASCS | Owner-only server or local coding workspace with explicit confirmation |
 | TIVISS | Owner-only TIVISS workspace |
 | Tasks | Server jobs with live polling, cancellation and local model execution |
 | History | Device-local conversation history |
 | My Storage | JSON records with optimistic concurrency and explicit/automatic synchronization |
-| Cloud Files | Account-scoped RESCS file list, upload, cache, integrity verification and delete |
+| Cloud Files | Account-scoped folders, quota, file details, upload/download progress, SHA-256 verification, durable offline upload queue and delete |
 | Devices | Lists registered devices; revocation is enforced by CORE-HOST and terminates the affected control channel |
 | Administration | Owner-only accounts, access requests, settings, audit, quotas and server status with password re-authentication |
 | Settings | Light/dark theme, service source paths, local model, chat storage policy and server origin |
@@ -71,10 +74,13 @@ The application consumes these authenticated endpoints:
 | `GET /api/devices` | Owned devices; owner may query all |
 | `POST /api/devices/{id}/revoke` | Revoke a device and publish a revocation event |
 | `GET /api/health` | Capabilities, version and event-channel availability |
-| `/api/records`, `/api/files`, `/api/jobs`, `/api/services`, `/api/status`, `/api/profiles`, `/api/access`, `/api/settings`, `/api/audit`, `/api/quotas` | Existing CORE workspace surfaces |
+| `GET/POST /api/messages` | Human-to-human messaging (threads, conversation, send) |
+| `POST /api/messages/{id}/read` | Recipient read acknowledgement |
+| `/api/records`, `/api/files`, `/api/folders`, `/api/jobs`, `/api/services`, `/api/status`, `/api/profiles`, `/api/access`, `/api/settings`, `/api/audit`, `/api/quotas` | Existing CORE workspace surfaces |
 
 `GET /api/health` advertises `ws_ticket_v1`, `session_renewal_v1`,
-`device_credentials_v1`, `device_management_v1` and `job_idempotency_v1`.
+`device_credentials_v1`, `device_management_v1`, `job_idempotency_v1` and
+`messaging_v1`.
 Job creation accepts an `Idempotency-Key` header so retries do not duplicate
 work.
 
@@ -82,16 +88,26 @@ The WSS endpoint is loopback WebSocket at `/api/ws` behind Caddy. Caddy
 terminates TLS and proxies `/api/ws` to `127.0.0.1:8781`; the HTTPS API remains
 on `127.0.0.1:8780`.
 
-## 6. Verification
+## 6. Reconnection behavior
 
-- UI suite: **205 passed** (macOS Python 3.14 venv).
-- CORE-HOST suite: **865 passed / 1 skipped** (including desktop control
-  contracts and a live loopback WebSocket test).
-- TIVISS suite: **285 passed** after the device-registration metadata fix.
-- Physical Windows/Linux desktop runs, signed/notarized artifacts, LAN and
-  24/7 operation remain **NOT YET PERFORMED**.
+The monitor thread owns recovery. A failed heartbeat, a closed control channel
+or a transport error schedules one guarded attempt with bounded exponential
+backoff. The attempt re-authenticates with the stored device credential, then
+restores the single-use-ticket WSS channel **before** reporting `Online`. A 401,
+403 or `session.revoked` event halts automatic recovery and requires a fresh
+sign-in. Queued records, uploads and messages drain after `connection.restored`.
 
-## 7. Non-goals
+## 7. Verification
+
+- UI suite: **222 collected, all passing** (macOS Python 3.14 venv), including
+  `tests/test_reconnection.py` and `tests/test_messaging.py`.
+- CORE-HOST suite: **870 passed / 4 skipped**.
+- RESCS: **318 passed / 4 skipped**; ASCS: **993 passed / 16 skipped**;
+  TIVISS: **285 passed**.
+- Physical Windows/Linux desktop runs, signed/notarized artifacts, real
+  installers, LAN and 24/7 operation remain **NOT YET PERFORMED**.
+
+## 8. Non-goals
 
 - Replacing the CORE web portal for browser-only administration.
 - Implementing ASIS/ASCS/TIVISS behavior inside the desktop process.

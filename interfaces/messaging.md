@@ -45,8 +45,47 @@ Contract requirements:
 
 Service-specific requests (invoking an operation on a service) are covered by [Services Contract](services.md).
 
+## 6. Human-to-human messaging (implemented 2026-11-13)
+
+This is a distinct feature from assistant chat. It carries plain text between
+two **approved** CORE accounts and grants no tool, shell, model or service
+access.
+
+### 6.1 Endpoints
+
+| Endpoint | Semantics |
+|---|---|
+| `POST /api/messages` | `{recipient, body, client_id}` → `201 {id, sender, recipient, created, delivered, read}` |
+| `GET /api/messages` | `{threads: [{peer, username, name, last_body, last_at, unread}]}` |
+| `GET /api/messages?peer=<id>&after=<ts>` | `{messages: [...]}`; marks delivered messages as read |
+| `POST /api/messages/<id>/read` | Recipient-only read acknowledgement |
+
+### 6.2 Guarantees
+
+1. **Server identity.** The server generates the message id; the client never
+   invents one.
+2. **Idempotency.** `client_id` (or `Idempotency-Key`) is unique per sender, so
+   a retry returns the original message instead of duplicating it.
+3. **Authorization.** Sender must be `owner` or `member`; recipient must be an
+   approved account. Pending, rejected and revoked accounts cannot obtain a
+   session at all.
+4. **Isolation.** Reads are derived from the authenticated account id; a third
+   account sees an empty thread, never another account's messages.
+5. **Delivery honesty.** A message stored on the device but not acknowledged by
+   the server is `queued`, never `delivered`.
+6. **Offline durability.** The queue is persisted in the per-profile SQLite
+   database and flushed by the synchronization loop after reconnect.
+7. **No privilege escalation.** Messaging exposes no coding, shell or
+   privileged AI surface to public members.
+
+### 6.3 Event
+
+`message.received` is published to the recipient's authenticated control
+channels with `{from, message_id}`; it carries no message body.
+
 ## Related
 
+- [Human Messaging in the desktop client](../systems/risarms-ui.md)
 - [Communication Contract](communication.md)
 - [Routing Contract](routing.md)
 - [Services Contract](services.md)
