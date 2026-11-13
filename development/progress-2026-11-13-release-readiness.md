@@ -13,6 +13,7 @@ or in the CI run listed.
 | 2 | RESCS `live-tests.yml` was rejected — `secrets` used in job- and step-level `if` | `actionlint`: `context "secrets" is not allowed here` | map secrets into job `env`, gate with `env.*`, print each target as available/UNAVAILABLE | verified — RESCS `CI` **success** on `cdbd6fa` |
 | 3 | Feature pushes produced **no run at all** for most workflows (`branches: [main]` only) | run history showed no entry for the pushed SHAs | push triggers now include `feat/**` and `fix/**` | verified — runs now exist for every pushed branch |
 | 4 | `macos-15-intel` is not a GitHub runner label (Intel macOS is `macos-13`) | `actionlint` [runner-label] error in CORE/ASIS/ASCS/RESCS `release.yml` | label corrected | implemented; a release run has not been dispatched |
+| 4b | **CORE feature-branch CI failed while `main` was green.** The branch's lint gate found 3 errors left by the merge: an unsorted import block in `gateway.py` and an unused `queue` import plus unsorted block in `tests/test_desktop_control.py` | reproduced locally: `ruff check --select E9,F,I core tests` → `Found 3 errors`; tests themselves passed (870) | `ruff --fix`, then re-ran the gate (`All checks passed!`) and the affected tests (`18 passed`) | fixed in `760988b`; CI run pending |
 
 ## 2. Desktop application
 
@@ -31,7 +32,7 @@ or in the CI run listed.
 | 10 | Windows job appends Inno/WiX directories to `PATH` and **fails early** if `iscc`, `candle`, `light` or `heat` is missing | implemented; `actionlint` clean |
 | 11 | Added an Apple Silicon macOS job (`macos-14`) beside Intel (`macos-13`) | implemented |
 | 12 | The Tk gate is now `python -c "import tkinter"`; `--doctor` requires a display and would fail on any headless runner | implemented |
-| 13 | **No installer artifact was produced.** Two `brew install python-tk@3.14` attempts exceeded 10 minutes each (tcl-tk builds from source) and the only Tk-enabled interpreter here is the 3.9.6 system Python, below `requires-python >= 3.10` | **blocked locally** |
+| 13 | **No installer artifact was produced.** Two `brew install python-tk@3.14` attempts exceeded 10 minutes each (tcl-tk builds from source), a backgrounded attempt never survived, and the only Tk-enabled interpreter here is the 3.9.6 system Python, below `requires-python >= 3.10`. The python.org 3.12 framework pkg was downloaded and expanded: it *does* contain `_tkinter` and Tcl/Tk 8.6, but every Mach-O reference is an absolute `/Library/Frameworks/...` path, so using it would require relinking the interpreter — not an acceptable basis for a shipped artifact | **blocked locally** |
 
 To produce artifacts without this host:
 1. GitHub → Actions → **desktop-release** → *Run workflow* (branch
