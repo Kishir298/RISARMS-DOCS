@@ -58,7 +58,7 @@ To produce artifacts without this host:
 | RESCS | `fix/cli-configuration-diagnostics` | `cdbd6fa` | CI | **6/6** (3.11–3.13, smoke ubuntu/windows/macos) | **success** |
 | RESCS | same branch | `26e95ce` | CI | 5 success, `Smoke (macos-latest)` **cancelled** after 15m with no steps executed | failed on infrastructure only |
 | CORE | `feat/desktop-control-channel` | `4720e69`, `8446af5` | CI | every `core-host` job failed at step 7 (`ruff check`); every `core-client` job passed | failure → fixed in `760988b` |
-| CORE | same branch | `760988b` | CI | lint fix | see §6 |
+| CORE | same branch | `760988b` | CI | **14/15** jobs passed across 3.10–3.14 and Windows; only `Smoke (macos-latest)` cancelled without running a step | code green; infrastructure red |
 
 Job-level logs remain unreadable here (no `gh`, anonymous log download is 403),
 but the runs/jobs API does expose job names, steps and conclusions, which is how
@@ -70,11 +70,21 @@ nothing about the code. The same commands were run on this macOS host instead:
 `rescs --config … doctor` → `Configuration, storage guard and server imports
 passed; no network probes performed.` exit **0**.
 
+The CORE macOS smoke was likewise cancelled before starting, so its exact
+commands were run here in a fresh virtualenv (`pip install -e CORE-HOST -e
+CORE-CLIENT`): `core-host --help` OK, `core-host doctor --data …` exit **0**
+(`Portal settings: first-run setup required`, external dependencies called out
+as unverified), `core-client --help` OK, `core-client doctor` exit **0**.
+`Smoke (ubuntu-latest)`, `Smoke (windows-latest)`, both Windows full jobs and
+all ten 3.10–3.14 jobs passed on GitHub.
+
 ## 6. Remaining blockers
 
 1. **Installer artifacts** — needs a Tk-enabled Python ≥3.10 or a CI dispatch.
-2. **CORE feature-branch CI conclusion** — the run was still queued when this
-   document was written; re-check the runs page.
+2. **macOS smoke jobs cancel before starting** — observed twice today (RESCS
+   `26e95ce`, CORE `760988b`) with no step executed, which is runner allocation,
+   not code. Both smokes were reproduced successfully on a real macOS host
+   (above). Re-run the workflow once macOS runners are available.
 3. **Pull requests** — cannot be created without authentication; compare links
    are listed in [recovery-2026-11-13.md](recovery-2026-11-13.md) §10.
 4. **Hardware validation** — no HP CORE-HOST, second desktop, LAN/TLS chain or
