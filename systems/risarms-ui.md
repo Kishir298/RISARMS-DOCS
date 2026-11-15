@@ -1,6 +1,6 @@
 # RISARMS-UI — Unified Desktop Application
 
-> [!NOTE] **Status:** v0.6.0 **IMPLEMENTED** (source and automated tests: 254
+> [!NOTE] **Status:** v0.6.0 **IMPLEMENTED** (source and automated tests: 255
 > passing). Signed installers, physical Windows/Linux runs and long-duration
 > desktop validation are **NOT YET PERFORMED**. Builds are unsigned by default.
 > Installer generation is implemented and unverified — see
@@ -60,7 +60,9 @@ contracts.
   re-authentication and record/file scope.
 - Local ASCS/ASIS subprocesses receive a random loopback approval URL and token.
   Every file/command request must be approved in the desktop dialog; closing the
-  dialog, timing out, or losing the broker denies the action.
+  dialog, timing out, or losing the broker denies the action. Session approvals
+  are keyed by service, action, command, workspace and non-job request details,
+  so a different target is confirmed again.
 - Concurrent local edits are retained and reported as conflicts instead of
   being overwritten.
 - Logs never include passwords, session tokens, CSRF values or device
@@ -107,7 +109,7 @@ starting two synchronization workers over the same queues.
 
 ## 7. Verification
 
-- UI suite: **254 passed** (macOS Python 3.14 venv), including
+- UI suite: **255 passed** (macOS Python 3.14 venv), including
   `tests/test_reconnection.py`, `tests/test_messaging.py`,
   `tests/test_desktop_doctor.py` and a real two-client messaging test in
   `tests/integration/test_core_messaging_e2e.py` that launches CORE-HOST and

@@ -1,6 +1,6 @@
 # A.S.I.S. — A Smart Intelligence System
 
-> [!NOTE] **Status:** **IN DEVELOPMENT** — rebuilt `asis` package (v0.1.0) ships CLI, Ollama provider, inference/conversation/context engines, local SQLite memory, tool system, permissions, events, voice pipeline, and the Pi policy/worker/handoff update. Verified: **946 passed / 24 skipped** (macOS Python 3.12, 2026-11-15). Legacy `core/` + `02_voice/` trees deprecated. C.O.R.E. uplink is a real optional adapter via `CORE/CORE-CLIENT`, standalone by default; physical LAN validation NOT PERFORMED. R.E.S.C.S. remains future/placeholder. A.S.I.S. is an **independent project**.
+> [!NOTE] **Status:** **IN DEVELOPMENT** — rebuilt `asis` package (v0.1.0) ships CLI, Ollama provider, inference/conversation/context engines, local SQLite memory, tool system, permissions, events, voice pipeline, and the Pi policy/worker/handoff update. Verified: **948 passed / 24 skipped** (macOS Python 3.12, 2026-11-15). Legacy `core/` + `02_voice/` trees deprecated. C.O.R.E. uplink is a real optional adapter via `CORE/CORE-CLIENT`, standalone by default; physical LAN validation NOT PERFORMED. R.E.S.C.S. remains future/placeholder. A.S.I.S. is an **independent project**. Dangerous local confirmations include sanitized tool arguments and broker session approvals are scoped to those arguments.
 
 ## 1. What A.S.I.S. is
 
@@ -55,7 +55,7 @@ A.S.I.S. **does not directly own** C.O.R.E.'s responsibilities: message routing,
 - Pipeline/factory abstraction (mock default; faster-whisper/STT, pyttsx3/TTS, Silero VAD, wake-word optional). Shares `AssistantApp.chat()`; real-engine hardware validation NOT PERFORMED.
 
 ### Tests
-- Top-level `tests/` suite: **946 passed / 24 skipped** on macOS Python 3.12 (2026-11-15). Coverage includes config, AI/conversation/memory, calculator, translation, web, tools/permissions, coding, voice, CLI/interactive, offline, CORE adapter/tools, Pi policy, and release contract/portal checks. Runs via `.venv/bin/python -m pytest -q`.
+- Top-level `tests/` suite: **948 passed / 24 skipped** on macOS Python 3.12 (2026-11-15). Coverage includes config, AI/conversation/memory, calculator, translation, web, tools/permissions, coding, voice, CLI/interactive, offline, CORE adapter/tools, Pi policy, and release contract/portal checks. Runs via `.venv/bin/python -m pytest -q`.
 
 ## 4. Legacy material (deprecated, pending removal)
 

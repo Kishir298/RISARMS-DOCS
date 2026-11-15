@@ -55,7 +55,7 @@
 
 | Project | Status | Evidence |
 |---|---|---|
-| ASIS | Complete / verified | 946 passed / 24 skipped; full ruff still reports pre-existing style debt |
+| ASIS | Complete / verified | 948 passed / 24 skipped; full ruff still reports pre-existing style debt |
 | ASCS | Complete / verified | 996 passed / 16 skipped; `doctor --offline` smoke verified locally (exit 0) |
 | RESCS | Complete / verified | 318 passed / 4 skipped; CLI configuration errors actionable; live tests report unavailable services instead of failing the run |
 | TIVISS | Complete / verified | 299 passed; full ruff still reports pre-existing style debt |
@@ -85,7 +85,7 @@
 3. Validate the Void installer on the physical HP 14: runit, Caddy, nftables,
    lid-close behavior, first-owner setup and backup/restore.
 4. Run the ASIS suite through a PR because its CI workflow does not trigger on
-   feature-branch pushes; local 946/24 is not a substitute for the matrix.
+   feature-branch pushes; local 948/24 is not a substitute for the matrix.
 5. Scope session approvals to canonical tool parameters rather than coarse
    action names for ASIS; owner-action application is now two-phase and
    resumable after a crash.

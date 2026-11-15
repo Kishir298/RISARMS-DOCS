@@ -66,7 +66,7 @@ R.E.S.C.S. documents its own history in `RESCS/CHANGELOG.md` and `docs/architect
 | Rebuilt `asis` package: CLI, AI provider layer (Ollama + mock), memory, tool framework, permissions, identity, events, system/runtime | IMPLEMENTED |
 | Concrete tools (Echo, CurrentTime) | IMPLEMENTED |
 | Voice pipeline abstraction (engines, input/speech/speaker/tts packages) | IMPLEMENTED (standalone) |
-| Test suite (946 passed / 24 skipped, v0.1.0) | IMPLEMENTED |
+| Test suite (948 passed / 24 skipped, v0.1.0) | IMPLEMENTED |
 | Voice wired into the chat loop | IMPLEMENTED |
 | Legacy tree removal (`core/`, `02_voice/`, `monitoring/`) | DEPRECATED, pending removal |
 | Real C.O.R.E. uplink (opt-in adapter) | IMPLEMENTED (standalone by default) |
