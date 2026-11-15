@@ -22,7 +22,7 @@
 | T.I.V.I.S.S. | **299 passed** (2026-11-15, macOS Python 3.14, v0.2.0) | Failure-first checks, atomic handover, bounded events; desktop registration metadata included |
 | RISARMS-UI | **254 passed** (2026-11-15, macOS Python 3.14, v0.6.0) | UI, HTTP client, connection manager and migrated CORE-CLIENT desktop tests; GUI launch pending Tk installation | 
 
-All run via `pytest -q` from their own roots — never from `RISARMS/` root (no root suite). The release authors' Linux x86_64 run reported CORE-HOST 840 passed; the one-test difference is platform-specific. Hardware/cloud-gated validations (physical Pi/ARM64, LAN, live S3/PG, endurance, live voice/model) have their own runbook: [hw-gated-validation.md](hw-gated-validation.md). The full Pi release evidence is in [pi-release-2026-11-06.md](pi-release-2026-11-06.md).
+All run via `pytest -q` from their own roots — never from `RISARMS/` root (no root suite). On 2026-11-15 the pushed-branch CI runs for CORE, RISARMS-UI, ASCS, RESCS and TIVISS were green; CORE includes the Windows full host suite. ASIS CI triggers only on `main`/PR, so run it through a PR before merging. The release authors' Linux x86_64 run reported CORE-HOST 840 passed; the one-test difference is platform-specific. Hardware/cloud-gated validations (physical Pi/ARM64, LAN, live S3/PG, endurance, live voice/model) have their own runbook: [hw-gated-validation.md](hw-gated-validation.md). The full Pi release evidence is in [pi-release-2026-11-06.md](pi-release-2026-11-06.md).
 
 ## 3. What is missing (PLANNED)
 

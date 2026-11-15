@@ -69,7 +69,8 @@
 | Live CORE→ASIS/ASCS/RESCS/TIVISS integration | Blocked — needs provisioned services |
 | Raspberry Pi / ARM64 | Blocked |
 | 24/7 operation | Blocked |
-| Documentation drift review | Partial — this update covers desktop, messaging, packaging, recovery |
+| Branch CI on pushed commits | CORE, RISARMS-UI, ASCS, RESCS and TIVISS green (2026-11-15); ASIS CI only runs on `main`/PR; RISARMS-DOCS has no code CI |
+| Documentation drift review | Partial — current pages refreshed; historical reports intentionally retain their original evidence |
 
 ## 5. Open items carried forward
 
@@ -83,17 +84,20 @@
    not automated.
 3. Validate the Void installer on the physical HP 14: runit, Caddy, nftables,
    lid-close behavior, first-owner setup and backup/restore.
-4. Re-run CORE, RISARMS-UI and TIVISS CI on the pushed branches. The local
-   suites pass, but no CI run is quoted here.
+4. Run the ASIS suite through a PR because its CI workflow does not trigger on
+   feature-branch pushes; local 946/24 is not a substitute for the matrix.
 5. Close the remaining owner-action safety gaps found in audit: make the
    apply+decision transition atomic, and scope session approvals to canonical
    tool parameters rather than coarse action names for ASIS.
-6. Validate Ollama cancellation on Windows with a real model.
-7. Portal CSRF/Origin behavior against a proxied deployment.
-8. Exact model tag behavior across ASIS/ASCS/TIVISS.
-9. Partial frame receive timeout coverage.
-10. Legacy `client/` package still ships beside CORE-CLIENT's `client`
+6. Refresh service grants while online and surface all granted services; the
+   current 7-day offline cache is refreshed on reconnect, and the storage
+   selector still exposes only workspace/ASIS to members.
+7. Validate Ollama cancellation on Windows with a real model.
+8. Portal CSRF/Origin behavior against a proxied deployment.
+9. Exact model tag behavior across ASIS/ASCS/TIVISS.
+10. Partial frame receive timeout coverage.
+11. Legacy `client/` package still ships beside CORE-CLIENT's `client`
     namespace; the desktop app no longer imports it, but the duplicate name
     remains a packaging hazard for the legacy portal entry point.
-11. Burn down the pre-existing full-ruff debt in ASIS and TIVISS; changed-file
+12. Burn down the pre-existing full-ruff debt in ASIS and TIVISS; changed-file
     lint is clean today.
