@@ -133,12 +133,12 @@ The full ownership table is in [System Boundaries](system-boundaries.md#1-respon
 
 | System | Now | Next |
 |---|---|---|
-| **C.O.R.E.** | v0.5.0 combined project (839 host + 200 client tests passed on macOS 3.12): Pi service integration, signed R.E.S.C.S. scope, `/api/ai-status`, safe-chat worker, portals, TLS device transport, agent scheduling | Physical Pi/ARM64 validation; Windows ↔ Mac LAN; 24/7 operational validation |
-| **R.E.S.C.S.** | v0.4.0 (312 passed / 4 skipped): versioned HTTP API, signed CORE owner scope, mount guard, Pi installer/systemd, records/files, uploads, lifecycle/governance, C.O.R.E. contract | Live PostgreSQL/Supabase + real S3; deployed C.O.R.E. ↔ R.E.S.C.S.; real Pi/ARM64 |
-| **A.S.I.S.** | Rebuilt `asis` package (941 passed / 24 skipped): CLI, Ollama provider, memory, calculator, translation, web tools, coding mode, permissions, voice, Pi policy/worker | Physical Pi/ARM64 and LAN validation; R.E.S.C.S. via C.O.R.E. (future) |
-| **T.I.V.I.S.S.** | Local agent at `TIVISS/` (v0.2.0; 279 passed): OllamaProvider, SQLite memory, CLI, export/import, logging, voice abstraction, stdlib transports offline-tested; still no live traffic | Resolve the handover model |
+| **C.O.R.E.** | v0.5.0 combined project (892 host + 225 client tests passed on macOS 3.14): Pi service integration, signed R.E.S.C.S. scope, `/api/ai-status`, safe-chat worker, portals, TLS device transport, agent scheduling | Physical Pi/ARM64 validation; Windows ↔ Mac LAN; 24/7 operational validation |
+| **R.E.S.C.S.** | v0.4.0 (318 passed / 4 skipped): versioned HTTP API, signed CORE owner scope, mount guard, Pi installer/systemd, records/files, uploads, lifecycle/governance, C.O.R.E. contract | Live PostgreSQL/Supabase + real S3; deployed C.O.R.E. ↔ R.E.S.C.S.; real Pi/ARM64 |
+| **A.S.I.S.** | Rebuilt `asis` package (946 passed / 24 skipped): CLI, Ollama provider, memory, calculator, translation, web tools, coding mode, permissions, voice, Pi policy/worker | Physical Pi/ARM64 and LAN validation; R.E.S.C.S. via C.O.R.E. (future) |
+| **T.I.V.I.S.S.** | Local agent at `TIVISS/` (v0.2.0; 299 passed): OllamaProvider, SQLite memory, CLI, export/import, logging, voice abstraction, stdlib transports offline-tested; still no live traffic | Resolve the handover model |
 | **RadarS.A.R.D.** | — | Define sensor/detection scope |
-| **A.S.C.S.** | Standalone v0.3.0 coding agent (991 passed / 6 skipped): desktop Windows-oriented; Linux/Pi headless generation-only; ASIS direct integration implemented | C.O.R.E.-mediated integration (future); real Pi/ARM64 |
+| **A.S.C.S.** | Standalone v0.3.0 coding agent (996 passed / 16 skipped): desktop Windows-oriented; Linux/Pi headless generation-only; ASIS direct integration implemented | C.O.R.E.-mediated integration (future); real Pi/ARM64 |
 
 ## 7. Filesystem reality
 

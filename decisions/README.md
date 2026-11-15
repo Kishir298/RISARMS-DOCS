@@ -54,3 +54,5 @@ Every ADR follows this structure:
 
 - [Development Contributions](../development/contribution.md)
 - [System Boundaries](../architecture/system-boundaries.md)
+- [0011 — Void Linux HP 14 host](./0011-void-linux-hp14-host.md)
+- [0012 — Ed25519 GitHub Releases updater](./0012-ed25519-github-releases-updater.md)

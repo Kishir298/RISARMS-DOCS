@@ -8,7 +8,7 @@ C.O.R.E. is the **central management and control engine** of R.I.S.A.R.M.S. It i
 
 **It is NOT the primary AI.** Intelligence belongs to A.S.I.S. and T.I.V.I.S.S. C.O.R.E. provides the substrate they operate on.
 
-**It runs on the control host** (Windows 11 laptop or Raspberry Pi/ARM64, which may co-host R.E.S.C.S.) and serves connected R.I.S.A.R.M.S. devices (Macs, phones, tablets, watches).
+**It runs on the control host** (Void Linux x86_64 on the HP 14, or Raspberry Pi/ARM64, which may co-host R.E.S.C.S.) and serves connected R.I.S.A.R.M.S. devices (Macs, phones, tablets, watches). Windows and macOS remain supported client/release targets.
 
 ### Responsibilities
 
@@ -51,6 +51,7 @@ C.O.R.E. is the **central management and control engine** of R.I.S.A.R.M.S. It i
 | **v0.3** | External-device platform: TLS transport, token authentication, device registration/persistence, device discovery and device-to-device routing, capability-driven agent scheduling, HTTP R.E.S.C.S. adapter, data distribution, provisioning CLI/client | **IMPLEMENTED** (`0.3.0`); physical LAN validation pending |
 | **v0.4** | Localhost host/client portals; capability router/model profiles; device-scoped R.E.S.C.S. proxy | **IMPLEMENTED** (`0.4.0`) |
 | **v0.5** | Combined host/client project; Pi service integration; signed R.E.S.C.S. owner scope; `/api/ai-status`; tool-free `CORE_SAFE_CHAT` worker | **IMPLEMENTED** (`0.5.0`); physical Pi/ARM64 validation pending |
+| **v0.6** | Per-profile service grants; session-bound registered owner devices; queued owner actions; Caddy/runit Void deployment | **IMPLEMENTED**; HP 14 Void validation pending |
 
 v0.3.0 is not "v0.2 finished": it adds an external-device platform on top of the v0.2 operational core. Version negotiation (`core/version.py`) keeps older clients working; deprecated APIs are scheduled for removal only in a future breaking version.
 
@@ -138,7 +139,7 @@ These are deployment-validation items, not missing software:
 
 ## 5. Test coverage
 
-- **66 host test files; 839 passed / 1 skipped on macOS Python 3.12 (2026-11-09).** Release authors reported 840 passed on Linux x86_64 Python 3.12. Client: **20 test files, 200 passed**.
+- **74 host test files; 892 passed / 4 skipped on macOS Python 3.14 (2026-11-15).** Client: **20 test files, 225 passed / 1 skipped**.
 - Coverage includes application orchestration, communication/TLS/framing, protocol negotiation, authentication, device registration/persistence/reconnect, discovery, presence, routing, services, resources, organization/reconciliation, R.E.S.C.S. adapters, scheduler, data distribution, health, events, integration behavior, Pi policy, and legacy compatibility.
 
 ## 5b. Web portals (v0.5.0)
@@ -201,6 +202,9 @@ The 13-phase v0.2 build order was completed; the phase definitions (objectives, 
 | Combined `CORE-HOST` + `CORE-CLIENT` repository and root CI | IMPLEMENTED |
 | Pi deployment scripts, wheels, and validation evidence | IMPLEMENTED (syntax/entry-point checks only) |
 | Signed R.E.S.C.S. owner scope (`X-RESCS-Signature`) | IMPLEMENTED |
+| Per-profile service grants (`GET /api/service-grants`, `PUT/DELETE /api/profiles/{id}/service-grants/{service}`) | IMPLEMENTED |
+| Registered owner-device binding for admin unlock | IMPLEMENTED |
+| Durable owner-action queue with owner-device + password approval | IMPLEMENTED |
 | `/api/ai-status` health surface | IMPLEMENTED |
 | Tool-free `CORE_SAFE_CHAT` worker (account-isolated Ollama) | IMPLEMENTED |
 | Physical Pi/ARM64, cgroup v2, systemd boot, SSD removal | **NOT YET PERFORMED** |

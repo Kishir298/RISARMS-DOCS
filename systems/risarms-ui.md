@@ -1,6 +1,6 @@
 # RISARMS-UI — Unified Desktop Application
 
-> [!NOTE] **Status:** v0.6.0 **IMPLEMENTED** (source and automated tests: 222
+> [!NOTE] **Status:** v0.6.0 **IMPLEMENTED** (source and automated tests: 254
 > passing). Signed installers, physical Windows/Linux runs and long-duration
 > desktop validation are **NOT YET PERFORMED**. Builds are unsigned by default.
 > Installer generation is implemented and unverified — see
@@ -22,8 +22,9 @@ contracts.
 - **Framework:** Python `>=3.10` with Tkinter/ttk (no Qt, Electron or browser
   runtime).
 - **Packaging:** PyInstaller one-directory bundles for macOS, Windows and Linux.
-- **Dependencies:** `core-client` (local inference and legacy helpers),
-  `keyring` (OS-backed device credentials) and `websockets` (control channel).
+- **Dependencies:** `keyring` (OS-backed device credentials) and `websockets`
+  (control channel). Local Ollama chat and approval brokering use the Python
+  standard library.
 - **Offline store:** per-profile SQLite database with scrypt-derived passphrase
   verification; files are capped at 8 MiB each and 250 MiB per local profile.
 
@@ -34,16 +35,16 @@ contracts.
 | Local profiles | Separate local passphrase from the server account; no recovery service; application lock is not disk encryption |
 | Connection | HTTPS login, remembered revocable device credential, automatic reconnect with bounded backoff, 12-hour server sessions with renewal, WSS control channel with polling fallback |
 | Messages | Direct text messages between approved accounts, local conversation history, queued/delivered/read states, offline queue drained on reconnect |
-| ASIS | Server-routed or local Ollama chat; safe-chat worker on the host |
-| ASCS | Owner-only server or local coding workspace with explicit confirmation |
+| ASIS | Server-routed or local Ollama chat; safe-chat worker on the host; local dangerous actions ask through a loopback approval dialog |
+| ASCS | Owner-only server or local coding workspace; local file/command actions ask through a loopback approval dialog |
 | TIVISS | Owner-only TIVISS workspace |
 | Tasks | Server jobs with live polling, cancellation and local model execution |
 | History | Device-local conversation history |
 | My Storage | JSON records with optimistic concurrency and explicit/automatic synchronization |
 | Cloud Files | Account-scoped folders, quota, file details, upload/download progress, SHA-256 verification, durable offline upload queue and delete |
 | Devices | Lists registered devices; revocation is enforced by CORE-HOST and terminates the affected control channel |
-| Administration | Owner-only accounts, access requests, settings, audit, quotas and server status with password re-authentication |
-| Settings | Light/dark theme, service source paths, local model, chat storage policy and server origin |
+| Administration | Owner-only accounts, access requests, settings, audit, quotas, server status and a queued owner-action inbox; approval requires a registered owner device plus password re-authentication |
+| Settings | Light/dark theme, service source paths, local model, chat storage policy, update channel/source and server origin; update checks verify signed manifests but do not install |
 
 ## 4. Security model
 
@@ -55,7 +56,11 @@ contracts.
   Redirects, environment proxies and origins with credentials or paths are
   refused.
 - Server permissions are authoritative. The UI hides owner-only pages but
-  CORE-HOST enforces every role, CSRF, re-authentication and record/file scope.
+  CORE-HOST enforces every role, CSRF, registered-device binding,
+  re-authentication and record/file scope.
+- Local ASCS/ASIS subprocesses receive a random loopback approval URL and token.
+  Every file/command request must be approved in the desktop dialog; closing the
+  dialog, timing out, or losing the broker denies the action.
 - Concurrent local edits are retained and reported as conflicts instead of
   being overwritten.
 - Logs never include passwords, session tokens, CSRF values or device
@@ -67,13 +72,14 @@ The application consumes these authenticated endpoints:
 
 | Endpoint | Purpose |
 |---|---|
-| `POST /api/login` | Password login; returns profile, CSRF and an optional device credential |
+| `POST /api/login` | Password login; returns profile, CSRF and a device credential bound to the session |
 | `POST /api/login/device` | Session from a remembered device credential |
 | `POST /api/session/renew` | Extends a live session |
 | `POST /api/ws-ticket` | Single-use, 60-second WebSocket ticket |
 | `GET /api/devices` | Owned devices; owner may query all |
 | `POST /api/devices/{id}/revoke` | Revoke a device and publish a revocation event |
 | `GET /api/health` | Capabilities, version and event-channel availability |
+| `/api/owner-actions` | Queue, list and approve/reject owner-only service-grant and quota requests |
 | `GET/POST /api/messages` | Human-to-human messaging (threads, conversation, send) |
 | `POST /api/messages/{id}/read` | Recipient read acknowledgement |
 | `/api/records`, `/api/files`, `/api/folders`, `/api/jobs`, `/api/services`, `/api/status`, `/api/profiles`, `/api/access`, `/api/settings`, `/api/audit`, `/api/quotas` | Existing CORE workspace surfaces |
@@ -101,14 +107,14 @@ starting two synchronization workers over the same queues.
 
 ## 7. Verification
 
-- UI suite: **227 passed** (macOS Python 3.14 venv), including
+- UI suite: **254 passed** (macOS Python 3.14 venv), including
   `tests/test_reconnection.py`, `tests/test_messaging.py`,
   `tests/test_desktop_doctor.py` and a real two-client messaging test in
   `tests/integration/test_core_messaging_e2e.py` that launches CORE-HOST and
   receives `message.received` over WSS.
-- CORE-HOST suite: **870 passed / 4 skipped**.
-- RESCS: **318 passed / 4 skipped**; ASCS: **993 passed / 16 skipped**;
-  TIVISS: **285 passed**.
+- CORE-HOST suite: **892 passed / 4 skipped**; CORE-CLIENT: **225 passed / 1 skipped**.
+- RESCS: **318 passed / 4 skipped**; ASCS: **996 passed / 16 skipped**;
+  TIVISS: **299 passed**.
 - Physical Windows/Linux desktop runs, signed/notarized artifacts, real
   installers, LAN and 24/7 operation remain **NOT YET PERFORMED**.
 

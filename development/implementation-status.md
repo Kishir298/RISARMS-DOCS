@@ -1,6 +1,6 @@
 # Implementation Status
 
-> [!IMPORTANT] Status reflects evidence gathered on **2026-11-13** on the
+> [!IMPORTANT] Status reflects evidence gathered on **2026-11-15** on the
 > macOS recovery host. "Verified" means a command was run in this session and
 > its result is quoted. "Unverified" means the code exists but no run supports
 > the claim. Never read this table as a release approval.
@@ -19,7 +19,7 @@
 
 | Capability | Status | Evidence / note |
 |---|---|---|
-| HTTPS API, sessions, CSRF, approvals | Complete / verified | 870 passed |
+| HTTPS API, sessions, CSRF, approvals | Complete / verified | 892 passed / 4 skipped |
 | Device credentials, single-use WSS tickets, session renewal | Complete / verified | `test_desktop_control.py`, merged from the feature branch |
 | Revocation events | Complete / verified | Messaging + device revocation tests |
 | Job idempotency | Complete / verified | Existing contract tests |
@@ -40,10 +40,14 @@
 | Offline file sync (durable queue) | Complete / verified | `test_messaging.py` style store tests, `sync_files` |
 | Human messaging UI | Complete / verified (logic) | Store/queue tests plus a real two-client HTTP+WSS test; UI rendering not exercised without Tk |
 | Single background sync worker | Implemented / partially verified | A guard prevents the timer and reconnect event from syncing concurrently; the guard needs a Tk loop to exercise |
-| Dependency self-check (`--doctor`) | Complete / verified | Reads `importlib.metadata.version("core-client")` so the repo's legacy `client` package cannot mask a missing dependency |
+| Dependency self-check (`--doctor`) | Complete / verified | Imports packaged UI modules, reports missing Tk and checks optional `cryptography` without importing the legacy `client` package |
 | Messaging delivery states | Complete / verified | `queued` is never reported as delivered |
 | Cloud Files folders/quota/details/progress | Implemented / unverified | No GUI run |
 | Light/dark theme, keyboard navigation | Implemented / unverified | Existing theme module; no accessibility audit |
+| Per-profile service grants and cached authorization | Complete / verified | `tests/test_authorization.py`; CORE remains authoritative |
+| Loopback local-action approvals | Complete / verified (logic) | `tests/test_approvals.py`; broker denies on timeout, close or transport error |
+| Informed owner-action review | Complete / verified (logic) | `tests/test_owner_actions_view.py`; full payload shown before password re-auth and confirmation |
+| Signed update check | Complete / verified (logic) | `tests/test_updates.py`; no install/apply UI yet |
 | Installer creation | Implemented / **unverified** | `packaging/installers.py`; local build refuses without Tk |
 | Signed/notarized artifacts | Blocked | No signing credentials |
 
@@ -51,10 +55,10 @@
 
 | Project | Status | Evidence |
 |---|---|---|
-| ASIS | Complete / verified at its own suite | Latest main CI was green; not re-run here. Its release matrix had an invalid `macos-15-intel` label, now corrected on a review branch |
-| ASCS | Complete / verified | 993 passed; `doctor --offline` smoke verified locally (exit 0) and CI **green** on `c2f4464` |
-| RESCS | Complete / verified | 318 passed; CLI configuration errors actionable; CI **green** on `cdbd6fa`; live tests now report unavailable services instead of failing the run |
-| TIVISS | Complete / verified | 285 passed; CI **green** on `2ec78e1` (3.11–3.13) |
+| ASIS | Complete / verified | 946 passed / 24 skipped; full ruff still reports pre-existing style debt |
+| ASCS | Complete / verified | 996 passed / 16 skipped; `doctor --offline` smoke verified locally (exit 0) |
+| RESCS | Complete / verified | 318 passed / 4 skipped; CLI configuration errors actionable; live tests report unavailable services instead of failing the run |
+| TIVISS | Complete / verified | 299 passed; full ruff still reports pre-existing style debt |
 
 ## 4. Cross-cutting
 
@@ -70,15 +74,26 @@
 ## 5. Open items carried forward
 
 1. Produce and inspect real installers on GitHub runners. The release workflow
-   now builds Linux from a Tk-enabled distribution interpreter, verifies the
+   builds Linux from a Tk-enabled distribution interpreter, verifies the
    Windows installer toolchain before building, and can honour
-   `workflow_dispatch`, so this is a missing *run*, not missing code.
-2. CORE feature-branch CI was still queued at the time of writing; re-check the
-   run before merging.
-2. Validate Ollama cancellation on Windows with a real model.
-3. Portal CSRF/Origin behavior against a proxied deployment.
-4. Exact model tag behavior across ASIS/ASCS/TIVISS.
-5. Partial frame receive timeout coverage.
-6. Legacy `client/` package still ships beside CORE-CLIENT's `client`
-   namespace; the desktop app no longer imports it, but the duplicate name
-   remains a packaging hazard for the legacy portal entry point.
+   `workflow_dispatch`, so this is a missing *run*, not missing code. No
+   authenticated `gh` client is available here to trigger it.
+2. Provision the production Ed25519 public key/fingerprint and finish the
+   verified install/apply path. Check-only verification exists; installation is
+   not automated.
+3. Validate the Void installer on the physical HP 14: runit, Caddy, nftables,
+   lid-close behavior, first-owner setup and backup/restore.
+4. Re-run CORE, RISARMS-UI and TIVISS CI on the pushed branches. The local
+   suites pass, but no CI run is quoted here.
+5. Close the remaining owner-action safety gaps found in audit: make the
+   apply+decision transition atomic, and scope session approvals to canonical
+   tool parameters rather than coarse action names for ASIS.
+6. Validate Ollama cancellation on Windows with a real model.
+7. Portal CSRF/Origin behavior against a proxied deployment.
+8. Exact model tag behavior across ASIS/ASCS/TIVISS.
+9. Partial frame receive timeout coverage.
+10. Legacy `client/` package still ships beside CORE-CLIENT's `client`
+    namespace; the desktop app no longer imports it, but the duplicate name
+    remains a packaging hazard for the legacy portal entry point.
+11. Burn down the pre-existing full-ruff debt in ASIS and TIVISS; changed-file
+    lint is clean today.

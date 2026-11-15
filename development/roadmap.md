@@ -66,7 +66,7 @@ R.E.S.C.S. documents its own history in `RESCS/CHANGELOG.md` and `docs/architect
 | Rebuilt `asis` package: CLI, AI provider layer (Ollama + mock), memory, tool framework, permissions, identity, events, system/runtime | IMPLEMENTED |
 | Concrete tools (Echo, CurrentTime) | IMPLEMENTED |
 | Voice pipeline abstraction (engines, input/speech/speaker/tts packages) | IMPLEMENTED (standalone) |
-| Test suite (941 passed / 24 skipped, v0.1.0) | IMPLEMENTED |
+| Test suite (946 passed / 24 skipped, v0.1.0) | IMPLEMENTED |
 | Voice wired into the chat loop | IMPLEMENTED |
 | Legacy tree removal (`core/`, `02_voice/`, `monitoring/`) | DEPRECATED, pending removal |
 | Real C.O.R.E. uplink (opt-in adapter) | IMPLEMENTED (standalone by default) |
@@ -76,11 +76,11 @@ R.E.S.C.S. documents its own history in `RESCS/CHANGELOG.md` and `docs/architect
 
 ## 6. T.I.V.I.S.S.
 
-Agent **IN DEVELOPMENT** (v0.2.0), local clone present (`TIVISS/`): OllamaProvider, SQLiteMemoryStore (dual SQLite), CLI, export/import, logging, voice abstraction, and stdlib-only C.O.R.E./R.E.S.C.S. transports tested offline. Verified: 279 passed. The defining open question — the handover model — is unresolved; see [systems/tiviss.md](../systems/tiviss.md).
+Agent **IN DEVELOPMENT** (v0.2.0), local clone present (`TIVISS/`): OllamaProvider, SQLiteMemoryStore (dual SQLite), CLI, export/import, logging, voice abstraction, and stdlib-only C.O.R.E./R.E.S.C.S. transports tested offline. Verified: 299 passed. The defining open question — the handover model — is unresolved; see [systems/tiviss.md](../systems/tiviss.md).
 
 ## 7. A.S.C.S.
 
-**IMPLEMENTED as a standalone tool** (v0.3.0, 991 passed / 6 skipped on macOS 2026-11-09; Linux/Pi headless generation-only). See [systems/asc.md](../systems/asc.md). Its own phase roadmap (00–06) lives in `ASCS/docs/phases/`. **ASIS integration IMPLEMENTED** (`export_handover_state()` + `ascs_integration` toolset). C.O.R.E.-mediated use by A.S.I.S./T.I.V.I.S.S. is **FUTURE**.
+**IMPLEMENTED as a standalone tool** (v0.3.0, 996 passed / 16 skipped on macOS 2026-11-09; Linux/Pi headless generation-only). See [systems/asc.md](../systems/asc.md). Its own phase roadmap (00–06) lives in `ASCS/docs/phases/`. **ASIS integration IMPLEMENTED** (`export_handover_state()` + `ascs_integration` toolset). C.O.R.E.-mediated use by A.S.I.S./T.I.V.I.S.S. is **FUTURE**.
 
 ## 8. RadarS.A.R.D.
 

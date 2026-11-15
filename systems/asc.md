@@ -2,7 +2,7 @@
 
 > [!NOTE] **File note:** this page lives at `systems/asc.md` (abbreviation `asc`) for historical link stability; it documents **A.S.C.S.**
 
-> [!NOTE] **Status:** **IMPLEMENTED as a standalone tool** (v0.3.0, **991 passed / 6 skipped** on macOS Python 3.12, 2026-11-09; opt-in live tests). A.S.C.S. is a local, private, autonomous coding agent built on Ollama: it plans, writes, runs and verifies code inside an explicit workspace, with three session modes, a web UI, a terminal TUI, and a Linux/Pi headless generation-only path. **ASIS integration is IMPLEMENTED** — ASIS can invoke ASCS via `ascs_integration` with handover; ASCS exposes `export_handover_state()`. Full C.O.R.E.-mediated integration remains **PLANNED/FUTURE**.
+> [!NOTE] **Status:** **IMPLEMENTED as a standalone tool** (v0.3.0, **996 passed / 16 skipped** on macOS Python 3.14, 2026-11-15; opt-in live tests). A.S.C.S. is a local, private, autonomous coding agent built on Ollama: it plans, writes, runs and verifies code inside an explicit workspace, with three session modes, a web UI, a terminal TUI, and a Linux/Pi headless generation-only path. **ASIS integration is IMPLEMENTED** — ASIS can invoke ASCS via `ascs_integration` with handover; ASCS exposes `export_handover_state()`. Full C.O.R.E.-mediated integration remains **PLANNED/FUTURE**.
 
 ## 1. What A.S.C.S. is
 
@@ -17,7 +17,7 @@ Its declared long-term role in R.I.S.A.R.M.S. is as a coding capability that A.S
 - Package: `agent` (distribution name `coding-agent`), version `0.3.0`
 - Entry point: `risa` (e.g. `risa --auto "…"`, `risa --tasks "…"`, `risa --ui`, `risa --tui`, `risa --doctor`, `risa --pi`)
 - Runtime: desktop web UI/TUI is **Windows-oriented** (32 GB target); the Pi path is **Linux ARM64 headless generation-only** (no tools/TUI); **dev testing is cross-platform**
-- Tests: **991 passed / 6 skipped** on macOS Python 3.12 (2026-11-09; live Ollama tests opt-in via `RISALIVE=1`, skipped by default)
+- Tests: **996 passed / 16 skipped** on macOS Python 3.14 (2026-11-15; live Ollama tests opt-in via `RISALIVE=1`, skipped by default)
 
 ## 3. What is implemented
 

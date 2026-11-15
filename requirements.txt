@@ -16,3 +16,6 @@ pyinstaller>=6.6
 # and the WSS event channel).
 keyring>=24.0
 websockets>=12.0
+
+# Ed25519 update-manifest verification in RISARMS-UI.
+cryptography>=42.0

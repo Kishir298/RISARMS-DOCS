@@ -1,6 +1,6 @@
 # R.E.S.C.S. — Rishik's Efficient System for Cloud Storage
 
-> [!NOTE] **Status:** v0.4.0 **IMPLEMENTED** (FastAPI storage service: versioned HTTP API, enforced API-key authentication, record/file storage, streaming + resumable uploads, lifecycle/governance, backup tooling, and the Raspberry Pi storage foundation). Verified: 312 passed / 4 skipped (macOS Python 3.12). Live PostgreSQL/Supabase deployment, real S3 backend, deployed C.O.R.E. ↔ R.E.S.C.S. interop, real Pi/ARM64, and 24/7 endurance are **Ready for External Validation** — documented and implemented, but not validated against live production infrastructure. R.E.S.C.S. is an **independent project**.
+> [!NOTE] **Status:** v0.4.0 **IMPLEMENTED** (FastAPI storage service: versioned HTTP API, enforced API-key authentication, record/file storage, streaming + resumable uploads, lifecycle/governance, backup tooling, and the Raspberry Pi storage foundation). Verified: 318 passed / 4 skipped (macOS Python 3.14, 2026-11-15). Live PostgreSQL/Supabase deployment, real S3 backend, deployed C.O.R.E. ↔ R.E.S.C.S. interop, real Pi/ARM64, and 24/7 endurance are **Ready for External Validation** — documented and implemented, but not validated against live production infrastructure. R.E.S.C.S. is an **independent project**.
 
 ## 1. What R.E.S.C.S. is
 
