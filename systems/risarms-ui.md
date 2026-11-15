@@ -57,7 +57,9 @@ contracts.
   refused.
 - Server permissions are authoritative. The UI hides owner-only pages but
   CORE-HOST enforces every role, CSRF, registered-device binding,
-  re-authentication and record/file scope.
+  re-authentication and record/file scope. Service grants refresh on reconnect
+  and every 60 seconds; newly granted services appear in service and storage
+  selectors, while revocation removes them from subsequent actions.
 - Local ASCS/ASIS subprocesses receive a random loopback approval URL and token.
   Every file/command request must be approved in the desktop dialog; closing the
   dialog, timing out, or losing the broker denies the action. Session approvals

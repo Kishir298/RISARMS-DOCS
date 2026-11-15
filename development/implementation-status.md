@@ -44,7 +44,7 @@
 | Messaging delivery states | Complete / verified | `queued` is never reported as delivered |
 | Cloud Files folders/quota/details/progress | Implemented / unverified | No GUI run |
 | Light/dark theme, keyboard navigation | Implemented / unverified | Existing theme module; no accessibility audit |
-| Per-profile service grants and cached authorization | Complete / verified | `tests/test_authorization.py`; CORE remains authoritative |
+| Per-profile service grants and cached authorization | Complete / verified | `tests/test_authorization.py`; CORE remains authoritative; grants refresh on reconnect and every 60 seconds, and newly granted services become selectable |
 | Loopback local-action approvals | Complete / verified (logic) | `tests/test_approvals.py`; broker denies on timeout, close or transport error |
 | Informed owner-action review | Complete / verified (logic) | `tests/test_owner_actions_view.py`; full payload shown before password re-auth and confirmation |
 | Signed update check | Complete / verified (logic) | `tests/test_updates.py`; no install/apply UI yet |
@@ -86,18 +86,12 @@
    lid-close behavior, first-owner setup and backup/restore.
 4. Run the ASIS suite through a PR because its CI workflow does not trigger on
    feature-branch pushes; local 948/24 is not a substitute for the matrix.
-5. Scope session approvals to canonical tool parameters rather than coarse
-   action names for ASIS; owner-action application is now two-phase and
-   resumable after a crash.
-6. Refresh service grants while online and surface all granted services; the
-   current 7-day offline cache is refreshed on reconnect, and the storage
-   selector still exposes only workspace/ASIS to members.
-7. Validate Ollama cancellation on Windows with a real model.
-8. Portal CSRF/Origin behavior against a proxied deployment.
-9. Exact model tag behavior across ASIS/ASCS/TIVISS.
-10. Partial frame receive timeout coverage.
-11. Legacy `client/` package still ships beside CORE-CLIENT's `client`
-    namespace; the desktop app no longer imports it, but the duplicate name
-    remains a packaging hazard for the legacy portal entry point.
-12. Burn down the pre-existing full-ruff debt in ASIS and TIVISS; changed-file
+5. Validate Ollama cancellation on Windows with a real model.
+6. Portal CSRF/Origin behavior against a proxied deployment.
+7. Exact model tag behavior across ASIS/ASCS/TIVISS.
+8. Partial frame receive timeout coverage.
+9. Legacy `client/` package still ships beside CORE-CLIENT's `client`
+   namespace; the desktop app no longer imports it, but the duplicate name
+   remains a packaging hazard for the legacy portal entry point.
+10. Burn down the pre-existing full-ruff debt in ASIS and TIVISS; changed-file
     lint is clean today.
