@@ -1,6 +1,6 @@
 # RISARMS-UI — Unified Desktop Application
 
-> [!NOTE] **Status:** v0.6.0 **IMPLEMENTED** (source and automated tests: 255
+> [!NOTE] **Status:** v0.6.0 **IMPLEMENTED** (source and automated tests: 259
 > passing). Signed installers, physical Windows/Linux runs and long-duration
 > desktop validation are **NOT YET PERFORMED**. Builds are unsigned by default.
 > Installer generation is implemented and unverified — see
@@ -44,7 +44,7 @@ contracts.
 | Cloud Files | Account-scoped folders, quota, file details, upload/download progress, SHA-256 verification, durable offline upload queue and delete |
 | Devices | Lists registered devices; revocation is enforced by CORE-HOST and terminates the affected control channel |
 | Administration | Owner-only accounts, access requests, settings, audit, quotas, server status and a queued owner-action inbox; approval requires a registered owner device plus password re-authentication |
-| Settings | Light/dark theme, service source paths, local model, chat storage policy, update channel/source and server origin; update checks verify signed manifests but do not install |
+| Settings | Light/dark theme, service source paths, local model, chat storage policy, update channel/source and server origin; update checks verify signed manifests, downloads are hash-verified, and the OS installer opens only after explicit confirmation |
 
 ## 4. Security model
 
@@ -65,6 +65,10 @@ contracts.
   dialog, timing out, or losing the broker denies the action. Session approvals
   are keyed by service, action, command, workspace and non-job request details,
   so a different target is confirmed again.
+- Update manifests are Ed25519-verified and artifacts must match the signed
+  SHA-256 and size. Packaged/environment public keys take precedence over the
+  development override. Downloads are staged in a private directory and the OS
+  installer is opened only after a separate user confirmation.
 - Concurrent local edits are retained and reported as conflicts instead of
   being overwritten.
 - Logs never include passwords, session tokens, CSRF values or device
@@ -111,7 +115,7 @@ starting two synchronization workers over the same queues.
 
 ## 7. Verification
 
-- UI suite: **255 passed** (macOS Python 3.14 venv), including
+- UI suite: **259 passed** (macOS Python 3.14 venv), including
   `tests/test_reconnection.py`, `tests/test_messaging.py`,
   `tests/test_desktop_doctor.py` and a real two-client messaging test in
   `tests/integration/test_core_messaging_e2e.py` that launches CORE-HOST and
