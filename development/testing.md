@@ -14,7 +14,7 @@
 
 | System | Suite | Notes |
 |---|---|---|
-| CORE-HOST | **892 passed / 4 skipped** (2026-11-15, macOS Python 3.14, v0.5.0) | Host spine + desktop control channel; run `.venv/bin/python -m pytest` in `CORE/CORE-HOST` |
+| CORE-HOST | **895 passed / 4 skipped** (2026-11-15, macOS Python 3.14, v0.5.0) | Host spine + desktop control channel; run `.venv/bin/python -m pytest` in `CORE/CORE-HOST` |
 | CORE-CLIENT | **225 passed / 1 skipped** (2026-11-15, macOS Python 3.14, v0.5.0) | Native client + portal; run `python3 -m pytest` in `CORE/CORE-CLIENT` |
 | R.E.S.C.S. | **318 passed / 4 skipped** (2026-11-15, macOS Python 3.14, v0.4.0) | Live PostgreSQL/S3 skipped without credentials; run `.venv/bin/python -m pytest` |
 | A.S.I.S. | **946 passed / 24 skipped** (2026-11-15, macOS Python 3.12, v0.1.0) | Pi policy and release contract included |

@@ -139,7 +139,7 @@ These are deployment-validation items, not missing software:
 
 ## 5. Test coverage
 
-- **74 host test files; 892 passed / 4 skipped on macOS Python 3.14 (2026-11-15).** Client: **20 test files, 225 passed / 1 skipped**.
+- **74 host test files; 895 passed / 4 skipped on macOS Python 3.14 (2026-11-15).** Client: **20 test files, 225 passed / 1 skipped**.
 - Coverage includes application orchestration, communication/TLS/framing, protocol negotiation, authentication, device registration/persistence/reconnect, discovery, presence, routing, services, resources, organization/reconciliation, R.E.S.C.S. adapters, scheduler, data distribution, health, events, integration behavior, Pi policy, and legacy compatibility.
 
 ## 5b. Web portals (v0.5.0)
@@ -204,7 +204,7 @@ The 13-phase v0.2 build order was completed; the phase definitions (objectives, 
 | Signed R.E.S.C.S. owner scope (`X-RESCS-Signature`) | IMPLEMENTED |
 | Per-profile service grants (`GET /api/service-grants`, `PUT/DELETE /api/profiles/{id}/service-grants/{service}`) | IMPLEMENTED |
 | Registered owner-device binding for admin unlock | IMPLEMENTED |
-| Durable owner-action queue with owner-device + password approval | IMPLEMENTED |
+| Durable owner-action queue with owner-device + password approval; crash-safe two-phase apply | IMPLEMENTED |
 | `/api/ai-status` health surface | IMPLEMENTED |
 | Tool-free `CORE_SAFE_CHAT` worker (account-isolated Ollama) | IMPLEMENTED |
 | Physical Pi/ARM64, cgroup v2, systemd boot, SSD removal | **NOT YET PERFORMED** |

@@ -19,7 +19,7 @@
 
 | Capability | Status | Evidence / note |
 |---|---|---|
-| HTTPS API, sessions, CSRF, approvals | Complete / verified | 892 passed / 4 skipped |
+| HTTPS API, sessions, CSRF, approvals | Complete / verified | 895 passed / 4 skipped |
 | Device credentials, single-use WSS tickets, session renewal | Complete / verified | `test_desktop_control.py`, merged from the feature branch |
 | Revocation events | Complete / verified | Messaging + device revocation tests |
 | Job idempotency | Complete / verified | Existing contract tests |
@@ -86,9 +86,9 @@
    lid-close behavior, first-owner setup and backup/restore.
 4. Run the ASIS suite through a PR because its CI workflow does not trigger on
    feature-branch pushes; local 946/24 is not a substitute for the matrix.
-5. Close the remaining owner-action safety gaps found in audit: make the
-   apply+decision transition atomic, and scope session approvals to canonical
-   tool parameters rather than coarse action names for ASIS.
+5. Scope session approvals to canonical tool parameters rather than coarse
+   action names for ASIS; owner-action application is now two-phase and
+   resumable after a crash.
 6. Refresh service grants while online and surface all granted services; the
    current 7-day offline cache is refreshed on reconnect, and the storage
    selector still exposes only workspace/ASIS to members.
