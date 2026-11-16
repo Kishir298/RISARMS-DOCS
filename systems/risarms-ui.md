@@ -1,6 +1,6 @@
 # RISARMS-UI — Unified Desktop Application
 
-> [!NOTE] **Status:** v0.6.0 **IMPLEMENTED** (source and automated tests: 259
+> [!NOTE] **Status:** v0.6.0 **IMPLEMENTED** (source and automated tests: 261
 > passing). Signed installers, physical Windows/Linux runs and long-duration
 > desktop validation are **NOT YET PERFORMED**. Builds are unsigned by default.
 > Installer generation is implemented and unverified — see
@@ -66,9 +66,11 @@ contracts.
   are keyed by service, action, command, workspace and non-job request details,
   so a different target is confirmed again.
 - Update manifests are Ed25519-verified and artifacts must match the signed
-  SHA-256 and size. Packaged/environment public keys take precedence over the
-  development override. Downloads are staged in a private directory and the OS
-  installer is opened only after a separate user confirmation.
+  SHA-256 and size. The build embeds `UPDATE_PUBLIC_KEY`; frozen builds trust
+  only that packaged key, and release builds fail closed when it is absent.
+  Development builds may use the environment key or the settings override.
+  Downloads are staged in a private directory and the OS installer is opened
+  only after a separate user confirmation.
 - Concurrent local edits are retained and reported as conflicts instead of
   being overwritten.
 - Logs never include passwords, session tokens, CSRF values or device
@@ -115,7 +117,7 @@ starting two synchronization workers over the same queues.
 
 ## 7. Verification
 
-- UI suite: **259 passed** (macOS Python 3.14 venv), including
+- UI suite: **261 passed** (macOS Python 3.14 venv), including
   `tests/test_reconnection.py`, `tests/test_messaging.py`,
   `tests/test_desktop_doctor.py` and a real two-client messaging test in
   `tests/integration/test_core_messaging_e2e.py` that launches CORE-HOST and

@@ -79,10 +79,11 @@
    Windows installer toolchain before building, and can honour
    `workflow_dispatch`, so this is a missing *run*, not missing code. No
    authenticated `gh` client is available here to trigger it.
-2. Provision the production Ed25519 public key/fingerprint in the packaged
-   application. Signed-manifest check, SHA-256 download verification and an
-   explicit OS-installer handoff exist; unattended install/rollback and
-   post-install health verification do not.
+2. Provision the production Ed25519 public key as `UPDATE_PUBLIC_KEY` for the
+   release workflow. Packaging now fails closed without a valid key, embeds it
+   into frozen builds, and performs signed-manifest plus SHA-256 download
+   verification with an explicit OS-installer handoff. Unattended
+   install/rollback and post-install health verification do not exist.
 3. Validate the Void installer on the physical HP 14: runit, Caddy, nftables,
    lid-close behavior, first-owner setup and backup/restore.
 4. Run the ASIS suite through a PR because its CI workflow does not trigger on
