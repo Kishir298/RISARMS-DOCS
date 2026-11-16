@@ -133,7 +133,7 @@ The full ownership table is in [System Boundaries](system-boundaries.md#1-respon
 
 | System | Now | Next |
 |---|---|---|
-| **C.O.R.E.** | v0.5.0 combined project (896 host + 225 client tests passed on macOS 3.14): Pi service integration, signed R.E.S.C.S. scope, `/api/ai-status`, safe-chat worker, portals, TLS device transport, agent scheduling | Physical Pi/ARM64 validation; Windows ↔ Mac LAN; 24/7 operational validation |
+| **C.O.R.E.** | v0.6.0 beta source (911 host + 225 client tests passed on macOS 3.14): Void x86_64 glibc/runit server release with versioned venvs, storage guard, Caddy/nftables, backup/restore, upgrade/rollback and diagnostics; desktop control channel, signed R.E.S.C.S. scope, `/api/ai-status`, safe-chat worker, portals, TLS device transport, agent scheduling | Booted Void install/reboot/rollback/storage-failure/backup-restore on HP 14; physical HP; LAN; 24/7 validation |
 | **R.E.S.C.S.** | v0.4.0 (318 passed / 4 skipped): versioned HTTP API, signed CORE owner scope, mount guard, Pi installer/systemd, records/files, uploads, lifecycle/governance, C.O.R.E. contract | Live PostgreSQL/Supabase + real S3; deployed C.O.R.E. ↔ R.E.S.C.S.; real Pi/ARM64 |
 | **A.S.I.S.** | Rebuilt `asis` package (948 passed / 24 skipped): CLI, Ollama provider, memory, calculator, translation, web tools, coding mode, permissions, voice, Pi policy/worker | Physical Pi/ARM64 and LAN validation; R.E.S.C.S. via C.O.R.E. (future) |
 | **T.I.V.I.S.S.** | Local agent at `TIVISS/` (v0.2.0; 299 passed): OllamaProvider, SQLite memory, CLI, export/import, logging, voice abstraction, stdlib transports offline-tested; still no live traffic | Resolve the handover model |
@@ -150,7 +150,7 @@ RISARMS/
 │   ├── CORE-HOST/  <- server/runtime (package `core`)
 │   ├── CORE-CLIENT/<- external-device client (package `client`, stdlib-only)
 │   ├── services/   <- ASIS, ASCS, RESCS, TIVISS copies
-│   ├── deployment/ <- Pi deployment scripts
+│   ├── deployment/ <- Void installer/services (Pi assets historical)
 │   ├── install/    <- release wheels
 │   └── validation/ <- release evidence
 ├── RESCS/

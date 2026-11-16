@@ -119,6 +119,10 @@ assert_device_ownership(
 
 ## 4c. Raspberry Pi storage foundation (v0.4.0)
 
+> [!NOTE]
+> This is R.E.S.C.S.'s independent Pi storage path. CORE 0.6.0 server releases
+> target Void Linux x86_64 with runit; the CORE-side Pi deployment is historical.
+
 The 0.4.0 release adds the Pi deployment path:
 
 - **Signed CORE owner scope** — CORE sends `X-RESCS-Owner`, `X-RESCS-Expires`, and `X-RESCS-Signature`; RESCS verifies the signature and owner scope before serving records/files.

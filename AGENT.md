@@ -10,7 +10,7 @@
 
 - `ASIS/` — A Smart Intelligence System (primary AI layer, v0.1.0 with Pi policy/worker update)
 - `ASCS/` — A Smart Coding System (standalone coding agent, v0.3.0 with Pi headless path; ASIS direct integration IMPLEMENTED, CORE-mediated future)
-- `CORE/` — combined C.O.R.E. project, v0.5.0: `CORE-HOST/` (`core` package), `CORE-CLIENT/` (`client` package), `services/`, `deployment/`, `install/`, `validation/`
+- `CORE/` — combined C.O.R.E. project, v0.6.0 (Void x86_64 server target): `CORE-HOST/` (`core` package), `CORE-CLIENT/` (`client` package), `services/`, `deployment/`, `install/`, `validation/`
 - `RESCS/` — Cloud storage system, v0.4.0 with Pi signed-scope/mount validation
 - `TIVISS/` — Separate AI agent (v0.2.0: OllamaProvider, SQLiteMemoryStore, Web/Calc/Translation/Voice config, offline-tested transports)
 - `DOCS/` — Architecture source of truth (this repo docs; remote `RISARMS-DOCS`)

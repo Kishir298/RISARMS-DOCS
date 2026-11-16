@@ -1,6 +1,6 @@
 # Implementation Status
 
-> [!IMPORTANT] Status reflects evidence gathered on **2026-11-15** on the
+> [!IMPORTANT] Status reflects evidence gathered on **2026-11-16** on the
 > macOS recovery host. "Verified" means a command was run in this session and
 > its result is quoted. "Unverified" means the code exists but no run supports
 > the claim. Never read this table as a release approval.
@@ -19,13 +19,15 @@
 
 | Capability | Status | Evidence / note |
 |---|---|---|
-| HTTPS API, sessions, CSRF, approvals | Complete / verified | 896 passed / 4 skipped |
+| HTTPS API, sessions, CSRF, approvals | Complete / verified | 911 passed / 4 skipped |
 | Device credentials, single-use WSS tickets, session renewal | Complete / verified | `test_desktop_control.py`, merged from the feature branch |
 | Revocation events | Complete / verified | Messaging + device revocation tests |
 | Job idempotency | Complete / verified | Existing contract tests |
 | Human-to-human messaging (`/api/messages`) | Complete / verified | 7 new tests in `tests/test_messages.py` |
 | Messaging over WSS push | Complete / verified | Real `core web` process with two clients: `message.received` received over WSS, see `tests/integration/test_core_messaging_e2e.py` in RISARMS-ui |
 | Windows/macOS LAN validation | Blocked | No second machine or certificate chain |
+| CORE 0.6.0 Void release assets (versioned venvs, storage guard, Caddy/nftables, backup/restore, upgrade/rollback, doctor) | Implemented / **unverified** at runtime | Static tests only; no booted Void host or physical HP |
+| CORE 0.6.0 runtime validation (install, reboot, runit, rollback, storage failure) | Blocked | Requires the HP 14 with Void installed |
 
 ## 2. RISARMS-ui desktop application
 
@@ -48,8 +50,10 @@
 | Loopback local-action approvals | Complete / verified (logic) | `tests/test_approvals.py`; broker denies on timeout, close or transport error |
 | Informed owner-action review | Complete / verified (logic) | `tests/test_owner_actions_view.py`; full payload shown before password re-auth and confirmation |
 | Signed update check | Complete / verified (logic) | `tests/test_updates.py`; verified download and explicit OS-installer handoff; unattended install/rollback remains open |
-| Installer creation | Implemented / **unverified** | `packaging/installers.py`; local build refuses without Tk |
-| Signed/notarized artifacts | Blocked | No signing credentials |
+| Installer creation | Implemented / **unverified** | `packaging/installers.py`; local build refuses without Tk; first CI draft run pending |
+| Release tag/version validation, beta metadata, SBOM merge, draft-only CI | Complete / verified | 286 tests; ruff clean; workflow YAML parsed |
+| Signed/notarized artifacts | Blocked | No Apple Developer ID or Windows code-signing certificate; macOS beta is ad-hoc, Windows unsigned |
+| Public signed auto-updates | Blocked | No production `UPDATE_PUBLIC_KEY` fingerprint or `UPDATE_SIGNING_KEY` |
 
 ## 3. Subsystems
 
@@ -67,9 +71,10 @@
 | Repository ownership documented | Yes — see [Repository Ownership](../architecture/README.md) and decision 0010 |
 | Multi-user isolation tests | Verified at API level (records, files, messages) |
 | Live CORE→ASIS/ASCS/RESCS/TIVISS integration | Blocked — needs provisioned services |
-| Raspberry Pi / ARM64 | Blocked |
+| Booted Void Linux / physical HP 14 | Blocked |
+| Raspberry Pi / ARM64 | Historical / not a CORE 0.6.0 target |
 | 24/7 operation | Blocked |
-| Branch CI on pushed commits | CORE, RISARMS-UI, ASCS, RESCS and TIVISS green (2026-11-15); ASIS CI only runs on `main`/PR; RISARMS-DOCS has no code CI |
+| Branch CI on pushed commits | CORE, RISARMS-UI, ASCS, RESCS and TIVISS green (2026-11-15); CORE 0.6.0 and RISARMS-ui changes have not yet been pushed; ASIS CI only runs on `main`/PR; RISARMS-DOCS has no code CI |
 | Documentation drift review | Partial — current pages refreshed; historical reports intentionally retain their original evidence |
 
 ## 5. Open items carried forward

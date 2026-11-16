@@ -1,69 +1,93 @@
 # Void Linux host — HP 14
 
 > [!NOTE]
-> This is the canonical deployment target for the HP 14: **Void Linux x86_64
-> glibc, headless**, co-hosting C.O.R.E. and R.E.S.C.S. behind Caddy. It has not
-> been executed on the physical HP 14 yet.
+> This is the canonical CORE 0.6.0 server target: **Void Linux x86_64 glibc,
+> headless, with runit**, co-hosting C.O.R.E. and R.E.S.C.S. behind Caddy on the
+> HP 14-dq1037wm. The installer and assets have static tests, but the install,
+> reboot, runit, Caddy trust, nftables load, storage-failure, upgrade, rollback,
+> backup/restore and physical HP runs have **not** been executed yet.
+> Raspberry Pi/ARM64 and systemd server deployments are historical for this release.
 
 ## Layout
 
 | Item | Path |
 |---|---|
 | Service account | `risarms` (no login shell) |
+| Versioned environments | `/opt/risarms/venvs/<version>/{core,rescs}` |
+| Stable environment links | `/opt/risarms/{core-venv,rescs-venv}` |
 | C.O.R.E. data | `/var/lib/risarms/core` |
 | R.E.S.C.S. data | `/var/lib/risarms/rescs` |
 | C.O.R.E. frontend | `/var/lib/risarms/frontend` |
 | Configuration | `/etc/risarms/{core.env,rescs.env,gateway.json}` (canonical) and `/var/lib/risarms/core/gateway.json` (CORE runtime copy) |
-| Logs | `/var/log/risarms/{core,rescs}` |
-| Virtual environments | `/opt/risarms/{core-venv,rescs-venv}` |
+| Logs | `/var/log/risarms/{core,rescs}` (svlogd, 1 MiB, 10 archives, daily) |
+| Install state and snapshots | `/var/lib/risarms/install-state` |
 | Backups | `/var/lib/risarms/backups` |
 | Caddy site | `/etc/caddy/risarms/portal.caddy` |
+| nftables table | `/etc/nftables.d/risarms.nft` |
 
 C.O.R.E. listens on `127.0.0.1:8780` (API) and `127.0.0.1:8781` (WebSocket).
 R.E.S.C.S. listens on `127.0.0.1:8081`. Caddy terminates TLS on `443`; the
-firewall exposes only `443`, SSH and mDNS.
+supplied firewall table exposes only `443`, SSH and mDNS.
+
+## Prerequisites
+
+```sh
+sudo xbps-install -S python3 python3-venv caddy runit-void nftables elogind
+```
+
+The installer requires root, Void Linux, x86_64, glibc, the commands above, and
+at least **5 GiB free** under `/var/lib/risarms`. It does not partition or format
+storage. Override `RISARMS_MIN_FREE_GIB` only after checking the disk.
+
+The HP has 8 GB installed memory today. The planned 2 x 8 GB Samsung DDR4-2666
+upgrade is **not installed or verified**; do not document it as present.
 
 ## Install
 
 ```sh
-sudo xbps-install -S python3 caddy runit-void nftables avahi elogind
-sudo bash CORE/deployment/void/install.sh
+sudo ./deployment/void/install.sh
+sudo tail -n 50 /var/log/risarms/core/current
 ```
 
-The installer refuses to overwrite existing configuration or keys. On first
-run it generates one `RESCS_API_KEY` and writes the same gateway to
-`/etc/risarms/gateway.json` and `/var/lib/risarms/core/gateway.json`; CORE and
-R.E.S.C.S. must always use the key in `/etc/risarms/rescs.env`. On later runs it
-verifies both copies, adopts the canonical file only when the runtime copy is
-absent, and fails loudly instead of rotating keys when they disagree. Repair a
-mismatch by aligning both files to `RESCS_API_KEY` manually, then re-run the
-installer.
+The default origin is `https://core.local`. Set a different HTTPS origin without
+editing keys:
+
+```sh
+sudo RISARMS_PUBLIC_ORIGIN=https://core.example.test ./deployment/void/install.sh
+```
+
+On first run the installer generates one `RESCS_API_KEY`, writes the same
+gateway to `/etc/risarms/gateway.json` and
+`/var/lib/risarms/core/gateway.json`, installs versioned virtual environments,
+and records install state. On later runs it verifies both gateway copies,
+updates the configured origin without rotating keys, and fails loudly on a key
+mismatch. Repair a mismatch manually before rerunning.
 
 It installs runit service directories but does **not** enable them. Review the
-generated origin and paths first, then:
+generated origin, paths and firewall before enabling:
 
 ```sh
 sudo ln -s /etc/sv/risarms-rescs /var/service/
 sudo ln -s /etc/sv/risarms-core /var/service/
 sudo ln -s /etc/sv/caddy /var/service/
 sudo sv status risarms-core risarms-rescs caddy
+sudo risarms-doctor
 ```
 
 Read the first-owner setup key from `/var/log/risarms/core/current`, then open
-`https://core.local` and trust the Caddy local CA on each client before entering
-credentials. If a real DNS name is used, change `CORE_PUBLIC_ORIGIN`, the
-Caddy site address and `gateway.json.public_origin` together.
+`https://core.local` and trust Caddy's local CA on each client. Copy only the
+public root certificate, never the private key.
 
 ## Host hardening
 
-- nftables: the installer copies `risarms.nft` into `/etc/nftables.d/`, but it
-  cannot safely edit every host's base ruleset. Add
-  `include "/etc/nftables.d/*.nft"` to `/etc/nftables.conf` (or include the file
-  explicitly), review the SSH rule, and run `sudo nft -f /etc/nftables.conf`.
-  Do not enable the firewall until the SSH rule is verified.
+- nftables: the installer copies `risarms.nft` into `/etc/nftables.d/`, adds
+  `include "/etc/nftables.d/*.nft"` to an existing `/etc/nftables.conf` when
+  absent, and validates it. It does not load the rules automatically. Review the
+  SSH rule and run `sudo nft -f /etc/nftables.conf` only when ready.
 - elogind: `HandleLidSwitch=ignore` keeps the headless host awake with the lid
   closed. Apply with `sudo sv restart elogind` or reboot.
-- Avahi advertises the host on the LAN. Disable it if mDNS is not wanted.
+- Avahi is not installed by the release installer; install it separately only if
+  mDNS is wanted.
 - Caddy uses `tls internal`; for a public name, replace it with an ACME-enabled
   site and open only `443`.
 
@@ -73,34 +97,49 @@ Caddy site address and `gateway.json.public_origin` together.
 sudo sv status risarms-core risarms-rescs caddy
 sudo sv down risarms-core risarms-rescs
 sudo sv up risarms-rescs risarms-core
-sudo /usr/local/sbin/risarms-backup
+sudo risarms-backup
+sudo risarms-restore --yes /var/lib/risarms/backups/risarms-<stamp>.tar.gz
+sudo risarms-doctor
 ```
 
-Backups stop CORE first, then RESCS, archive both data trees, and restart RESCS
-before CORE. Keep backups off the host.
+Backups stop CORE first, then RESCS, archive both data trees plus
+`/etc/risarms`, Caddy/nftables/elogind and runit configuration, and restart only
+services that were running. Backups contain secrets, are mode `0600`, are not
+encrypted by the installer, and default to 14-day retention. Keep copies off the
+host on equally protected media.
 
-## Update order
+## Upgrade and rollback
 
-1. Take a backup.
-2. Stop CORE, then RESCS.
-3. Install the signed RESCS release into `/opt/risarms/rescs-venv`.
-4. Install the signed CORE release into `/opt/risarms/core-venv`.
-5. Start RESCS and check `http://127.0.0.1:8081/health/ready`.
-6. Start CORE and check `https://core.local/api/health`.
-7. Roll back the previous virtual environments if either health check fails.
+```sh
+sudo ./deployment/void/upgrade.sh /path/to/new/CORE-Server-<version>-void-x86_64
+sudo risarms-rollback
+```
 
-Never auto-apply an owner action or an update. Signed update manifests and
-Ed25519 verification are tracked separately in the updater workstream.
+Upgrade validates the new manifest, builds new versioned environments before
+switching stable symlinks, and records the previous version. A failed install
+restores the previous links. Rollback switches back to the previous environments
+and restarts services that were running; use `risarms-restore` for data and
+configuration rollback. Never auto-apply an owner action or an update.
 
 ## Validation checklist
 
-- [ ] `sv status` shows both services up after a cold boot.
-- [ ] `RESCS_API_KEY` matches both gateway files; a reconfigure never rotates it.
+- [ ] Booted Void install on the HP completes from the release archive.
+- [ ] `sv status` shows services up after a cold boot.
+- [ ] Caddy local CA trust and `https://core.local/api/health` work.
+- [ ] `RESCS_API_KEY` matches both gateway files; reconcile never rotates it.
 - [ ] CORE binds only loopback; Caddy is the only public listener.
+- [ ] nftables loads without locking out SSH.
 - [ ] Owner login creates and binds a registered device; admin unlock fails
       without it.
 - [ ] Service-grant changes require admin unlock and appear in the audit log.
 - [ ] A queued owner action stays pending until approved from the owner device.
-- [ ] RESCS health is checked before CORE starts.
 - [ ] Lid close does not suspend the host.
-- [ ] Backup restore is tested on a second directory.
+- [ ] Upgrade, rollback, backup, restore and storage-failure drills pass.
+- [ ] Physical HP firmware, thermal and planned 2 x 8 GB upgrade checks pass.
+
+## Related
+
+- [CORE repository README](../../CORE/README.md)
+- [Void deployment README](../../CORE/deployment/void/README.md)
+- [Hardware-gated validation](hw-gated-validation.md)
+- [Update supply chain](update-supply-chain.md)

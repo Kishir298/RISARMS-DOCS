@@ -30,23 +30,26 @@ Outputs land in `dist/`:
 
 | Artifact | Platform |
 |---|---|
-| `RISARMS-Portal-<ver>-macos-<arch>.zip` | macOS archive |
-| `RISARMS-Portal-<ver>-macos-<arch>.dmg` | macOS installer |
-| `RISARMS-Portal-<ver>-windows-<arch>.zip` | Windows archive |
-| `RISARMS-Portal-<ver>-windows-<arch>-setup.exe` | Windows installer |
-| `RISARMS-Portal-<ver>-windows-<arch>.msi` | Windows MSI |
-| `RISARMS-Portal-<ver>-linux-<arch>.tar.gz` | Linux archive |
-| `risarms-portal_<ver>_<arch>.deb` | Debian package |
-| `RISARMS-Portal-<ver>-linux-<arch>.AppImage` | AppImage |
-| `SHA256SUMS` | Checksums for every artifact above |
+| `RISARMS-Portal-<ver>-macos-{x86_64,arm64}.zip` | macOS archive |
+| `RISARMS-Portal-<ver>-macos-{x86_64,arm64}.dmg` | macOS installer |
+| `RISARMS-Portal-<ver>-windows-x86_64.zip` | Windows archive |
+| `RISARMS-Portal-<ver>-windows-x86_64-setup.exe` | Windows installer |
+| `RISARMS-Portal-<ver>-windows-x86_64.msi` | Windows MSI |
+| `RISARMS-Portal-<ver>-linux-x86_64.tar.gz` | Linux archive |
+| `risarms-portal_<ver>_amd64.deb` | Debian package |
+| `RISARMS-Portal-<ver>-linux-x86_64.AppImage` | AppImage |
+| `SHA256SUMS-<platform>` | Per-platform checksums for the artifacts above |
+| `sbom-<platform>.cdx.json` | Per-platform CycloneDX SBOM |
 
 ## 3. CI
 
 `.github/workflows/desktop-release.yml` runs on `workflow_dispatch` and on `v*`
-tags. It pins the CORE-CLIENT source commit, installs Tk and the packaging
-tools, runs the test suite, runs `python -m risarms_ui --doctor`, builds, and
-uploads the artifacts. Signing credentials are supplied only through CI secrets
-and are never committed.
+tags. It validates the tag against project metadata, installs Tk and the
+packaging tools, runs the test suite, verifies Tk importability, embeds the
+update public key, builds, and uploads unique per-platform artifacts. Tagged
+runs verify checksums, merge SBOMs, sign `update.json`, and create a **draft**
+release; manual runs do not publish. Signing credentials are supplied only
+through CI secrets and are never committed.
 
 ## 4. Troubleshooting
 
@@ -61,6 +64,8 @@ and are never committed.
 
 ## 5. Current validation state
 
-Installer generation is **implemented but unverified**. The recovery host had no
-Tk-enabled Python, so no DMG was produced. Treat the first successful CI run as
-the verification event and record the artifact hashes here.
+Installer generation is **implemented but unverified**. The recovery host has
+no Tk-enabled Python, so no DMG was produced locally. Treat the first successful
+CI draft run as the verification event and record draft artifact hashes here.
+macOS remains ad-hoc signed and unnotarized; Windows remains unsigned; public
+distribution stays gated on signing credentials.

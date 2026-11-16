@@ -8,10 +8,11 @@ Every release publishes:
 
 | Asset | Purpose |
 |---|---|
-| Platform installers/archives | Signed application artifacts |
-| `update.json` | Version, channel, compatibility and artifact hashes |
-| `SHA256SUMS` | Human-readable artifact digests |
-| `sbom.cdx.json` | CycloneDX dependency inventory |
+| Platform installers/archives | Beta application artifacts; unsigned Windows and ad-hoc-signed macOS until credentials exist |
+| `update.json` | Version, channel, compatibility, artifact hashes and Ed25519 signature |
+| `SHA256SUMS` | Aggregate artifact digests |
+| `SHA256SUMS-<platform>` | Per-platform digests |
+| `sbom-<platform>.cdx.json` / `sbom-aggregate.cdx.json` | CycloneDX dependency inventory |
 
 ## Manifest
 
@@ -58,7 +59,16 @@ Rules:
 RISARMS-UI has manifest verification, artifact download verification, a
 Settings check action, platform/architecture-aware installer selection, a
 private download staging directory and an explicit OS-installer handoff. There
-is no unattended install/rollback or post-install health verification. The
-production public key and fingerprint are still required before a release build
-can be produced without manual key injection. CORE/RESCS/ASIS/ASCS/TIVISS remain
-on their existing release process until their updater clients are migrated.
+is no unattended install/rollback or post-install health verification.
+`packaging/validate_release.py` validates `vX.Y.Z` and `vX.Y.Z-beta.N` tags;
+beta manifests preserve the suffix and compare correctly in the updater.
+Release workflows create **draft** GitHub releases and require both
+`UPDATE_PUBLIC_KEY` (Actions variable or secret) and `UPDATE_SIGNING_KEY`
+(secret) to produce a signed manifest. They refuse to publish unsigned manifests.
+
+The production Ed25519 public-key fingerprint is still required before a
+public signed update release. A temporary local test key is acceptable only for
+local tests and must stay out of Git. CORE/RESCS/ASIS/ASCS/TIVISS remain on
+their existing release process until their updater clients are migrated. CORE
+0.6.0 server releases ship source archives and do **not** implement signed
+server updates.

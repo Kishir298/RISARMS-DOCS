@@ -85,7 +85,7 @@ sequenceDiagram
 ### C.O.R.E. ↔ R.E.S.C.S.
 
 - **Implemented (software):** R.E.S.C.S. ships a versioned `/api/v1` API with enforced `X-API-Key` auth, signed CORE owner scope (`X-RESCS-Signature`), a `/srv/core` mount guard, and a machine-readable contract (`GET /api/v1/contract`, error-code table, reserved namespaces). C.O.R.E. ships `InMemoryRescsAdapter`, `FileRescsAdapter` and `HttpRescsAdapter` with fallback and health, and persists device identity/runtime history through this boundary. A real CORE↔RESCS loopback script (`scripts/validate_core_loopback.py`) passes.
-- **Remaining:** deployed cross-host interop (CORE ↔ RESCS over a real network against live PostgreSQL/Supabase) and physical Pi/ARM64 validation have not been exercised; that is external validation, not missing code.
+- **Remaining:** deployed cross-host interop (CORE ↔ RESCS over a real network against live PostgreSQL/Supabase) and the booted Void/HP 14 deployment have not been exercised; that is external validation, not missing code.
 - Contract: [Integration Contracts](../interfaces/integration-contracts.md) and `RESCS/docs/core-integration-contract.md`.
 
 ### C.O.R.E. ↔ A.S.I.S.

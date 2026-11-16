@@ -8,7 +8,7 @@
 - **Each system versions independently** — C.O.R.E. 0.3.z, R.E.S.C.S. 0.3.z, A.S.I.S. 0.1.z, A.S.C.S. 0.3.z can advance on their own cadence.
 - **The ecosystem has no single version number**; a release refers to a matrix of component versions.
 - **Breaking changes** to a [contract](../interfaces/communication.md) bump MAJOR (or the contract's own version) and require a [Decision Record](../decisions/README.md).
-- C.O.R.E. additionally maintains an explicit **protocol-version negotiation** layer (`core/version.py`): supported versions `0.2.0`/`0.2.1`/`0.3.0`/`0.4.0`, with legacy clients kept working by design.
+- C.O.R.E. additionally maintains an explicit **protocol-version negotiation** layer (`core/version.py`): package negotiation supports `0.2.0` through `0.6.0`; the wire protocol remains `0.4.0` with `0.3.0`, and legacy clients are kept working by design.
 
 ## 2. Where versions must agree (per system)
 
@@ -21,17 +21,17 @@ A version is only coherent when these agree:
 | A.S.I.S. | `pyproject.toml`, `asis/__init__.py`, config settings, docs |
 | A.S.C.S. | `pyproject.toml`, package docstring/docs |
 
-## 3. Current version matrix (verified 2026-11-09)
+## 3. Current version matrix (verified 2026-11-16)
 
 | System | Version | Consistency |
 |---|---|---|
-| **C.O.R.E. package (CORE-HOST)** | `0.5.0` | Consistent in `pyproject.toml`/wheels; `core/version.py` and wire protocol remain `0.4.0` intentionally |
-| **CORE-CLIENT** | `0.5.0` | Consistent in `pyproject.toml`; protocol remains `0.4.0` |
+| **C.O.R.E. package (CORE-HOST)** | `0.6.0` | Consistent in `pyproject.toml`, `core/version.py`, `compatibility.json` and wheels; wire protocol remains `0.4.0` intentionally |
+| **CORE-CLIENT** | `0.6.0` | Consistent in `pyproject.toml` and `compatibility.json`; protocol remains `0.4.0` |
 | **R.E.S.C.S.** | `0.4.0` | Consistent (pyproject + CHANGELOG + package) |
 | **A.S.I.S.** | `0.1.0` | Consistent for `asis` package; Pi policy/worker update |
 | **A.S.C.S.** | `0.3.0` | Consistent; distribution name `coding-agent` vs package `agent` vs command `risa` |
 | **T.I.V.I.S.S.** | `0.2.0` | Local clone at `TIVISS/` (CLI, export/import, logging, voice, core_tcp/rescs_http offline-tested) |
-| **Portals** | `v0.5.0` | Host/client portals ship in `CORE/` |
+| **Portals** | `v0.6.0` | Browser portal ships in `CORE/`; desktop portal ships as RISARMS-ui `0.6.0` |
 | **Radar** | — | Code-free |
 
 ## 4. Known, accepted quirks (tracked)

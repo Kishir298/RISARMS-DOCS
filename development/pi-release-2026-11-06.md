@@ -1,8 +1,14 @@
 # Pi release integration — 2026-11-06
 
+> [!WARNING]
+> **Historical.** This page records the applied Pi release set and its original
+> evidence. CORE 0.6.0 targets Void Linux x86_64 glibc with runit on the HP 14;
+> Pi/ARM64 is no longer a CORE server release target. Do not rewrite the test
+> counts below. See [Void Linux host](void-linux.md) for the current target.
+
 > [!NOTE]
 > This page records the applied Pi release set, the local verification results,
-> and the limitations that remain. It is the authoritative release note for the
+> and the limitations that remain. It was the authoritative release note for the
 > 2026-11-06 integration.
 
 ## 1. Applied releases

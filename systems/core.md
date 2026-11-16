@@ -1,6 +1,6 @@
 # C.O.R.E. — Communication, Organization and Resource Engine
 
-> [!NOTE] **Status:** v0.5.0 **IMPLEMENTED** (combined `CORE-HOST` + `CORE-CLIENT` project, all intended software components covered by automated tests). Package version is 0.5.0; wire/protocol compatibility remains 0.4.0. Physical Pi/ARM64, Windows ↔ Mac LAN, and extended 24/7 operational validation are **NOT YET PERFORMED** — they are deployment-validation tasks, not missing software. Compatibility with older clients is preserved by design.
+> [!NOTE] **Status:** v0.6.0 **IMPLEMENTED** (beta source; combined `CORE-HOST` + `CORE-CLIENT` project). Package version is 0.6.0; wire/protocol compatibility remains 0.4.0. The server release targets **Void Linux x86_64 glibc with runit** only. Booted Void install, reboot, upgrade/rollback, storage failure, backup restore, physical HP 14, Windows ↔ Mac LAN, and extended 24/7 operational validation are **NOT YET PERFORMED** — deployment-validation tasks, not missing server software. Compatibility with older clients is preserved by design.
 
 ## 1. What C.O.R.E. is
 
@@ -8,7 +8,7 @@ C.O.R.E. is the **central management and control engine** of R.I.S.A.R.M.S. It i
 
 **It is NOT the primary AI.** Intelligence belongs to A.S.I.S. and T.I.V.I.S.S. C.O.R.E. provides the substrate they operate on.
 
-**It runs on the control host** (Void Linux x86_64 on the HP 14, or Raspberry Pi/ARM64, which may co-host R.E.S.C.S.) and serves connected R.I.S.A.R.M.S. devices (Macs, phones, tablets, watches). Windows and macOS remain supported client/release targets.
+**It runs on the control host** — Void Linux x86_64 glibc with runit on the HP 14, co-hosting R.E.S.C.S. — and serves connected R.I.S.A.R.M.S. devices (Macs, phones, tablets, watches). Raspberry Pi/ARM64 and systemd server deployments are historical for this release. Windows, macOS and Linux x86_64 remain supported through the separate RISARMS-ui desktop client.
 
 ### Responsibilities
 
@@ -40,7 +40,7 @@ C.O.R.E. is the **central management and control engine** of R.I.S.A.R.M.S. It i
 - Runtime requirements: `PyYAML`; optional monitoring extra adds `prometheus-client` + `fastapi`
 - CLI entry point: `core-host` (or `python -m core`); client entry point: `core-client`
 - Application entry point: `core.application.app.CoreApplication`
-- **Package version `0.5.0`** in `pyproject.toml`; `core/version.py` and the wire protocol intentionally remain `0.4.0` for compatibility
+- **Package version `0.6.0`** in `pyproject.toml`; `core/version.py` reports `0.6.0`, while the wire protocol intentionally remains `0.4.0` for compatibility
 
 ## 3. Version history — the operating distinction
 
@@ -50,12 +50,12 @@ C.O.R.E. is the **central management and control engine** of R.I.S.A.R.M.S. It i
 | **v0.2** | Made the architecture operational: TCP transport, routing-to-service execution, runtime orchestration, events/health integration, configuration-driven runtime, security integration, R.E.S.C.S. adapter groundwork, real CLI | **IMPLEMENTED** (`0.2.0` → `0.2.1`); clients remain supported via protocol negotiation |
 | **v0.3** | External-device platform: TLS transport, token authentication, device registration/persistence, device discovery and device-to-device routing, capability-driven agent scheduling, HTTP R.E.S.C.S. adapter, data distribution, provisioning CLI/client | **IMPLEMENTED** (`0.3.0`); physical LAN validation pending |
 | **v0.4** | Localhost host/client portals; capability router/model profiles; device-scoped R.E.S.C.S. proxy | **IMPLEMENTED** (`0.4.0`) |
-| **v0.5** | Combined host/client project; Pi service integration; signed R.E.S.C.S. owner scope; `/api/ai-status`; tool-free `CORE_SAFE_CHAT` worker | **IMPLEMENTED** (`0.5.0`); physical Pi/ARM64 validation pending |
-| **v0.6** | Per-profile service grants; session-bound registered owner devices; queued owner actions; Caddy/runit Void deployment | **IMPLEMENTED**; HP 14 Void validation pending |
+| **v0.5** | Combined host/client project; Pi service integration; signed R.E.S.C.S. owner scope; `/api/ai-status`; tool-free `CORE_SAFE_CHAT` worker | **IMPLEMENTED** (`0.5.0`, historical); physical Pi/ARM64 validation pending |
+| **v0.6** | Void Linux x86_64 server release; per-profile service grants; session-bound registered owner devices; queued owner actions; versioned venvs; storage guard; runit/Caddy/nftables; backup/restore, upgrade/rollback, diagnostics | **IMPLEMENTED (beta source, `0.6.0`)**; HP 14 Void runtime validation pending |
 
 v0.3.0 is not "v0.2 finished": it adds an external-device platform on top of the v0.2 operational core. Version negotiation (`core/version.py`) keeps older clients working; deprecated APIs are scheduled for removal only in a future breaking version.
 
-## 4. Subsystem structure (v0.5.0)
+## 4. Subsystem structure (v0.6.0)
 
 ```text
 core/
@@ -139,10 +139,10 @@ These are deployment-validation items, not missing software:
 
 ## 5. Test coverage
 
-- **74 host test files; 896 passed / 4 skipped on macOS Python 3.14 (2026-11-15).** Client: **20 test files, 225 passed / 1 skipped**. Public-origin proxy checks ignore `X-Forwarded-Host`; partial control frames are covered across read timeouts.
+- **75 host test files; 911 passed / 4 skipped on macOS Python 3.14 (2026-11-16).** Client: **20 test files, 225 passed / 1 skipped**. Void deployment assets add static tests for the installer, runit scripts, storage guard, backup/restore, upgrade/rollback, diagnostics, manifest and workflow. Public-origin proxy checks ignore `X-Forwarded-Host`; partial control frames are covered across read timeouts.
 - Coverage includes application orchestration, communication/TLS/framing, protocol negotiation, authentication, device registration/persistence/reconnect, discovery, presence, routing, services, resources, organization/reconciliation, R.E.S.C.S. adapters, scheduler, data distribution, health, events, integration behavior, Pi policy, and legacy compatibility.
 
-## 5b. Web portals (v0.5.0)
+## 5b. Web portals (v0.6.0)
 
 Localhost-only presentation planes (no new authorities):
 
@@ -195,19 +195,23 @@ The 13-phase v0.2 build order was completed; the phase definitions (objectives, 
 | Physical LAN validation | **NOT YET PERFORMED** |
 | 24/7 operational validation | **NOT YET PERFORMED** |
 
-### 6.3 v0.5.0 capability summary
+### 6.3 v0.6.0 capability summary
 
 | Capability | Status |
 |---|---|
 | Combined `CORE-HOST` + `CORE-CLIENT` repository and root CI | IMPLEMENTED |
-| Pi deployment scripts, wheels, and validation evidence | IMPLEMENTED (syntax/entry-point checks only) |
+| Void x86_64 installer, versioned venvs, storage guard, Caddy/nftables, runit services and svlogd rotation | IMPLEMENTED (static tests only; booted Void pending) |
+| Backup/restore, upgrade/rollback, diagnostics and install-state snapshots | IMPLEMENTED (static tests only; runtime drill pending) |
+| Historical Pi deployment scripts, wheels, and validation evidence | RETAINED (not a 0.6.0 server target) |
 | Signed R.E.S.C.S. owner scope (`X-RESCS-Signature`) | IMPLEMENTED |
 | Per-profile service grants (`GET /api/service-grants`, `PUT/DELETE /api/profiles/{id}/service-grants/{service}`) | IMPLEMENTED |
 | Registered owner-device binding for admin unlock | IMPLEMENTED |
 | Durable owner-action queue with owner-device + password approval; crash-safe two-phase apply | IMPLEMENTED |
 | `/api/ai-status` health surface | IMPLEMENTED |
 | Tool-free `CORE_SAFE_CHAT` worker (account-isolated Ollama) | IMPLEMENTED |
-| Physical Pi/ARM64, cgroup v2, systemd boot, SSD removal | **NOT YET PERFORMED** |
+| Booted Void install, reboot, runit start/stop, Caddy trust, nftables load | **NOT YET PERFORMED** |
+| Upgrade, rollback, backup/restore and storage-failure drills on HP | **NOT YET PERFORMED** |
+| Physical HP firmware, thermal and 2 x 8 GB DDR4-2666 upgrade (planned, not installed) | **NOT YET PERFORMED** |
 
 ## 7. Related documentation
 

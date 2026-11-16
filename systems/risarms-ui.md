@@ -1,9 +1,13 @@
 # RISARMS-UI — Unified Desktop Application
 
-> [!NOTE] **Status:** v0.6.0 **IMPLEMENTED** (source and automated tests: 261
-> passing). Signed installers, physical Windows/Linux runs and long-duration
-> desktop validation are **NOT YET PERFORMED**. Builds are unsigned by default.
-> Installer generation is implemented and unverified — see
+> [!NOTE] **Status:** v0.6.0 **IMPLEMENTED** (source and automated tests: 286
+> passing). Target platforms are macOS Intel/Apple Silicon, Windows x86_64 and
+> Linux x86_64, with a Void Linux glibc smoke test pending. Beta builds are
+> **unsigned Windows** and **ad-hoc-signed, unnotarized macOS**; signed
+> installers, public signed auto-updates, physical Windows/Linux/Apple Silicon
+> runs and long-duration desktop validation are **NOT YET PERFORMED** or gated.
+> iOS TestFlight and Android beta distribution are future work. Installer
+> generation is implemented and unverified — see
 > [Installer Creation](../development/installers.md).
 
 ## 1. Purpose
@@ -21,7 +25,7 @@ contracts.
 
 - **Framework:** Python `>=3.10` with Tkinter/ttk (no Qt, Electron or browser
   runtime).
-- **Packaging:** PyInstaller one-directory bundles for macOS, Windows and Linux.
+- **Packaging:** PyInstaller one-directory bundles and native installers for macOS Intel/Apple Silicon, Windows x86_64 and Linux x86_64. iOS and Android are not implemented.
 - **Dependencies:** `keyring` (OS-backed device credentials) and `websockets`
   (control channel). Local Ollama chat and approval brokering use the Python
   standard library.
@@ -117,16 +121,20 @@ starting two synchronization workers over the same queues.
 
 ## 7. Verification
 
-- UI suite: **261 passed** (macOS Python 3.14 venv), including
-  `tests/test_reconnection.py`, `tests/test_messaging.py`,
-  `tests/test_desktop_doctor.py` and a real two-client messaging test in
+- UI suite: **286 passed** (macOS Python 3.14 venv), including release-tag
+  parsing, beta-aware update ordering, artifact architecture normalization,
+  manifest/SBOM merging, `tests/test_reconnection.py`, `tests/test_messaging.py`,
+  `tests/test_desktop_doctor.py`, and a real two-client messaging test in
   `tests/integration/test_core_messaging_e2e.py` that launches CORE-HOST and
   receives `message.received` over WSS.
-- CORE-HOST suite: **896 passed / 4 skipped**; CORE-CLIENT: **225 passed / 1 skipped**.
+- CORE-HOST suite: **911 passed / 4 skipped**; CORE-CLIENT: **225 passed / 1 skipped**.
 - RESCS: **318 passed / 4 skipped**; ASCS: **996 passed / 16 skipped**;
   TIVISS: **299 passed**.
-- Physical Windows/Linux desktop runs, signed/notarized artifacts, real
-  installers, LAN and 24/7 operation remain **NOT YET PERFORMED**.
+- Release workflow targets `macos-15-intel`, `macos-15`, `windows-2022` and
+  `ubuntu-24.04`; the older `macos-13`/`macos-14` labels are retired.
+- Physical Apple Silicon, Windows, Linux and Void desktop runs,
+  signed/notarized artifacts, real installers, public signed auto-updates, LAN
+  and 24/7 operation remain **NOT YET PERFORMED** or gated.
 
 ## 8. Non-goals
 

@@ -22,11 +22,11 @@ Use **Void Linux x86_64 glibc** as the HP 14 host baseline.
   under `/var/log/risarms`, and the service account is `risarms`.
 - Windows and macOS remain supported release/client targets, not the server
   baseline.
-- Raspberry Pi/ARM64 deployment remains supported separately.
+- Raspberry Pi/ARM64 deployment assets remain in the repository but are **historical** for CORE 0.6.0; Pi is not a server release target.
 
 ## Consequences
 
 - The Void installer is documented in `RISARMS-DOCS/development/void-linux.md`.
 - Physical HP 14 validation is still required.
 - Deployment scripts must not assume systemd; runit is the default on this host.
-- Existing Pi/systemd deployment assets remain valid for Pi hosts.
+- Existing Pi/systemd deployment assets are retained for historical Pi hosts but are not shipped or validated as part of CORE 0.6.0.

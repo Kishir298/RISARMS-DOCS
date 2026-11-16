@@ -59,7 +59,7 @@ The arrows are explained precisely in [System Interactions](architecture/system-
 
 ## 4. Each subsystem at a glance
 
-- **C.O.R.E.** is the central control engine. It owns communication, message protocols, routing, organization, resources, services, runtime/lifecycle, events, dependencies, configuration, health, logging and security infrastructure. It is **not** the primary AI. It runs on the Void Linux HP 14, Windows laptops and Linux/Pi deployments, and serves external devices. The canonical HP 14 target is documented in [Void Linux host](development/void-linux.md). → [systems/core.md](systems/core.md)
+- **C.O.R.E.** is the central control engine. It owns communication, message protocols, routing, organization, resources, services, runtime/lifecycle, events, dependencies, configuration, health, logging and security infrastructure. It is **not** the primary AI. CORE 0.6.0 server releases target **Void Linux x86_64 glibc with runit on the HP 14 only**; Windows, macOS, Raspberry Pi/ARM64 and systemd server deployments are historical or unsupported for this release. RISARMS-ui remains the supported desktop client. The canonical target is documented in [Void Linux host](development/void-linux.md). → [systems/core.md](systems/core.md)
 - **R.E.S.C.S.** is the cloud/data storage system: persistent records, file/object storage, retrieval, lifecycle/governance and cloud-backed data. It is an **independent project** (`RESCS/` next to `CORE/`); `CORE/services/RESCS/` is a release mirror. → [systems/rescs.md](systems/rescs.md)
 - **A.S.I.S.** is the primary AI/intelligence layer: natural-language understanding, reasoning, response generation and voice. It is an **independent project** (`ASIS/` next to `CORE/`). It uses C.O.R.E. (and storage through C.O.R.E.) rather than owning C.O.R.E. responsibilities. → [systems/asis.md](systems/asis.md)
 - **T.I.V.I.S.S.** is a separate AI agent with its own identity, configuration, memory, permissions and ownership model — intended to eventually be handed over to another person. It must **not** become a renamed copy of A.S.I.S. Its v0.2.0 foundation is cloned locally at `TIVISS/` and remains foundation-only (no live traffic, no real handover). → [systems/tiviss.md](systems/tiviss.md)
@@ -73,8 +73,8 @@ The arrows are explained precisely in [System Interactions](architecture/system-
 
 | System | Status | Notes |
 |---|---|---|
-| **C.O.R.E.** | v0.5.0 **IMPLEMENTED** | Combined `CORE-HOST` + `CORE-CLIENT` project with Pi service integration, signed R.E.S.C.S. owner scope, `/api/ai-status`, desktop device credentials, owner-device-bound administration, a durable owner-action queue, session renewal, WSS tickets and job idempotency. Verified: 896 host tests passed / 4 skipped and 225 client tests passed / 1 skipped (macOS Python 3.14). Physical Pi/ARM64, Windows ↔ Mac LAN, and 24/7 operational validation remain **NOT YET PERFORMED**. |
-| **RISARMS-UI** | v0.6.0 **IMPLEMENTED** (source) | Canonical Tkinter desktop app with local profiles, offline SQLite store, keychain device credentials, explicit record/file sync, ASIS/ASCS/TIVISS workspaces, owner administration, loopback local-action approvals, signed update checks, verified update download and PyInstaller build/CI configuration. Verified: **261 UI tests passed**; GUI launch, physical Windows/Linux runs and signed installers remain **NOT YET PERFORMED**. |
+| **C.O.R.E.** | v0.6.0 **IMPLEMENTED** (beta source) | Void Linux x86_64 glibc/runit server release for the HP 14, with versioned virtual environments, storage guard, Caddy/nftables, svlogd rotation, backup/restore, upgrade/rollback and diagnostics. Protocol remains 0.4.0. Verified: 911 host tests passed / 4 skipped and 225 client tests passed / 1 skipped (macOS Python 3.14). Void install/reboot/rollback/storage-failure and physical HP validation remain **NOT YET PERFORMED**. Windows, macOS, Pi/ARM64 and systemd server deployments are historical. |
+| **RISARMS-UI** | v0.6.0 **IMPLEMENTED** (source) | Canonical Tkinter desktop app with local profiles, offline SQLite store, keychain device credentials, explicit record/file sync, ASIS/ASCS/TIVISS workspaces, owner administration, loopback local-action approvals, signed update checks, verified update download, PyInstaller/native installer packaging and draft-only release validation. Verified: **286 UI tests passed**. Physical Apple Silicon, Windows, Linux and Void smoke runs, signed/notarized installers and public signed auto-updates remain **NOT YET PERFORMED** or gated. iOS TestFlight and Android beta are future work. |
 | **R.E.S.C.S.** | v0.4.0 **IMPLEMENTED** | Pi storage foundation: signed CORE owner scope (`X-RESCS-Signature`), required `/srv/core` mount guard, systemd/installer, real CORE loopback validation. Verified: 318 passed / 4 skipped. Live PostgreSQL/Supabase, real S3, deployed C.O.R.E. ↔ R.E.S.C.S. interop, and real Pi/ARM64 remain external validation. The local 0.3.1 line is archived separately; namespace/key uniqueness is unchanged. |
 | **A.S.I.S.** | **IN DEVELOPMENT** | Rebuilt `asis` package with Pi policy/worker/handoff support. Verified: 948 passed / 24 skipped (macOS Python 3.12). **ASCS integration IMPLEMENTED** via `ascs_integration` toolset (subprocess + API modes), `ascs_handover`, `ascs_status` — direct local-tool exception documented in ADR 0007; C.O.R.E.-mediated path is FUTURE. C.O.R.E. uplink optional; R.E.S.C.S. future. |
 | **T.I.V.I.S.S.** | **IN DEVELOPMENT** (v0.2.0) | v0.2.0 capabilities: **OllamaProvider** (real Ollama HTTP API with streaming, tool calling, thinking tag stripping), **SQLiteMemoryStore** (dual DB: `conversation_logs.db` + `semantic_memory.db`), Web/Calculator/Translation/Voice config mirroring ASIS. Foundation (identity, ownership, runtime, memory, permissions, handover). Verified: 299 passed. Local clone at `TIVISS/`; real handover intentionally not implemented. |
@@ -85,7 +85,7 @@ The authoritative per-system detail is in [`systems/`](systems/). **Nothing in t
 
 ## 6. C.O.R.E. roadmap state
 
-C.O.R.E. v0.1 established the architecture, and v0.2 made it operational. **v0.3.0** added the external-device platform (TLS transport, token authentication, device lifecycle/persistence, agent scheduling, HTTP R.E.S.C.S. adapter, data distribution, provisioning); **v0.4.0** added the localhost host/client portals; **v0.5.0** combines the host and client into `CORE/`, adds Pi service integration, signed R.E.S.C.S. owner scope, `/api/ai-status`, and a tool-free safe-chat worker. The desktop control channel adds scoped device credentials, session renewal, single-use WSS tickets and idempotent job creation. Package version is 0.5.0; wire protocol compatibility remains 0.4.0. Remaining work is deployment validation (physical Pi/ARM64, LAN, 24/7 operation), not software. See [systems/core.md](systems/core.md#6-roadmap), [desktop application](development/desktop-app.md) and the [Pi release note](development/pi-release-2026-11-06.md).
+C.O.R.E. v0.1 established the architecture, and v0.2 made it operational. **v0.3.0** added the external-device platform; **v0.4.0** added the localhost host/client portals; **v0.5.0** combined the host/client project and added Pi service integration. **v0.6.0** is the Void Linux x86_64 server release: versioned venvs, storage guard, runit/Caddy/nftables deployment, svlogd rotation, backup/restore, upgrade/rollback, diagnostics, and the desktop control channel. Package version is `0.6.0`; wire protocol remains `0.4.0`. Remaining work is hardware/deployment validation (booted Void on the HP, reboot, rollback, storage failure, backup restore, LAN and 24/7 operation), not server software. See [systems/core.md](systems/core.md#6-roadmap), [Void Linux host](development/void-linux.md), [desktop application](development/desktop-app.md) and the historical [Pi release note](development/pi-release-2026-11-06.md).
 
 ## 7. Repository structure
 
@@ -135,9 +135,10 @@ RISARMS-DOCS/
 │   ├── versioning.md
 │   ├── testing.md
 │   ├── contribution.md
-│   ├── hw-gated-validation.md
 │   ├── desktop-app.md
-│   └── pi-release-2026-11-06.md
+│   ├── void-linux.md
+│   ├── pi-release-2026-11-06.md
+│   └── hw-gated-validation.md
 │
 └── decisions/
     ├── README.md
@@ -161,7 +162,7 @@ RISARMS/
 │   ├── CORE-HOST/  <- server/runtime, package `core`
 │   ├── CORE-CLIENT/<- stdlib-only external-device client, package `client`
 │   ├── services/   <- ASIS, ASCS, RESCS, TIVISS service copies
-│   ├── deployment/ <- Pi deployment scripts/config
+│   ├── deployment/ <- Void installer/services (Pi assets retained historically)
 │   ├── install/    <- release wheels (core, core-client, rescs)
 │   └── validation/ <- release evidence
 ├── RESCS/          <- https://github.com/Kishir298/RESCS (0.4.0)

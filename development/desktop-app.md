@@ -1,8 +1,10 @@
 # Desktop Application Build and Release
 
-> [!NOTE] **Status:** Build configuration and CI workflow are IMPLEMENTED.
-> Artifacts are unsigned unless signing credentials are supplied. No signed
-> release has been produced from this workspace.
+> [!NOTE] **Status:** Build configuration and draft-only CI workflow are
+> IMPLEMENTED. Beta artifacts are unsigned on Windows and ad-hoc-signed,
+> unnotarized on macOS unless signing credentials are supplied. No signed or
+> public release has been produced from this workspace. Public distribution and
+> signed auto-updates remain gated.
 
 ## 1. Repository layout
 
@@ -43,11 +45,12 @@ Outputs:
 
 | Platform | Artifact |
 |---|---|
-| macOS | `RISARMS-Portal-0.6.0-macos-<arch>.zip` containing `RISARMS Portal.app` |
-| Windows | `RISARMS-Portal-0.6.0-windows-<arch>.zip` with `risarms-ui.exe` |
-| Linux | `RISARMS-Portal-0.6.0-linux-<arch>.tar.gz` |
+| macOS | `RISARMS-Portal-0.6.0-macos-{x86_64,arm64}.zip` containing `RISARMS Portal.app`, plus `.dmg` |
+| Windows | `RISARMS-Portal-0.6.0-windows-x86_64.zip` with `risarms-ui.exe`, plus `.exe`/`.msi` installers |
+| Linux | `RISARMS-Portal-0.6.0-linux-x86_64.tar.gz`, plus `.deb`/`.AppImage` |
 
-`dist/SHA256SUMS` records the archive digest.
+`dist/SHA256SUMS-<platform>` records the platform archive and installer digests.
+`dist/sbom-<platform>.cdx.json` records the platform dependency inventory.
 
 ### Signing hooks (optional)
 
@@ -64,23 +67,35 @@ Never commit certificates, private keys, notarization profiles or passwords.
 ## 4. CI
 
 `.github/workflows/desktop-release.yml` runs on manual dispatch and `v*` tags.
-It checks out `Kishir298/CORE-HOST` as a sibling for the `core-client`
-dependency, runs lint/tests/doctor, builds unsigned artifacts on macOS 13,
-Windows and Ubuntu 22.04, and uploads them with checksums.
+It validates `v0.6.0` / `v0.6.0-beta.N` against `pyproject.toml` and
+`risarms_ui.__version__`, runs lint/tests, verifies Tk, embeds
+`UPDATE_PUBLIC_KEY`, and builds on `macos-15-intel`, `macos-15`,
+`windows-2022` and `ubuntu-24.04`. It uploads unique per-platform artifacts,
+checksums and SBOMs.
 
-The workflow uses `main` for the CORE dependency by default. Release from a
-matching CORE branch/tag only after the desktop control endpoints are merged.
+For tags, a release job verifies checksums, merges SBOMs, requires
+`UPDATE_SIGNING_KEY` to sign `update.json`, writes aggregate `SHA256SUMS`, and
+creates a **draft** GitHub release. It never publishes automatically and
+refuses to modify an existing release. Beta releases are marked prerelease and
+labeled unsigned. `workflow_dispatch` builds artifacts only.
+
+The old `macos-13`/`macos-14` labels are retired. A first real CI draft run,
+native installers, signing and notarization remain pending.
 
 ## 5. Validation status
 
 | Item | Status |
 |---|---|
-| Unit/contract tests | IMPLEMENTED |
+| Unit/contract tests | IMPLEMENTED (286 passed) |
 | Tk GUI launch on macOS | Blocked in the authoring environment until Tk is installed |
+| Physical Apple Silicon run | NOT YET PERFORMED |
 | Physical Windows run | NOT YET PERFORMED |
-| Physical Linux run | NOT YET PERFORMED |
+| Physical Linux / Void glibc smoke run | NOT YET PERFORMED |
+| Native installers from CI | NOT YET PERFORMED |
 | Signed/notarized artifacts | NOT YET PERFORMED (hooks only) |
+| Public signed auto-updates | GATED (no production key) |
 | LAN reconnect/revocation testing | NOT YET PERFORMED on physical devices |
+| iOS TestFlight / Android beta | FUTURE WORK |
 
 ## Related
 

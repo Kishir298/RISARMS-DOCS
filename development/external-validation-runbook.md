@@ -21,52 +21,44 @@ prerequisites are met.
 
 | # | Validation | Category | Blockers | Est. Duration |
 |---|------------|----------|----------|---------------|
-| 1 | Physical LAN (CORE-HOST ↔ CORE-CLIENT) | Network | Windows host on LAN, TLS certs | 2-4 hours |
+| 1 | Physical LAN (Void CORE ↔ RISARMS-ui) | Network | Installed Void host on LAN, Caddy trust | 2-4 hours |
 | 2 | Live PostgreSQL/Supabase (RESCS) | Cloud | DB instance + credentials | 30 min |
 | 3 | Live S3 (RESCS) | Cloud | S3 bucket + credentials | 30 min |
 | 4 | 24/7 Endurance (RESCS) | Hardware | Dedicated non-primary machine | 24 hours |
 | 5 | Live Voice + Model (ASIS/ASCS) | Hardware | Mic/speaker, GPU, 32GB+ RAM | 2-4 hours |
 | 6 | TIVISS Upstream Verification | Network | Fresh clone of upstream | 10 min |
-| 7 | Physical Pi/ARM64 (CORE + RESCS) | Hardware | Raspberry Pi, 64-bit OS, SSD at `/srv/core` | 2-4 hours |
+| 7 | Historical physical Pi/ARM64 (CORE + RESCS) | Hardware | Not a CORE 0.6.0 target | 2-4 hours |
 
 ---
 
-## 1. Physical LAN — CORE-HOST ↔ CORE-CLIENT
+## 1. Physical LAN — Void CORE ↔ RISARMS-ui
 
 ### Prerequisites
-- Windows host + Mac/Linux client on same LAN
-- Firewall rule `C.O.R.E. TCP 5000` verified per `CORE/CORE-HOST/docs/windows-firewall.md`
-- Fresh TLS cert: private `core.key` (host-only), public `core.crt` copied to client
-- CORE-HOST + CORE-CLIENT `--help` smoke test passes
+- HP 14 running Void Linux, installed per [Void Linux host](void-linux.md), Caddy trusted
+- RISARMS-ui on a separate LAN device
+- Only TCP `443` exposed publicly; CORE and RESCS remain loopback-bound
 
 ### Procedure
 ```bash
-# On Windows host (CORE-HOST)
-cd CORE/CORE-HOST
-venv\Scripts\python -m core --host 0.0.0.0 --port 5000 --tls --certfile core.crt --keyfile core.key
+# On the Void host
+sudo risarms-doctor
+curl https://core.local/api/health
 
-# On client machine (CORE-CLIENT)
-cd CORE/CORE-CLIENT
-.venv/bin/python -m client.core_device_client \
-  --host <WINDOWS_HOST_IP> \
-  --port 5000 \
-  --device-file ./device.json \
-  --ca-file core.crt \
-  --token <PROVISIONING_TOKEN>
+# On the desktop client
+# Sign in at https://core.local, then verify messaging, reconnect and revocation.
 ```
 
 ### Validation Checklist
-- [ ] Device registers successfully (`DEVICE_REGISTER_RESPONSE` with `registered: true`)
-- [ ] Device discovery works (`DEVICE_DISCOVER_RESPONSE` lists both devices)
-- [ ] Device-to-device relay works (sender gets no reply, receiver gets message)
-- [ ] Portal accessible at `http://<WINDOWS_HOST>:8765` from client browser
-- [ ] Portal mutations require `X-Core-Request` header (403 without)
-- [ ] Host log shows authenticated external device (token only visible with `log_external_tokens: true`)
-- [ ] Remembered device file (`~/.risarms-device.json`) contains NO session token/credential
-- [ ] Reconnect works: client reconnects with same provisioning token, new session token issued
+- [ ] Device registers and the owner device is bound
+- [ ] TLS trust works without disabling certificate verification
+- [ ] Human-to-human messaging works over WSS
+- [ ] Revocation takes effect on reconnect
+- [ ] Portal mutations require the CSRF header
+- [ ] No session token or private key is written to the desktop profile
+- [ ] Host logs contain no credentials or provisioning tokens
 
 ### Acceptance Criteria
-All checklist boxes ticked; host log shows authenticated external device; remembered-device file contains NO session token.
+All checklist boxes ticked; traffic works over the LAN with certificate verification enabled; no secrets in logs.
 
 ### Do NOT
 - Wait 24h for lease expiry (fake-clock tests cover it)
@@ -226,7 +218,7 @@ Each repo uses pytest markers to gate live tests:
 ## Running All External Validations (When Infrastructure Ready)
 
 ```bash
-# 1. LAN (run on Windows host + client machine)
+# 1. LAN (run on the Void host + RISARMS-ui desktop client)
 # 2. PostgreSQL
 cd RESCS && RESCS_INTEGRATION_DATABASE_URL=... .venv/bin/python -m pytest tests/integration/test_postgres_compat.py -q
 
@@ -246,7 +238,11 @@ git clone https://github.com/Kishir298/TIVISS && cd TIVISS && python3 -m pytest 
 
 ---
 
-## 7. Physical Raspberry Pi / ARM64 — CORE + RESCS
+## 7. Historical physical Raspberry Pi / ARM64 — CORE + RESCS
+
+> [!WARNING]
+> Historical only. CORE 0.6.0 targets Void Linux x86_64 with runit; the current
+> path is [Void Linux host](void-linux.md).
 
 ### Prerequisites
 - Raspberry Pi 4/5 (ARM64), Raspberry Pi OS 64-bit, cgroup v2, systemd
