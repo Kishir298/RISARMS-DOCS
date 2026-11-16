@@ -139,7 +139,7 @@ These are deployment-validation items, not missing software:
 
 ## 5. Test coverage
 
-- **74 host test files; 895 passed / 4 skipped on macOS Python 3.14 (2026-11-15).** Client: **20 test files, 225 passed / 1 skipped**.
+- **74 host test files; 896 passed / 4 skipped on macOS Python 3.14 (2026-11-15).** Client: **20 test files, 225 passed / 1 skipped**. Public-origin proxy checks ignore `X-Forwarded-Host`; partial control frames are covered across read timeouts.
 - Coverage includes application orchestration, communication/TLS/framing, protocol negotiation, authentication, device registration/persistence/reconnect, discovery, presence, routing, services, resources, organization/reconciliation, R.E.S.C.S. adapters, scheduler, data distribution, health, events, integration behavior, Pi policy, and legacy compatibility.
 
 ## 5b. Web portals (v0.5.0)

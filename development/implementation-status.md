@@ -19,7 +19,7 @@
 
 | Capability | Status | Evidence / note |
 |---|---|---|
-| HTTPS API, sessions, CSRF, approvals | Complete / verified | 895 passed / 4 skipped |
+| HTTPS API, sessions, CSRF, approvals | Complete / verified | 896 passed / 4 skipped |
 | Device credentials, single-use WSS tickets, session renewal | Complete / verified | `test_desktop_control.py`, merged from the feature branch |
 | Revocation events | Complete / verified | Messaging + device revocation tests |
 | Job idempotency | Complete / verified | Existing contract tests |
@@ -88,11 +88,6 @@
 4. Run the ASIS suite through a PR because its CI workflow does not trigger on
    feature-branch pushes; local 948/24 is not a substitute for the matrix.
 5. Validate Ollama cancellation on Windows with a real model.
-6. Portal CSRF/Origin behavior against a proxied deployment.
-7. Exact model tag behavior across ASIS/ASCS/TIVISS.
-8. Partial frame receive timeout coverage.
-9. Legacy `client/` package still ships beside CORE-CLIENT's `client`
-   namespace; the desktop app no longer imports it, but the duplicate name
-   remains a packaging hazard for the legacy portal entry point.
-10. Burn down the pre-existing full-ruff debt in ASIS and TIVISS; changed-file
-    lint is clean today.
+6. Exact model tag behavior across ASIS/ASCS/TIVISS.
+7. Burn down the pre-existing full-ruff debt in ASIS and TIVISS; changed-file
+   lint is clean today.
