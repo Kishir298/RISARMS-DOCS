@@ -39,10 +39,12 @@ Every release publishes:
 
 Rules:
 
-- The production public key must be embedded in the client before release; until
-  it is provisioned, Settings accepts an operator-supplied key for testing. The
-  private key lives only in CI secrets (`UPDATE_SIGNING_KEY`, base64 raw Ed25519
-  seed).
+- `packaging/build.py` requires `UPDATE_PUBLIC_KEY` (base64 raw Ed25519 public
+  key), validates the 32-byte value and embeds it in the frozen application.
+  Packaged builds trust only that key. Until the production value is provisioned,
+  development runs may use `RISARMS_UPDATE_PUBLIC_KEY` or the Settings override.
+  The private key lives only in CI secrets (`UPDATE_SIGNING_KEY`, base64 raw
+  Ed25519 seed).
 - An unsigned, mis-signed, wrong-product or wrong-channel manifest is rejected.
 - URLs must be HTTPS; loopback HTTP is allowed only in tests.
 - Downloads are size-capped and verified against the signed SHA-256 before use.
@@ -54,8 +56,9 @@ Rules:
 ## Current state
 
 RISARMS-UI has manifest verification, artifact download verification, a
-Settings check action, a release publishing job and a CycloneDX SBOM build step.
-There is no install/apply UI yet. The production public key and fingerprint are
-still required before a release check can work without manual key entry.
-CORE/RESCS/ASIS/ASCS/TIVISS remain on their existing release process until their
-updater clients are migrated.
+Settings check action, platform/architecture-aware installer selection, a
+private download staging directory and an explicit OS-installer handoff. There
+is no unattended install/rollback or post-install health verification. The
+production public key and fingerprint are still required before a release build
+can be produced without manual key injection. CORE/RESCS/ASIS/ASCS/TIVISS remain
+on their existing release process until their updater clients are migrated.

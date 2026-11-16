@@ -16,7 +16,7 @@ algorithm for product updates.
 - Each release publishes `update.json`, `SHA256SUMS`, an SBOM and the artifacts.
 - `update.json` carries version, channel, artifact hashes, compatibility data and
   an Ed25519 signature over the canonical manifest bytes.
-- Production clients embed only the public key; the current UI accepts an operator-supplied key until that key is provisioned. The private key is never committed.
+- Production clients embed only the public key. Release packaging fails closed without `UPDATE_PUBLIC_KEY`; development runs may use an environment key or settings override until the production key is provisioned. The private key is never committed.
 - Check and install are separate actions; no silent auto-install.
 - CORE and RESCS updates require an owner device, explicit confirmation, a
   backup, service stop, health checks and rollback.
