@@ -47,7 +47,7 @@
 | Per-profile service grants and cached authorization | Complete / verified | `tests/test_authorization.py`; CORE remains authoritative; grants refresh on reconnect and every 60 seconds, and newly granted services become selectable |
 | Loopback local-action approvals | Complete / verified (logic) | `tests/test_approvals.py`; broker denies on timeout, close or transport error |
 | Informed owner-action review | Complete / verified (logic) | `tests/test_owner_actions_view.py`; full payload shown before password re-auth and confirmation |
-| Signed update check | Complete / verified (logic) | `tests/test_updates.py`; no install/apply UI yet |
+| Signed update check | Complete / verified (logic) | `tests/test_updates.py`; verified download and explicit OS-installer handoff; unattended install/rollback remains open |
 | Installer creation | Implemented / **unverified** | `packaging/installers.py`; local build refuses without Tk |
 | Signed/notarized artifacts | Blocked | No signing credentials |
 
