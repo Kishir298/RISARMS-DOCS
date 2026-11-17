@@ -1,7 +1,8 @@
 # Implementation Status
 
 > [!IMPORTANT] Status reflects evidence gathered on **2026-11-16** on the
-> macOS recovery host. "Verified" means a command was run in this session and
+> macOS recovery host; the repository sync and hygiene section was updated
+> **2026-11-17**. "Verified" means a command was run in this session and
 > its result is quoted. "Unverified" means the code exists but no run supports
 > the claim. Never read this table as a release approval.
 
@@ -74,7 +75,7 @@
 | Booted Void Linux / physical HP 14 | Blocked |
 | Raspberry Pi / ARM64 | Historical / not a CORE 0.6.0 target |
 | 24/7 operation | Blocked |
-| Branch CI on pushed commits | CORE, RISARMS-UI, ASCS, RESCS and TIVISS green (2026-11-15); CORE 0.6.0 and RISARMS-ui changes have not yet been pushed; ASIS CI only runs on `main`/PR; RISARMS-DOCS has no code CI |
+| Branch CI on pushed commits | CORE, RISARMS-UI, ASCS, RESCS and TIVISS green (2026-11-15); CORE 0.6.0 and RISARMS-ui branch tips are pushed and synced (2026-11-17; CI not re-checked); ASIS CI only runs on `main`/PR; RISARMS-DOCS has no code CI |
 | Documentation drift review | Partial — current pages refreshed; historical reports intentionally retain their original evidence |
 
 ## 5. Open items carried forward
@@ -97,3 +98,56 @@
 6. Exact model tag behavior across ASIS/ASCS/TIVISS.
 7. Burn down the pre-existing full-ruff debt in ASIS and TIVISS; changed-file
    lint is clean today.
+
+## 6. Repository sync and hygiene (2026-11-17)
+
+Fast-forward-only sync was run for every remote-backed repository; all were
+already at their remote branch tips. `Flavora/` was intentionally excluded, and
+`integration-tests/` has no configured remote, so it cannot be pulled.
+
+| Repository | Branch | HEAD |
+|---|---|---|
+| ASCS | `fix/doctor-offline-smoke` | `f6de931` |
+| ASIS | `fix/release-runner-labels` | `e627729` |
+| CORE | `feat/desktop-control-channel` | `f321b6c` |
+| RISARMS-DOCS | `docs/desktop-integration` | `4810f02` |
+| RESCS | `fix/cli-configuration-diagnostics` | `18bd8aa` |
+| TIVISS | `fix/ci-test-dependencies` | `074dd58` |
+| RISARMS-ui | `feat/risarms-ui-desktop` | `8e06179` |
+
+### 6.1 Ignore-rule hardening
+
+Safety/privacy gaps were fixed, along with a few generated-artifact hygiene
+rules; no tracked source was removed except Python bytecode caches in
+`integration-tests/`.
+
+| Repository | Change | Reason |
+|---|---|---|
+| `integration-tests/` | Added `.gitignore`; removed six tracked `__pycache__/*.pyc` files from the index | The repo had no ignore rules; caches were tracked |
+| `RESCS/` | Ignore `rescs_storage/`, `rescs_test_storage/`, `rescs_storage_test/`, `rescs.env` | Default runtime storage and CLI-generated config can hold user data or an API key |
+| `ASIS/` | Ignore SQLite sidecars and SSH private keys | Runtime DB journals and local keys must never be committed |
+| `ASCS/` | Ignore SSH private keys, `.mypy_cache/`, `.ipynb_checkpoints/`; stopped ignoring the tracked `uv.lock` | Removed a tracked-but-ignored inconsistency |
+| `TIVISS/` | Ignore `.ascs/` workspace state and SSH private keys | Integration state can contain workspace context |
+| `CORE/services/{RESCS,TIVISS,ASIS}/` | Applied the critical runtime-storage, database-journal and SSH-key fixes to the mirrored services | Keeps release mirrors consistent with their sources |
+| `RISARMS-ui/` | Un-ignored the tracked `packaging/risarms-ui.spec` | Removed a tracked-but-ignored inconsistency |
+| `RISARMS-DOCS/` | Ignore coverage, generated build outputs, and temporary/editor backup files | Prevent accidental commits of generated artifacts |
+
+Verification: `git check-ignore -v` matched every newly covered path and left
+`.env.example` / `requirements.txt` unignored. The documentation venv was synced
+with `RISARMS-DOCS/.venv/bin/python -m pip install -r RISARMS-DOCS/requirements.txt`;
+`pip check` reported "No broken requirements found." No new Python packages or
+modules were needed, so `requirements.txt` is unchanged.
+
+### 6.2 Residual items
+
+- `integration-tests/` has no remote; its hygiene changes can only be committed
+  locally (no push target).
+- `CORE-HOST/config/core.lan.example.yaml` is still blocked by
+  `CORE-HOST/.gitignore:38` even though the docs reference it. This is a
+  documentation/versioning gap, not a secret leak.
+- `RISARMS-ui` still tracks generated validation evidence
+  (`validation/command-tests.xml`, `source-sha256.json`,
+  `installed-command-smoke.json`) and a historical `install/*.whl`; these are
+  release evidence, not secrets, and need a policy decision before untracking.
+- `CORE/install/*.whl` release evidence is 0.5.0 while package metadata is
+  0.6.0; this predates the sync and is outside the ignore-rule scope.

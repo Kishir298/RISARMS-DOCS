@@ -64,3 +64,22 @@ secrets/
 *.priv
 private-key*
 release-keys/
+
+# Coverage / generated build outputs
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.tox/
+dist/
+build/
+*.whl
+*.tar.gz
+*.zip
+
+# Temporary / editor backups
+.cache/
+*.tmp
+*.bak
+*.orig
+*.rej
