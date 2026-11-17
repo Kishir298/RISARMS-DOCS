@@ -171,7 +171,7 @@ RISARMS/
 ├── TIVISS/         <- https://github.com/Kishir298/TIVISS (v0.2.0)
 ├── RISARMS-ui/     <- https://github.com/Kishir298/RISARMS-ui (canonical desktop app)
 ├── old-versions/   <- local archive (CORE 0.4.0, RESCS 0.3.1); not a git repository
-├── DOCS/           <- this repository (remote: RISARMS-DOCS)
+├── RISARMS-DOCS/   <- this repository (remote: Kishir298/RISARMS-DOCS)
 └── Flavora/        <- excluded sibling; not an ecosystem member
 ```
 

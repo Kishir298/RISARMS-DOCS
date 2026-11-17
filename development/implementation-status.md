@@ -129,7 +129,7 @@ rules; no tracked source was removed except Python bytecode caches in
 | `ASIS/` | Ignore SQLite sidecars and SSH private keys | Runtime DB journals and local keys must never be committed |
 | `ASCS/` | Ignore SSH private keys, `.mypy_cache/`, `.ipynb_checkpoints/`; stopped ignoring the tracked `uv.lock` | Removed a tracked-but-ignored inconsistency |
 | `TIVISS/` | Ignore `.ascs/` workspace state and SSH private keys | Integration state can contain workspace context |
-| `CORE/services/{RESCS,TIVISS,ASIS}/` | Applied the critical runtime-storage, database-journal and SSH-key fixes to the mirrored services | Keeps release mirrors consistent with their sources |
+| `CORE/services/{RESCS,TIVISS,ASIS}/` | Applied the critical runtime-storage and database-journal fixes (plus SSH-key rules for ASIS/TIVISS) to the mirrored services | Keeps release mirrors consistent with their sources |
 | `RISARMS-ui/` | Un-ignored the tracked `packaging/risarms-ui.spec` | Removed a tracked-but-ignored inconsistency |
 | `RISARMS-DOCS/` | Ignore coverage, generated build outputs, and temporary/editor backup files | Prevent accidental commits of generated artifacts |
 
@@ -150,5 +150,8 @@ modules were needed, so `requirements.txt` is unchanged.
   (`validation/command-tests.xml`, `source-sha256.json`,
   `installed-command-smoke.json`) and a historical `install/*.whl`; these are
   release evidence, not secrets, and need a policy decision before untracking.
-- `CORE/install/*.whl` release evidence is 0.5.0 while package metadata is
-  0.6.0; this predates the sync and is outside the ignore-rule scope.
+- `CORE/install/core-0.5.0` and `core_client-0.5.0` lag the 0.6.0 package
+  metadata; `rescs-0.4.0` matches its package. This predates the sync and is
+  outside the ignore-rule scope.
+- `ASIS/.gitignore` still lists `uv.lock` although ASIS has no lockfile; it is
+  harmless until ASIS adopts uv.

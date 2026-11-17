@@ -4,15 +4,16 @@
 
 ## 1. Role + Scope
 
-**Role:** You are a BUILD MODE coding agent operating in `C:\Users\rishi\Desktop\RISARMS` (Windows). You edit files, run tests, and report files changed/deleted + test results. Do NOT commit unless explicitly requested.
+**Role:** You are a BUILD MODE coding agent operating in the RISARMS workspace root (the directory containing `ASIS/`, `ASCS/`, `CORE/`, `RESCS/`, `TIVISS/`, `RISARMS-DOCS/`, and `RISARMS-ui/`). You edit files, run tests, and report files changed/deleted + test results. Do NOT commit unless explicitly requested.
 
-**In-scope (6 active top-level entries):**
+**In-scope (7 active top-level entries):**
 
 - `ASIS/` — A Smart Intelligence System (primary AI layer, v0.1.0 with Pi policy/worker update)
 - `ASCS/` — A Smart Coding System (standalone coding agent, v0.3.0 with Pi headless path; ASIS direct integration IMPLEMENTED, CORE-mediated future)
 - `CORE/` — combined C.O.R.E. project, v0.6.0 (Void x86_64 server target): `CORE-HOST/` (`core` package), `CORE-CLIENT/` (`client` package), `services/`, `deployment/`, `install/`, `validation/`
 - `RESCS/` — Cloud storage system, v0.4.0 with Pi signed-scope/mount validation
 - `TIVISS/` — Separate AI agent (v0.2.0: OllamaProvider, SQLiteMemoryStore, Web/Calc/Translation/Voice config, offline-tested transports)
+- `RISARMS-ui/` — Canonical cross-platform desktop client (Tkinter): presents CORE/ASIS/ASCS/RESCS/TIVISS and consumes CORE-HOST over HTTPS/WSS. Presentation only, not an integration layer.
 - `RISARMS-DOCS/` — Architecture source of truth (this repository; remote `Kishir298/RISARMS-DOCS`)
 
 **Explicitly excluded:**
@@ -23,16 +24,17 @@
 
 **Independence rule:** The owning RESCS, ASIS, ASCS, and TIVISS repositories live *beside* CORE. `CORE/services/*` holds release mirrors for the combined deployment; edits belong in the owning repo and are synced in. Integration is only via defined interfaces; no shared source of truth.
 
-## 2. Method — 6 Parallel Sub-Agents
+## 2. Method — 7 Parallel Sub-Agents
 
-For any ecosystem-wide audit/fix, fan out 6 parallel workers, one per in-scope root:
+For any ecosystem-wide audit/fix, fan out 7 parallel workers, one per in-scope root:
 
 1. `ASIS` agent
 2. `ASCS` agent
 3. `CORE` agent (covers `CORE-HOST/` and `CORE-CLIENT/`)
 4. `RESCS` agent
 5. `TIVISS` agent
-6. `RISARMS-DOCS` agent
+6. `RISARMS-ui` agent
+7. `RISARMS-DOCS` agent
 
 Rules:
 
@@ -54,9 +56,9 @@ Rules:
 ## 4. Master Prompt
 
 ```text
-You are in BUILD MODE. Work in C:\Users\rishi\Desktop\RISARMS.
-Scope: ASIS, ASCS, CORE, RESCS, TIVISS, RISARMS-DOCS.
-Method: 6 parallel sub-agents (one per in-scope root).
+You are in BUILD MODE. Work in the RISARMS workspace root.
+Scope: ASIS, ASCS, CORE, RESCS, TIVISS, RISARMS-ui, RISARMS-DOCS.
+Method: 7 parallel sub-agents (one per in-scope root).
 For each task: read target files first, make minimal edits, run scoped pytest/ruff, verify no .py deleted before any recursive remove, never touch .git history.
 Do NOT commit. Return files changed/deleted + test results.
 Canonical guide: RISARMS-DOCS/AGENT.md.
@@ -88,8 +90,7 @@ Reference: `RISARMS-DOCS/README.md`, `RISARMS-DOCS/architecture/`, `RISARMS-DOCS
 
 ## 7. Repository Sync Protocol
 
-Before any BUILD MODE work, sync the six ecosystem repos plus the RISARMS-ui
-desktop client:
+Before any BUILD MODE work, sync all seven in-scope repositories:
 
 ```bash
 git -C ASCS pull

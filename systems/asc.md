@@ -79,4 +79,4 @@ A.S.C.S. tracks its own phase roadmap (`ASCS/docs/phases/`, phases 00–06: arch
 - [System Boundaries](../architecture/system-boundaries.md)
 - [System Interactions](../architecture/system-interactions.md)
 - [Development Roadmap](../development/roadmap.md)
-- [A.S.I.S. Integration (asis.md#6)](../systems/asis.md#6)
+- [A.S.I.S. Integration (asis.md §6)](../systems/asis.md#6-asis--ascs-integration-implemented)
