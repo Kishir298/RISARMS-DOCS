@@ -102,7 +102,8 @@
 ## 6. Repository sync and hygiene (2026-11-17)
 
 Fast-forward-only sync was run for every remote-backed repository; all were
-already at their remote branch tips. `Flavora/` was intentionally excluded, and
+already at their remote branch tips. HEADs below are the sync point, before the
+hygiene commits in §6.1. `Flavora/` was intentionally excluded, and
 `integration-tests/` has no configured remote, so it cannot be pulled.
 
 | Repository | Branch | HEAD |
