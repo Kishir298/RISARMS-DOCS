@@ -125,11 +125,11 @@ rules; no tracked source was removed except Python bytecode caches in
 | Repository | Change | Reason |
 |---|---|---|
 | `integration-tests/` | Added `.gitignore`; removed six tracked `__pycache__/*.pyc` files from the index | The repo had no ignore rules; caches were tracked |
-| `RESCS/` | Ignore `rescs_storage/`, `rescs_test_storage/`, `rescs_storage_test/`, `rescs.env` | Default runtime storage and CLI-generated config can hold user data or an API key |
+| `RESCS/` | Ignore `rescs_storage/`, `rescs_test_storage/`, `rescs_storage_test/`, `rescs.env`, and SSH private keys | Default runtime storage and CLI-generated config can hold user data or an API key |
 | `ASIS/` | Ignore SQLite sidecars and SSH private keys | Runtime DB journals and local keys must never be committed |
 | `ASCS/` | Ignore SSH private keys, `.mypy_cache/`, `.ipynb_checkpoints/`; stopped ignoring the tracked `uv.lock` | Removed a tracked-but-ignored inconsistency |
 | `TIVISS/` | Ignore `.ascs/` workspace state and SSH private keys | Integration state can contain workspace context |
-| `CORE/services/{RESCS,TIVISS,ASIS}/` | Applied the critical runtime-storage and database-journal fixes (plus SSH-key rules for ASIS/TIVISS) to the mirrored services | Keeps release mirrors consistent with their sources |
+| `CORE/services/{ASCS,RESCS,TIVISS,ASIS}/` | Applied runtime-storage, database-journal, SSH-key and local-cache fixes to the mirrored services | Keeps release mirrors consistent with their sources |
 | `RISARMS-ui/` | Un-ignored the tracked `packaging/risarms-ui.spec` | Removed a tracked-but-ignored inconsistency |
 | `RISARMS-DOCS/` | Ignore coverage, generated build outputs, and temporary/editor backup files | Prevent accidental commits of generated artifacts |
 
@@ -155,3 +155,6 @@ modules were needed, so `requirements.txt` is unchanged.
   outside the ignore-rule scope.
 - `ASIS/.gitignore` still lists `uv.lock` although ASIS has no lockfile; it is
   harmless until ASIS adopts uv.
+- `CORE/services/ASCS/.gitignore` still ignores `uv.lock` because the outer
+  CORE repository does not track nested lockfiles; standalone ASCS tracks it.
+  This is intentional but differs from the owning repo.
