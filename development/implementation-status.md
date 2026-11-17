@@ -132,6 +132,9 @@ rules; no tracked source was removed except Python bytecode caches in
 | `RISARMS-ui/` | Un-ignored the tracked `packaging/risarms-ui.spec` | Removed a tracked-but-ignored inconsistency |
 | `RISARMS-DOCS/` | Ignore coverage, generated build outputs, and temporary/editor backup files | Prevent accidental commits of generated artifacts |
 
+Additionally, `CORE-HOST/config/core.lan.example.yaml` is now tracked (the local
+`core.yaml` remains ignored), so the LAN setup docs resolve from a fresh clone.
+
 Verification: `git check-ignore -v` matched every newly covered path and left
 `.env.example` / `requirements.txt` unignored. The documentation venv was synced
 with `RISARMS-DOCS/.venv/bin/python -m pip install -r RISARMS-DOCS/requirements.txt`;
@@ -142,9 +145,6 @@ modules were needed, so `requirements.txt` is unchanged.
 
 - `integration-tests/` has no remote; its hygiene changes can only be committed
   locally (no push target).
-- `CORE-HOST/config/core.lan.example.yaml` is still blocked by
-  `CORE-HOST/.gitignore:38` even though the docs reference it. This is a
-  documentation/versioning gap, not a secret leak.
 - `RISARMS-ui` still tracks generated validation evidence
   (`validation/command-tests.xml`, `source-sha256.json`,
   `installed-command-smoke.json`) and a historical `install/*.whl`; these are
