@@ -21,7 +21,7 @@ prerequisites are met.
 
 | # | Validation | Category | Blockers | Est. Duration |
 |---|------------|----------|----------|---------------|
-| 1 | Physical LAN (Void CORE ↔ RISARMS-ui) | Network | Installed Void host on LAN, Caddy trust | 2-4 hours |
+| 1 | Physical LAN (Void CORE host ↔ RISARMS-ui clients: macOS Intel, macOS Apple Silicon, Windows x86_64, Linux x86_64 — NOT YET PERFORMED) | Network | Installed Void host on LAN, Caddy trust | 2-4 hours |
 | 2 | Live PostgreSQL/Supabase (RESCS) | Cloud | DB instance + credentials | 30 min |
 | 3 | Live S3 (RESCS) | Cloud | S3 bucket + credentials | 30 min |
 | 4 | 24/7 Endurance (RESCS) | Hardware | Dedicated non-primary machine | 24 hours |
@@ -33,9 +33,14 @@ prerequisites are met.
 
 ## 1. Physical LAN — Void CORE ↔ RISARMS-ui
 
+> [!NOTE] **Target matrix (NOT YET PERFORMED):** physical Void CORE host ↔
+> RISARMS-ui clients on **macOS Intel, macOS Apple Silicon, Windows x86_64 and
+> Linux x86_64**. Historical two-machine Windows-host ↔ Mac tests retain their
+> original dates/context in earlier reports; they do not satisfy this matrix.
+
 ### Prerequisites
-- HP 14 running Void Linux, installed per [Void Linux host](void-linux.md), Caddy trusted
-- RISARMS-ui on a separate LAN device
+- HP 14 (reference deployment machine) running Void Linux, installed per [Void Linux host](void-linux.md), Caddy trusted
+- RISARMS-ui on a separate LAN device (macOS Intel, macOS Apple Silicon, Windows x86_64 or Linux x86_64)
 - Only TCP `443` exposed publicly; CORE and RESCS remain loopback-bound
 
 ### Procedure
@@ -292,5 +297,5 @@ Store results in `validation-results/<date>-<validation>/` for audit trail.
 
 - [Testing](testing.md) — Local test suite status
 - [Hardware-Gated Validation](hw-gated-validation.md) — Original blocker matrix
-- [LAN Readiness](../../CORE/CORE-HOST/docs/lan-readiness.md) — Host-side preflight
+- [LAN Readiness](https://github.com/Kishir298/CORE/blob/main/CORE-HOST/docs/lan-readiness.md) — Host-side preflight
 - [ADR 0007](../decisions/0007-ascs-standalone-coding-agent.md) — ASIS↔ASCS local-tool exception

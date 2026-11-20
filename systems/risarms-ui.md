@@ -129,7 +129,7 @@ starting two synchronization workers over the same queues.
   receives `message.received` over WSS.
 - CORE-HOST suite: **911 passed / 4 skipped**; CORE-CLIENT: **225 passed / 1 skipped**.
 - RESCS: **318 passed / 4 skipped**; ASCS: **996 passed / 16 skipped**;
-  TIVISS: **299 passed**.
+  TIVISS: **299 passed** (all historical evidence, macOS runs dated 2026-11-15/16).
 - Release workflow targets `macos-15-intel`, `macos-15`, `windows-2022` and
   `ubuntu-24.04`; the older `macos-13`/`macos-14` labels are retired.
 - Physical Apple Silicon, Windows, Linux and Void desktop runs,

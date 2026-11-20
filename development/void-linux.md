@@ -32,15 +32,23 @@ supplied firewall table exposes only `443`, SSH and mDNS.
 ## Prerequisites
 
 ```sh
-sudo xbps-install -S python3 python3-venv caddy runit-void nftables elogind
+sudo xbps-install -S python3 python3-pip caddy runit-void nftables elogind
 ```
+
+> [!NOTE]
+> Void has **no `python3-venv` package** (404 in void-packages); Void's `python3`
+> is built `--without-ensurepip`. `python3-pip` provides pip, and the installer
+> creates environments with `python3 -m venv --without-pip` + `python3 -m pip
+> --python "$staging/bin/python" install ...`. Always install `python3-pip`,
+> never `python3-venv`.
 
 The installer requires root, Void Linux, x86_64, glibc, the commands above, and
 at least **5 GiB free** under `/var/lib/risarms`. It does not partition or format
 storage. Override `RISARMS_MIN_FREE_GIB` only after checking the disk.
 
-The HP has 8 GB installed memory today. The planned 2 x 8 GB Samsung DDR4-2666
-upgrade is **not installed or verified**; do not document it as present.
+Installed RAM on the HP is **unverified** (an earlier report said 4 GB — do not
+state a figure as fact). The planned 2 x 8 GB Samsung DDR4-2666 upgrade to
+16 GB is **PLANNED — not installed or verified**; do not document it as present.
 
 ## Install
 
@@ -139,7 +147,8 @@ configuration rollback. Never auto-apply an owner action or an update.
 
 ## Related
 
-- [CORE repository README](../../CORE/README.md)
-- [Void deployment README](../../CORE/deployment/void/README.md)
+- [CORE repository README](https://github.com/Kishir298/CORE/blob/main/README.md)
+- [Void deployment README](https://github.com/Kishir298/CORE/blob/feat/desktop-control-channel/deployment/void/README.md)
+  — lives on `feat/desktop-control-channel` today; moves to `main` after merge
 - [Hardware-gated validation](hw-gated-validation.md)
 - [Update supply chain](update-supply-chain.md)

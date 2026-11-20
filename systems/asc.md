@@ -2,11 +2,11 @@
 
 > [!NOTE] **File note:** this page lives at `systems/asc.md` (abbreviation `asc`) for historical link stability; it documents **A.S.C.S.**
 
-> [!NOTE] **Status:** **IMPLEMENTED as a standalone tool** (v0.3.0, **996 passed / 16 skipped** on macOS Python 3.14, 2026-11-15; opt-in live tests). A.S.C.S. is a local, private, autonomous coding agent built on Ollama: it plans, writes, runs and verifies code inside an explicit workspace, with three session modes, a web UI, a terminal TUI, and a Linux/Pi headless generation-only path. **ASIS integration is IMPLEMENTED** — ASIS can invoke ASCS via `ascs_integration` with handover; ASCS exposes `export_handover_state()`. Full C.O.R.E.-mediated integration remains **PLANNED/FUTURE**.
+> [!NOTE] **Status:** **IMPLEMENTED as a standalone tool** (`requires_core: false`, v0.3.0; Python 3.12+; Windows/macOS/Linux x86_64+arm64). Historical evidence: **996 passed / 16 skipped** on macOS Python 3.14, 2026-11-15 (opt-in live tests). A.S.C.S. is a local, private, autonomous coding agent with **multi-provider model support** — ollama (default), openai, anthropic, grok, google, deepseek (LiteLLM/OpenCode opt-in) — that plans, writes, runs and verifies code inside an explicit workspace, with three session modes, a web UI, a terminal TUI, and a Linux/Pi headless generation-only path. **C.O.R.E. integration is OPTIONAL** (protocol 0.3.0/0.4.0 via `ASCS_CORE_CREDENTIAL` / `ASCS_CORE_ENABLED`, offline fallback). **ASIS integration is IMPLEMENTED** — ASIS can invoke ASCS via `ascs_integration` with handover; ASCS exposes `export_handover_state()`. Full C.O.R.E.-mediated integration remains **PLANNED/FUTURE**. Source of truth: `ASCS/compatibility.json` + `ASCS/README.md`.
 
 ## 1. What A.S.C.S. is
 
-A.S.C.S. is the ecosystem's **autonomous coding agent**: a local, privacy-first developer tool driven by a locally-running Ollama model (default `qwen3-coder:30b`, fallback `qwen2.5-coder:14b`). No code leaves the machine; the only runtime dependency is the standard library plus Ollama.
+A.S.C.S. is the ecosystem's **autonomous coding agent**: a local, privacy-first developer tool. It drives a locally-running Ollama model by default (default `qwen3-coder:30b`, fallback `qwen2.5-coder:14b`) and supports optional cloud providers (OpenAI, Anthropic, Grok, Google, DeepSeek via config — LiteLLM/OpenCode opt-in; these do leave the machine). Ollama-local mode sends no code off-machine; otherwise the only runtime dependency is Python 3.12+ and the standard library.
 
 Its declared long-term role in R.I.S.A.R.M.S. is as a coding capability that A.S.I.S. and T.I.V.I.S.S. can eventually use. Today it runs entirely standalone.
 
@@ -14,10 +14,12 @@ Its declared long-term role in R.I.S.A.R.M.S. is as a coding capability that A.S
 
 - Location: `RISARMS/ASCS/` (sibling of `CORE/`, `RESCS/`, `ASIS/`, `TIVISS/`, `RISARMS-DOCS/`); mirrored at `CORE/services/ASCS/` for the combined release
 - Own git repository (origin `https://github.com/Kishir298/ASCS.git`, branch `main`)
-- Package: `agent` (distribution name `coding-agent`), version `0.3.0`
+- Package: `agent` (distribution name `coding-agent`), version `0.3.0`; console scripts `ascs`, `risa`
 - Entry point: `risa` (e.g. `risa --auto "…"`, `risa --tasks "…"`, `risa --ui`, `risa --tui`, `risa --doctor`, `risa --pi`)
-- Runtime: desktop web UI/TUI is **Windows-oriented** (32 GB target); the Pi path is **Linux ARM64 headless generation-only** (no tools/TUI); **dev testing is cross-platform**
-- Tests: **996 passed / 16 skipped** on macOS Python 3.14 (2026-11-15; live Ollama tests opt-in via `RISALIVE=1`, skipped by default)
+- Runtime: **Python 3.12+** (`requires-python >=3.12`); supported OS per `ASCS/compatibility.json`: **Windows, macOS and Linux on x86_64 and arm64** (Windows 10 22H2+, macOS 12.0+, Linux glibc 2.28+). Desktop web UI/TUI is Windows-primary (32 GB target); the Pi path is **Linux ARM64 headless generation-only** (no tools/TUI); **dev testing is cross-platform**
+- Standalone: **`requires_core: false`** — C.O.R.E. integration is optional (protocol 0.3.0/0.4.0, `ASCS_CORE_CREDENTIAL`, `ASCS_CORE_ENABLED`, offline fallback)
+- Model providers: **ollama, openai, anthropic, grok, google, deepseek** (LiteLLM/OpenCode opt-in)
+- Tests: historical evidence — **996 passed / 16 skipped** on macOS Python 3.14 (2026-11-15; live Ollama tests opt-in via `RISALIVE=1`, skipped by default). Exact counts vary with platform/plugins — re-verify locally.
 
 ## 3. What is implemented
 
@@ -31,6 +33,8 @@ Its declared long-term role in R.I.S.A.R.M.S. is as a coding capability that A.S
 | Web UI (`http://127.0.0.1:8787`) and terminal TUI (responsive tiers, themes, cursor-aware input) | IMPLEMENTED |
 | Windows-aware tool execution (python/pip/pytest resolution; transparent `python`→`python3` fallback for dev testing) | IMPLEMENTED |
 | Ollama integration (streaming + resilient chat, model fallback auto-switch, stop-on-exit) | IMPLEMENTED |
+| Multi-provider model support (ollama, openai, anthropic, grok, google, deepseek; LiteLLM/OpenCode opt-in) | IMPLEMENTED (per `compatibility.json`) |
+| Optional C.O.R.E. integration — declared in `compatibility.json` (protocol 0.3.0/0.4.0, `ASCS_CORE_CREDENTIAL`, `ASCS_CORE_ENABLED`, offline fallback; ASCS keeps running when CORE is unavailable) | **Declared / optional** (manifest only; CORE is never required — see `ASCS/COMPATIBILITY.md`) |
 | Project context (workspace, toolchain, context index; dual chunk limits 30B/14B) | IMPLEMENTED |
 | Experience store (phase 5 learning groundwork) | IMPLEMENTED (early) |
 | Verification engine (tool success vs objective success) | IMPLEMENTED |

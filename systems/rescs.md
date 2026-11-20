@@ -1,6 +1,6 @@
 # R.E.S.C.S. — Rishik's Efficient System for Cloud Storage
 
-> [!NOTE] **Status:** v0.4.0 **IMPLEMENTED** (FastAPI storage service: versioned HTTP API, enforced API-key authentication, record/file storage, streaming + resumable uploads, lifecycle/governance, backup tooling, and the Raspberry Pi storage foundation). Verified: 318 passed / 4 skipped (macOS Python 3.14, 2026-11-15). Live PostgreSQL/Supabase deployment, real S3 backend, deployed C.O.R.E. ↔ R.E.S.C.S. interop, real Pi/ARM64, and 24/7 endurance are **Ready for External Validation** — documented and implemented, but not validated against live production infrastructure. R.E.S.C.S. is an **independent project**.
+> [!NOTE] **Status:** v0.4.0 **IMPLEMENTED** (FastAPI storage service: versioned HTTP API, enforced API-key authentication, record/file storage, streaming + resumable uploads, lifecycle/governance, backup tooling, and the Raspberry Pi storage foundation). Version **0.4.0** confirmed in `RESCS/pyproject.toml` (package and CHANGELOG agree). Test evidence: **318 passed / 4 skipped** is historical evidence stated as macOS Python 3.14, 2026-11-15 (not re-verified against `RESCS/README.md`, which quotes no count; RESCS's own `docs/RESCS-Pi-Handoff.md` separately records 312 passed on Linux x86_64 Python 3.12). Live PostgreSQL/Supabase deployment, real S3 backend, deployed C.O.R.E. ↔ R.E.S.C.S. interop, real Pi/ARM64, and 24/7 endurance are **Ready for External Validation** — documented and implemented, but not validated against live production infrastructure. R.E.S.C.S. is an **independent project** with its own platform support (Linux/Pi ARM64, macOS, Windows per its own docs and CI) — C.O.R.E.'s Void-only server restriction does **not** apply to R.E.S.C.S.
 
 ## 1. What R.E.S.C.S. is
 
@@ -28,8 +28,9 @@ R.E.S.C.S. is the **cloud/data storage system** of R.I.S.A.R.M.S. It provides st
 
 - Location: `RISARMS/RESCS/` (sibling of `CORE/`, `ASIS/`, `ASCS/`, `TIVISS/`, `RISARMS-DOCS/`); also mirrored at `CORE/services/RESCS/` for the combined release
 - Own git repository (origin `https://github.com/Kishir298/RESCS`, branch `main`)
-- Stack: Python ≥ 3.11, FastAPI + uvicorn, SQLAlchemy 2.0, psycopg 3 (PostgreSQL), Pydantic v2 + pydantic-settings
+- Stack: Python ≥ 3.11 (`requires-python = ">=3.11"` in `RESCS/pyproject.toml`), FastAPI + uvicorn, SQLAlchemy 2.0, psycopg 3 (PostgreSQL), Pydantic v2 + pydantic-settings
 - Version: **`0.4.0`** (pyproject, package and CHANGELOG agree)
+- Platforms: independent of C.O.R.E. — runs wherever Python ≥ 3.11 runs (Linux x86_64/ARM64 incl. Raspberry Pi, macOS, Windows); the CORE 0.6.0 Void-only server target does not restrict R.E.S.C.S.
 
 ## 3. Project layout
 

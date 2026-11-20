@@ -19,7 +19,7 @@ re-open only when the listed resource exists.
 | 1 | CORE 0.6.0 Void x86_64 install on HP 14 | ❌ BLOCKED | No booted Void host, physical HP, or installer execution environment |
 | 2 | CORE Void reboot, runit, Caddy trust, nftables load | ❌ BLOCKED | Requires item 1 |
 | 3 | CORE upgrade, rollback, backup/restore, storage-failure drills | ❌ BLOCKED | Requires item 1 and a disposable data set |
-| 4 | Physical HP firmware, thermal and planned 2 x 8 GB DDR4-2666 upgrade | ❌ BLOCKED | Upgrade is not installed or verified; no physical HP access |
+| 4 | Physical HP firmware, thermal and planned 2 x 8 GB DDR4-2666 upgrade | ❌ BLOCKED | Installed RAM is unverified (earlier report: 4 GB); the upgrade is PLANNED — not installed or verified; no physical HP access |
 | 5 | RISARMS-ui Apple Silicon/Windows/Linux/Void runs and native installers | ❌ BLOCKED | No runtime hosts and no authenticated CI run |
 | 6 | Physical LAN (Void host ↔ device) | ❌ BLOCKED | No Void host on the LAN; firewall + TLS certs not re-verifiable |
 | 7 | R.E.S.C.S. live S3 | ❌ BLOCKED | No bucket or `RESCS_LIVE_S3_*` credentials (keys must rotate after) |
@@ -45,7 +45,7 @@ re-open only when the listed resource exists.
 | Procedure | Extract the release, run `sudo ./deployment/void/install.sh`, review configuration, enable runit services, run `sudo risarms-doctor`, reboot, then test login and backup/restore |
 | Acceptance | Services start on boot; Caddy trust works; CORE/RESCS health endpoints pass; nftables does not lock out SSH; keys do not rotate; upgrade, rollback, backup, restore and storage-failure drills pass; no secrets in logs |
 | Do NOT | Claim signed server updates or hardware validation; this release ships a source archive and no server update signature |
-| Memory note | The 2 x 8 GB Samsung DDR4-2666 upgrade is **planned, not installed or verified**. Validate firmware/thermal behavior only after the upgrade is physically present |
+| Memory note | Installed RAM on the HP is **unverified** (earlier report: 4 GB — do not state a figure as fact). The 2 x 8 GB Samsung DDR4-2666 upgrade to 16 GB is **PLANNED, not installed or verified**. Validate firmware/thermal behavior only after the upgrade is physically present |
 
 ## 0b. Historical physical Raspberry Pi / ARM64 deployment (CORE + RESCS)
 
@@ -104,4 +104,4 @@ Gated tests: `RESCS/tests/integration/test_s3_live.py` (`requires_live_s3`).
 ## Related
 
 - [Testing](testing.md)
-- [LAN Readiness](../../CORE/CORE-HOST/docs/lan-readiness.md) — canonical host-side checklist
+- [LAN Readiness](https://github.com/Kishir298/CORE/blob/main/CORE-HOST/docs/lan-readiness.md) — canonical host-side checklist

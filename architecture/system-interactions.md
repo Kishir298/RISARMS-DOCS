@@ -96,7 +96,7 @@ sequenceDiagram
 ### C.O.R.E. ↔ External Devices
 
 - **Implemented (software):** TCP + TLS transport (TLS 1.2+, fail-closed when misconfigured externally), token authentication, handshake/protocol negotiation with 0.2.x legacy support, device registration with persistence (via R.E.S.C.S.), discovery, presence, reconnection handling, device-to-device routing through C.O.R.E., structured device errors, connection/frame limits, and a stdlib external client with provisioning (`provision-device`).
-- **Remaining:** physical Windows ↔ Mac LAN validation and 24/7 endurance.
+- **Remaining:** physical LAN validation (Void CORE host ↔ RISARMS-ui clients on macOS Intel, macOS Apple Silicon, Windows x86_64 and Linux x86_64 — NOT YET PERFORMED) and 24/7 endurance.
 
 ### C.O.R.E. CapabilityRouter & ModelProfile (v0.3.1)
 

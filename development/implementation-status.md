@@ -26,9 +26,9 @@
 | Job idempotency | Complete / verified | Existing contract tests |
 | Human-to-human messaging (`/api/messages`) | Complete / verified | 7 new tests in `tests/test_messages.py` |
 | Messaging over WSS push | Complete / verified | Real `core web` process with two clients: `message.received` received over WSS, see `tests/integration/test_core_messaging_e2e.py` in RISARMS-ui |
-| Windows/macOS LAN validation | Blocked | No second machine or certificate chain |
+| Physical LAN validation (Void CORE host ↔ RISARMS-ui clients: macOS Intel, macOS Apple Silicon, Windows x86_64, Linux x86_64) | Blocked | No second machine, Void host or certificate chain; matrix NOT YET PERFORMED (historical Windows-host ↔ Mac tests keep their dates/context and do not satisfy this matrix) |
 | CORE 0.6.0 Void release assets (versioned venvs, storage guard, Caddy/nftables, backup/restore, upgrade/rollback, doctor) | Implemented / **unverified** at runtime | Static tests only; no booted Void host or physical HP |
-| CORE 0.6.0 runtime validation (install, reboot, runit, rollback, storage failure) | Blocked | Requires the HP 14 with Void installed |
+| CORE 0.6.0 runtime validation (install, reboot, runit, rollback, storage failure) | Blocked | Requires the reference HP 14 (HP 14-dq1037wm) with Void installed |
 
 ## 2. RISARMS-ui desktop application
 
@@ -61,7 +61,7 @@
 | Project | Status | Evidence |
 |---|---|---|
 | ASIS | Complete / verified | 948 passed / 24 skipped; full ruff still reports pre-existing style debt |
-| ASCS | Complete / verified | 996 passed / 16 skipped; `doctor --offline` smoke verified locally (exit 0) |
+| ASCS | Complete / verified | 996 passed / 16 skipped (historical evidence, macOS Python 3.14, 2026-11-15); `doctor --offline` smoke verified locally (exit 0) |
 | RESCS | Complete / verified | 318 passed / 4 skipped; CLI configuration errors actionable; live tests report unavailable services instead of failing the run |
 | TIVISS | Complete / verified | 299 passed; full ruff still reports pre-existing style debt |
 
@@ -75,7 +75,7 @@
 | Booted Void Linux / physical HP 14 | Blocked |
 | Raspberry Pi / ARM64 | Historical / not a CORE 0.6.0 target |
 | 24/7 operation | Blocked |
-| Branch CI on pushed commits | CORE, RISARMS-UI, ASCS, RESCS and TIVISS green (2026-11-15); CORE 0.6.0 and RISARMS-ui branch tips are pushed and synced (2026-11-17; CI not re-checked); ASIS CI only runs on `main`/PR; RISARMS-DOCS has no code CI |
+| Branch CI on pushed commits | CORE, RISARMS-UI, ASCS, RESCS and TIVISS green (2026-11-15); **as of 2026-11-20 CORE and RESCS runs are FAILING** (Windows exec-bit test / Python 3.12 concurrency flake) with fixes in progress locally and not yet pushed — CI is NOT green; CORE 0.6.0 and RISARMS-ui branch tips are pushed and synced (2026-11-17; CI not re-checked); ASIS CI only runs on `main`/PR; RISARMS-DOCS has no code CI |
 | Documentation drift review | Partial — current pages refreshed; historical reports intentionally retain their original evidence |
 
 ## 5. Open items carried forward

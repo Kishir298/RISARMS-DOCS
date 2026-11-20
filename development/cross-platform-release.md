@@ -77,7 +77,7 @@ Formats: `.zip` (Windows), `.tar.gz` (macOS/Linux/source), `.dmg`, `.exe`, `.msi
 
 | System | OS | Architectures | Notes |
 | --- | --- | --- | --- |
-| CORE server | Void Linux | x86_64, glibc, runit | HP 14 only; release target |
+| CORE server | Void Linux | x86_64, glibc, runit | HP 14 reference machine; release target |
 | RISARMS-ui | macOS | x86_64, arm64 | Ad-hoc signed, unnotarized beta |
 | RISARMS-ui | Windows | x86_64 | Unsigned beta |
 | RISARMS-ui | Linux | x86_64 | Includes a pending Void glibc smoke test |

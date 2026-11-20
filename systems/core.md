@@ -1,6 +1,6 @@
 # C.O.R.E. — Communication, Organization and Resource Engine
 
-> [!NOTE] **Status:** v0.6.0 **IMPLEMENTED** (beta source; combined `CORE-HOST` + `CORE-CLIENT` project). Package version is 0.6.0; wire/protocol compatibility remains 0.4.0. The server release targets **Void Linux x86_64 glibc with runit** only. Booted Void install, reboot, upgrade/rollback, storage failure, backup restore, physical HP 14, Windows ↔ Mac LAN, and extended 24/7 operational validation are **NOT YET PERFORMED** — deployment-validation tasks, not missing server software. Compatibility with older clients is preserved by design.
+> [!NOTE] **Status:** v0.6.0 **IMPLEMENTED** (beta source; combined `CORE-HOST` + `CORE-CLIENT` project). Package version is 0.6.0; wire/protocol compatibility remains 0.4.0. The server release targets **Void Linux x86_64 glibc with runit** (the HP 14-dq1037wm is the **reference deployment machine**, not a hardware gate). Booted Void install, reboot, upgrade/rollback, storage failure, backup restore, physical HP, physical LAN validation (Void CORE host ↔ RISARMS-ui clients on macOS Intel, macOS Apple Silicon, Windows x86_64 and Linux x86_64), and extended 24/7 operational validation are **NOT YET PERFORMED** — deployment-validation tasks, not missing server software. Compatibility with older clients is preserved by design.
 
 ## 1. What C.O.R.E. is
 
@@ -8,7 +8,7 @@ C.O.R.E. is the **central management and control engine** of R.I.S.A.R.M.S. It i
 
 **It is NOT the primary AI.** Intelligence belongs to A.S.I.S. and T.I.V.I.S.S. C.O.R.E. provides the substrate they operate on.
 
-**It runs on the control host** — Void Linux x86_64 glibc with runit on the HP 14, co-hosting R.E.S.C.S. — and serves connected R.I.S.A.R.M.S. devices (Macs, phones, tablets, watches). Raspberry Pi/ARM64 and systemd server deployments are historical for this release. Windows, macOS and Linux x86_64 remain supported through the separate RISARMS-ui desktop client.
+**It runs on the control host** — Void Linux x86_64 glibc with runit (HP 14 as the reference deployment machine), co-hosting R.E.S.C.S. — and serves connected R.I.S.A.R.M.S. devices (Macs, phones, tablets, watches). Raspberry Pi/ARM64 and systemd server deployments are historical for this release. Windows, macOS and Linux x86_64 remain supported through the separate RISARMS-ui desktop client.
 
 ### Responsibilities
 
@@ -84,7 +84,7 @@ core/
 ```
 Host layout: `CORE/CORE-HOST/core/` + `CORE/CORE-HOST/config/` (`core.yaml` dev, `core.lan.example.yaml` LAN deployment).
 Client: `CORE/CORE-CLIENT/client/core_device_client.py` — minimal stdlib external-device client with Option A login semantics (never imports `core`).
-Combined project also carries `services/{ASIS,ASCS,RESCS,TIVISS}`, `deployment/pi/`, `install/` wheels, and `validation/` release evidence.
+Combined project also carries `services/{ASIS,ASCS,RESCS,TIVISS}`, `deployment/void/` (the v0.6.0 installer/services; legacy Pi deployment assets retained historically), `install/` wheels, and `validation/` release evidence.
 ```
 
 ### 4.1 Purpose of each subsystem (highlights beyond the v0.1 foundation)
@@ -132,7 +132,7 @@ External TCP requires TLS 1.2+, token authentication, validated protocol version
 
 These are deployment-validation items, not missing software:
 
-- **Physical Windows ↔ Mac LAN validation has not been performed.** All external-transport behavior is covered by automated localhost tests (TLS, handshake, framing, identity, persistence, timeouts).
+- **Physical LAN validation — Void CORE host ↔ RISARMS-ui clients on macOS Intel, macOS Apple Silicon, Windows x86_64 and Linux x86_64 — has NOT YET BEEN PERFORMED.** (Historical two-machine Windows-host ↔ Mac tests retain their original dates/context elsewhere and do not satisfy this matrix.) All external-transport behavior is covered by automated localhost tests (TLS, handshake, framing, identity, persistence, timeouts).
 - **Launcher-owned `ollama serve` lifecycle: PERFORMED 2026-09-19** (tray quit → owned autostart → owned stop → tray restored; pre-existing servers untouched). See CORE's `docs/serve-autostart-manual-test.md`.
 - **Extended 24/7 physical-host validation has not been performed** (Task Scheduler autostart and NSSM service configuration are documented but not endurance-validated).
 - The development configuration (`transport: local`, `network.enabled: false`, `security.enforce_authorization: false`) is intentionally *not* the deployment configuration; see `config/core.lan.example.yaml` and CORE's own `docs/lan-readiness.md`.
@@ -211,7 +211,7 @@ The 13-phase v0.2 build order was completed; the phase definitions (objectives, 
 | Tool-free `CORE_SAFE_CHAT` worker (account-isolated Ollama) | IMPLEMENTED |
 | Booted Void install, reboot, runit start/stop, Caddy trust, nftables load | **NOT YET PERFORMED** |
 | Upgrade, rollback, backup/restore and storage-failure drills on HP | **NOT YET PERFORMED** |
-| Physical HP firmware, thermal and 2 x 8 GB DDR4-2666 upgrade (planned, not installed) | **NOT YET PERFORMED** |
+| Physical HP firmware, thermal and planned 2 x 8 GB DDR4-2666 upgrade (installed RAM unverified — earlier report: 4 GB; upgrade PLANNED, not installed) | **NOT YET PERFORMED** |
 
 ## 7. Related documentation
 

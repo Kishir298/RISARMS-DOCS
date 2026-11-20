@@ -15,7 +15,7 @@ The ecosystem matures in this order (current position in brackets):
 1. ~~**C.O.R.E. v0.2** — make the control engine operational~~ — **IMPLEMENTED** (shipped 0.2.0 → 0.2.1; superseded by v0.3.0).
 2. ~~**R.E.S.C.S. v0.1 completion**~~ — **IMPLEMENTED** (now v0.4.0 with full API, enforced auth, signed CORE owner scope, and Pi mount foundation).
 3. **C.O.R.E. ↔ R.E.S.C.S. integration** — **IMPLEMENTED in software** (adapter + signed scope + real loopback validation); deployed cross-host interop is the remaining validation step.
-4. **Deployment validation** — booted Void Linux on the HP 14 (install, reboot, upgrade/rollback, backup/restore, storage failure), physical HP, Windows ↔ Mac LAN, and 24/7 endurance for C.O.R.E.; live PostgreSQL/Supabase + real S3 for R.E.S.C.S. ← *current frontier*
+4. **Deployment validation** — booted Void Linux on the HP 14 (install, reboot, upgrade/rollback, backup/restore, storage failure), physical HP, physical LAN (Void CORE host ↔ RISARMS-ui clients: macOS Intel, macOS Apple Silicon, Windows x86_64, Linux x86_64 — NOT YET PERFORMED), and 24/7 endurance for C.O.R.E.; live PostgreSQL/Supabase + real S3 for R.E.S.C.S. ← *current frontier*
 5. **A.S.I.S. completion + integration** — wire voice into the chat loop, remove legacy `core/` + `02_voice/` trees (deprecated, pending removal), then connect A.S.I.S. to C.O.R.E. (**IN DEVELOPMENT**). **ASIS ↔ ASCS integration IMPLEMENTED** (`ascs_integration` toolset + `export_handover_state()` handover protocol). Pi policy/worker path added.
 6. **A.S.I.S. ↔ C.O.R.E. contract** — the intelligence layer operates through the control engine (**PLANNED**).
 7. **T.I.V.I.S.S.** — v0.2.0 local agent: OllamaProvider, SQLiteMemoryStore (dual SQLite), CLI, export/import, logging, voice abstraction, stdlib-only transports offline-tested (**IN DEVELOPMENT**; handover model unresolved).
@@ -37,9 +37,9 @@ The 13-phase v0.2 build order is **complete**; the per-phase definitions live in
 | Void x86_64 glibc/runit server release, versioned venvs, 5 GiB storage guard, Caddy/nftables, svlogd, backup/restore, upgrade/rollback, doctor | **IMPLEMENTED (v0.6.0 beta source)** |
 | R.E.S.C.S. adapters (`InMemory`/`File`/`Http`) + data distribution | **IMPLEMENTED** |
 | Booted Void install, reboot, rollback, backup/restore and storage-failure drills on HP 14 | **NOT YET PERFORMED** |
-| Physical HP firmware/thermal and planned 2 x 8 GB DDR4-2666 checks | **NOT YET PERFORMED** |
+| Physical HP firmware/thermal and planned 2 x 8 GB DDR4-2666 checks (installed RAM unverified — earlier report: 4 GB; upgrade PLANNED) | **NOT YET PERFORMED** |
 | Physical Raspberry Pi/ARM64 deployment | **HISTORICAL / NOT A 0.6.0 TARGET** |
-| Physical Windows ↔ Mac LAN validation | **NOT YET PERFORMED** |
+| Physical LAN validation — Void CORE host ↔ RISARMS-ui clients (macOS Intel, macOS Apple Silicon, Windows x86_64, Linux x86_64) | **NOT YET PERFORMED** |
 | 24/7 operational validation | **NOT YET PERFORMED** |
 
 ## 4. R.E.S.C.S. roadmap (summary)
@@ -83,7 +83,7 @@ Agent **IN DEVELOPMENT** (v0.2.0), local clone present (`TIVISS/`): OllamaProvid
 
 ## 7. A.S.C.S.
 
-**IMPLEMENTED as a standalone tool** (v0.3.0, 996 passed / 16 skipped on macOS 2026-11-09; Linux/Pi headless generation-only). See [systems/asc.md](../systems/asc.md). Its own phase roadmap (00–06) lives in `ASCS/docs/phases/`. **ASIS integration IMPLEMENTED** (`export_handover_state()` + `ascs_integration` toolset). C.O.R.E.-mediated use by A.S.I.S./T.I.V.I.S.S. is **FUTURE**.
+**IMPLEMENTED as a standalone tool** (v0.3.0; standalone, multi-provider, Windows/macOS/Linux x86_64+arm64, Python 3.12+, optional CORE integration per `ASCS/compatibility.json`; historical evidence: 996 passed / 16 skipped on macOS Python 3.14 — stated as 2026-11-15 in [testing.md](testing.md), an earlier note here said 2026-11-09, exact date unverified; Linux/Pi headless generation-only). See [systems/asc.md](../systems/asc.md). Its own phase roadmap (00–06) lives in `ASCS/docs/phases/`. **ASIS integration IMPLEMENTED** (`export_handover_state()` + `ascs_integration` toolset). C.O.R.E.-mediated use by A.S.I.S./T.I.V.I.S.S. is **FUTURE**.
 
 ## 8. RadarS.A.R.D.
 
