@@ -75,7 +75,7 @@
 | Booted Void Linux / physical HP 14 | Blocked |
 | Raspberry Pi / ARM64 | Historical / not a CORE 0.6.0 target |
 | 24/7 operation | Blocked |
-| Branch CI on pushed commits | CORE, RISARMS-UI, ASCS, RESCS and TIVISS green (2026-11-15); **as of 2026-11-20 CORE and RESCS runs are FAILING** (Windows exec-bit test / Python 3.12 concurrency flake) with fixes in progress locally and not yet pushed — CI is NOT green; CORE 0.6.0 and RISARMS-ui branch tips are pushed and synced (2026-11-17; CI not re-checked); ASIS CI only runs on `main`/PR; RISARMS-DOCS has no code CI |
+| Branch CI on pushed commits | CORE, RISARMS-UI, ASCS, RESCS and TIVISS green (2026-11-15). CORE and RESCS regressed on 2026-11-20 and were fixed and pushed the same day: CORE [`b5ba79f`](https://github.com/Kishir298/CORE/actions/runs/44775446911) 15/15 jobs green incl. `core-host (Windows, full)`; RESCS [`6b8e780`](https://github.com/Kishir298/RESCS/actions/runs/44767993130) green; RISARMS-UI [`24ce7a6`](https://github.com/Kishir298/RISARMS-ui/actions/runs/44030726524) green. ASIS CI only runs on `main`/PR; RISARMS-DOCS has no code CI |
 | Documentation drift review | Partial — current pages refreshed; historical reports intentionally retain their original evidence |
 
 ## 5. Open items carried forward
