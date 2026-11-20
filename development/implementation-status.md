@@ -61,7 +61,7 @@
 | Project | Status | Evidence |
 |---|---|---|
 | ASIS | Complete / verified | 948 passed / 24 skipped; full ruff still reports pre-existing style debt |
-| ASCS | Complete / verified | 996 passed / 16 skipped (historical evidence, macOS Python 3.14, 2026-11-15); `doctor --offline` smoke verified locally (exit 0) |
+| ASCS | Complete / verified | 996 passed / 16 skipped (macOS Python 3.14, recorded 2026-11-15, **re-verified 2026-11-20** on Python 3.14.7); `doctor --offline` smoke verified locally (exit 0) |
 | RESCS | Complete / verified | 318 passed / 4 skipped; CLI configuration errors actionable; live tests report unavailable services instead of failing the run |
 | TIVISS | Complete / verified | 299 passed; full ruff still reports pre-existing style debt |
 

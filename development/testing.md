@@ -18,7 +18,7 @@
 | CORE-CLIENT | **225 passed / 1 skipped** (2026-11-16, macOS Python 3.14, v0.6.0) | Native client + portal; run `python3 -m pytest` in `CORE/CORE-CLIENT` |
 | R.E.S.C.S. | **318 passed / 4 skipped** (2026-11-15, macOS Python 3.14, v0.4.0) | Live PostgreSQL/S3 skipped without credentials; run `.venv/bin/python -m pytest` |
 | A.S.I.S. | **948 passed / 24 skipped** (2026-11-15, macOS Python 3.12, v0.1.0) | Pi policy and release contract included |
-| A.S.C.S. | **996 passed / 16 skipped** (2026-11-15, macOS Python 3.14, v0.3.0) + opt-in live suite | Pi policy tests mock the Linux guard; live gated `RISALIVE=1` |
+| A.S.C.S. | **996 passed / 16 skipped** (2026-11-15, macOS Python 3.14, v0.3.0; **re-verified 2026-11-20** on macOS Python 3.14.7) + opt-in live suite | Pi policy tests mock the Linux guard; live gated `RISALIVE=1` |
 | T.I.V.I.S.S. | **299 passed** (2026-11-15, macOS Python 3.14, v0.2.0) | Failure-first checks, atomic handover, bounded events; desktop registration metadata included |
 | RISARMS-UI | **286 passed** (2026-11-16, macOS Python 3.14, v0.6.0) | UI, HTTP client, connection manager, release metadata, signed updates and migrated CORE-CLIENT desktop tests; GUI launch pending Tk installation |
 

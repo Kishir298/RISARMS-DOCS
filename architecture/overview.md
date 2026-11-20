@@ -138,7 +138,7 @@ The full ownership table is in [System Boundaries](system-boundaries.md#1-respon
 | **A.S.I.S.** | Rebuilt `asis` package (948 passed / 24 skipped): CLI, Ollama provider, memory, calculator, translation, web tools, coding mode, permissions, voice, Pi policy/worker | Physical Pi/ARM64 and LAN validation; R.E.S.C.S. via C.O.R.E. (future) |
 | **T.I.V.I.S.S.** | Local agent at `TIVISS/` (v0.2.0; 299 passed): OllamaProvider, SQLite memory, CLI, export/import, logging, voice abstraction, stdlib transports offline-tested; still no live traffic | Resolve the handover model |
 | **RadarS.A.R.D.** | — | Define sensor/detection scope |
-| **A.S.C.S.** | Standalone v0.3.0 coding agent (996 passed / 16 skipped, historical evidence macOS Python 3.14 2026-11-15): multi-provider (Ollama default + OpenAI/Anthropic/Grok/Google/DeepSeek opt-in), Windows/macOS/Linux x86_64+arm64, Python 3.12+, optional CORE integration (declared in compatibility.json, offline fallback); Linux/Pi headless generation-only; ASIS direct integration implemented | C.O.R.E.-mediated integration (future); real Pi/ARM64 |
+| **A.S.C.S.** | Standalone v0.3.0 coding agent (996 passed / 16 skipped, macOS Python 3.14 recorded 2026-11-15, re-verified 2026-11-20): multi-provider (Ollama default + OpenAI/Anthropic/Grok/Google/DeepSeek opt-in), Windows/macOS/Linux x86_64+arm64, Python 3.12+, CORE integration **declared only** (`compatibility.json`, no runtime client code — runs standalone with offline fallback); Linux/Pi headless generation-only; ASIS direct integration implemented | C.O.R.E.-mediated integration (future); real Pi/ARM64 |
 
 ## 7. Filesystem reality
 

@@ -83,7 +83,7 @@ Agent **IN DEVELOPMENT** (v0.2.0), local clone present (`TIVISS/`): OllamaProvid
 
 ## 7. A.S.C.S.
 
-**IMPLEMENTED as a standalone tool** (v0.3.0; standalone, multi-provider, Windows/macOS/Linux x86_64+arm64, Python 3.12+, optional CORE integration per `ASCS/compatibility.json`; historical evidence: 996 passed / 16 skipped on macOS Python 3.14 — stated as 2026-11-15 in [testing.md](testing.md), an earlier note here said 2026-11-09, exact date unverified; Linux/Pi headless generation-only). See [systems/asc.md](../systems/asc.md). Its own phase roadmap (00–06) lives in `ASCS/docs/phases/`. **ASIS integration IMPLEMENTED** (`export_handover_state()` + `ascs_integration` toolset). C.O.R.E.-mediated use by A.S.I.S./T.I.V.I.S.S. is **FUTURE**.
+**IMPLEMENTED as a standalone tool** (v0.3.0; standalone, multi-provider, Windows/macOS/Linux x86_64+arm64, Python 3.12+, CORE integration declared in `ASCS/compatibility.json` (manifest only — no runtime client code); historical evidence: 996 passed / 16 skipped on macOS Python 3.14, **re-verified 2026-11-20**; two distinct dated measurements exist — 991 passed / 6 skipped on 2026-11-09 ([ADR 0007](../decisions/0007-ascs-standalone-coding-agent.md)) and 996 / 16 on 2026-11-15 ([testing.md](testing.md)) — so the earlier "exact date unverified" note is resolved; Linux/Pi headless generation-only). See [systems/asc.md](../systems/asc.md). Its own phase roadmap (00–06) lives in `ASCS/docs/phases/`. **ASIS integration IMPLEMENTED** (`export_handover_state()` + `ascs_integration` toolset). C.O.R.E.-mediated use by A.S.I.S./T.I.V.I.S.S. is **FUTURE**.
 
 ## 8. RadarS.A.R.D.
 
