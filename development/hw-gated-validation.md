@@ -26,7 +26,7 @@ re-open only when the listed resource exists.
 | 8 | R.E.S.C.S. live PostgreSQL/Supabase | ❌ BLOCKED | No live DB or `RESCS_INTEGRATION_DATABASE_URL` |
 | 9 | R.E.S.C.S. 24/7 endurance | ❌ BLOCKED | Needs non-primary hardware; >5 s budget is forbidden on the MacBook |
 | 10 | A.S.I.S./A.S.C.S. live voice + model | ❌ BLOCKED | Requires mic/speaker + Ollama 30b; live flags forbidden by AGENT.md here |
-| 11 | T.I.V.I.S.S. external verification | ✅ LOCAL VERIFIED | Local `TIVISS/` checkout passes 279 tests; upstream re-clone still optional |
+| 11 | T.I.V.I.S.S. external verification | ✅ LOCAL VERIFIED | Local `TIVISS-HOST/` checkout passes 279 tests; upstream re-clone still optional |
 | 12 | Historical Pi/ARM64 deployment (CORE + RESCS) | ❌ HISTORICAL / BLOCKED | Not a CORE 0.6.0 server target; no Pi hardware or systemd host |
 
 ## Rules that always apply
@@ -41,7 +41,7 @@ re-open only when the listed resource exists.
 ## 0. CORE 0.6.0 Void Linux HP 14
 
 | Preconditions | HP 14-dq1037wm, Void Linux x86_64 glibc, runit, at least 5 GiB free, release archive, reviewed `core.env`/`rescs.env`/Caddy origin |
-| Source of truth | `CORE/README.md`, `CORE/deployment/void/README.md`, `CORE/deployment/void/install.sh` |
+| Source of truth | `CORE-HOST/README.md`, `RISARMS-HOST/deployment/void/README.md`, `RISARMS-HOST/deployment/void/install.sh` |
 | Procedure | Extract the release, run `sudo ./deployment/void/install.sh`, review configuration, enable runit services, run `sudo risarms-doctor`, reboot, then test login and backup/restore |
 | Acceptance | Services start on boot; Caddy trust works; CORE/RESCS health endpoints pass; nftables does not lock out SSH; keys do not rotate; upgrade, rollback, backup, restore and storage-failure drills pass; no secrets in logs |
 | Do NOT | Claim signed server updates or hardware validation; this release ships a source archive and no server update signature |
@@ -50,7 +50,7 @@ re-open only when the listed resource exists.
 ## 0b. Historical physical Raspberry Pi / ARM64 deployment (CORE + RESCS)
 
 | Preconditions | Raspberry Pi 4/5 (ARM64), Raspberry Pi OS 64-bit, cgroup v2, systemd, dedicated SSD mounted at `/srv/core` |
-| Source of truth | `CORE/deployment/pi/README.md`, `CORE/deployment/pi/install.sh`, `RESCS/deploy/pi/` |
+| Source of truth | `RISARMS-HOST/deployment/pi/README.md`, `RISARMS-HOST/deployment/pi/install.sh`, `RESCS/deploy/pi/` |
 | Procedure | Run the CORE Pi installer on clean hardware; verify systemd units, `/srv/core` guard, service health, and reboot persistence; then exercise CORE ↔ RESCS loopback |
 | Acceptance | Services start on boot, `/srv/core` is enforced, loopback passes, no secrets in logs, clean restart after power loss |
 | Do NOT | Treat macOS x86_64 unit tests as Pi/ARM64 validation; commit device certs or provisioning tokens. Pi is not a CORE 0.6.0 server target |
@@ -58,7 +58,7 @@ re-open only when the listed resource exists.
 ## 1. Physical LAN — Void CORE host ↔ RISARMS-ui device
 
 | Preconditions | Installed Void host on the LAN with trusted Caddy; RISARMS-ui desktop client on a separate device; only TCP `443` exposed |
-| Source of truth | `CORE/CORE-HOST/docs/lan-readiness.md` (preflight §0, checklist) and `CORE/README.md` |
+| Source of truth | `CORE-HOST/docs/lan-readiness.md` (preflight §0, checklist) and `CORE-HOST/README.md` |
 | Procedure | Complete item 0, then sign in from the desktop client and exercise messaging, reconnect and revocation over the LAN |
 | Acceptance | All checklist boxes ticked; certificate verification stays enabled; host logs contain no credentials; desktop profile contains NO session token |
 | Do NOT | Wait 24 h for lease expiry (fake-clock tests cover it), disable TLS, or commit `var/rescs.json` / cert material |
@@ -99,9 +99,9 @@ Gated tests: `RESCS/tests/integration/test_s3_live.py` (`requires_live_s3`).
 
 ## 6. T.I.V.I.S.S. external verification
 
-| Status | **LOCAL VERIFIED** — local checkout exists at `RISARMS/TIVISS/` and passes **279 tests**. To re-verify against upstream, clone `https://github.com/Kishir298/TIVISS` fresh and run its test suite. Do not clone it into the RISARMS workspaces without explicit direction |
+| Status | **LOCAL VERIFIED** — local checkout exists at `RISARMS/TIVISS-HOST/` and passes **279 tests**. To re-verify against upstream, clone `https://github.com/Kishir298/TIVISS-HOST` fresh and run its test suite. Do not clone it into the RISARMS workspaces without explicit direction |
 
 ## Related
 
 - [Testing](testing.md)
-- [LAN Readiness](https://github.com/Kishir298/CORE/blob/main/CORE-HOST/docs/lan-readiness.md) — canonical host-side checklist
+- [LAN Readiness](https://github.com/Kishir298/CORE-HOST/blob/main/docs/lan-readiness.md) — canonical host-side checklist

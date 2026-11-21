@@ -56,21 +56,21 @@ Equally important is what each system does **not** own:
 
 ```text
 RISARMS/
-├── CORE/           <- owned by C.O.R.E. development
-│   ├── CORE-HOST/  <- server/runtime (package `core`)
-│   ├── CORE-CLIENT/<- external-device client (package `client`, stdlib-only)
-│   └── services/   <- release/deployment copies of independent services
+├── CORE-HOST/      <- owned by C.O.R.E. development (server/runtime, package `core`)
+├── CORE-CLIENT/    <- owned by C.O.R.E. development (external-device client, package `client`, stdlib-only)
+├── RISARMS-HOST/   <- umbrella: release/deployment copies of independent services (services/*)
 ├── RESCS/          <- owned by R.E.S.C.S. development (independent)
 ├── ASIS/           <- owned by A.S.I.S. development (independent)
 ├── ASCS/           <- owned by A.S.C.S. development (independent)
-├── TIVISS/         <- owned by T.I.V.I.S.S. development (independent, foundation-only)
+├── TIVISS-HOST/    <- owned by T.I.V.I.S.S. development (independent, foundation-only)
+├── TIVISS-CLIENT/  <- owned by T.I.V.I.S.S. development (client scaffold)
 ├── old-versions/   <- local archive (not a git repository)
 └── RISARMS-DOCS/   <- this documentation (remote: RISARMS-DOCS)
 ```
 
 The owning source repositories are the standalone `RESCS/`, `ASIS/`, `ASCS/`, and
-`TIVISS/`. `CORE/services/*` contains release mirrors for installation and
-deployment; edits belong in the owning repository and are synced into CORE.
+`TIVISS-HOST/`/`TIVISS-CLIENT/`. `RISARMS-HOST/services/*` contains release mirrors for installation and
+deployment; edits belong in the owning repository and are synced into `RISARMS-HOST`.
 Integration is contract-based. Rationale: ADR [0001](../decisions/0001-rescs-independent-from-core.md), ADR [0002](../decisions/0002-asis-independent-from-core.md), ADR [0005](../decisions/0005-storage-integration-via-adapter.md), ADR [0007](../decisions/0007-ascs-standalone-coding-agent.md).
 
 ## 4. Boundary rules for agents

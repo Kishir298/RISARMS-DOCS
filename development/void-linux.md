@@ -147,8 +147,8 @@ configuration rollback. Never auto-apply an owner action or an update.
 
 ## Related
 
-- [CORE repository README](https://github.com/Kishir298/CORE/blob/main/README.md)
-- [Void deployment README](https://github.com/Kishir298/CORE/blob/feat/desktop-control-channel/deployment/void/README.md)
-  — lives on `feat/desktop-control-channel` today; moves to `main` after merge
+- [CORE-HOST repository README](https://github.com/Kishir298/CORE-HOST/blob/main/README.md)
+- [Void deployment README](https://github.com/Kishir298/RISARMS-HOST/blob/main/deployment/void/README.md)
+  — lives on `RISARMS-HOST` `main` (moved from `feat/desktop-control-channel` on `CORE` at the 2026-11-21 split)
 - [Hardware-gated validation](hw-gated-validation.md)
 - [Update supply chain](update-supply-chain.md)

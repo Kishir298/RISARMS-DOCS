@@ -1,6 +1,6 @@
 # C.O.R.E. — Communication, Organization and Resource Engine
 
-> [!NOTE] **Status:** v0.6.0 **IMPLEMENTED** (beta source; combined `CORE-HOST` + `CORE-CLIENT` project). Package version is 0.6.0; wire/protocol compatibility remains 0.4.0. The server release targets **Void Linux x86_64 glibc with runit** (the HP 14-dq1037wm is the **reference deployment machine**, not a hardware gate). Booted Void install, reboot, upgrade/rollback, storage failure, backup restore, physical HP, physical LAN validation (Void CORE host ↔ RISARMS-ui clients on macOS Intel, macOS Apple Silicon, Windows x86_64 and Linux x86_64), and extended 24/7 operational validation are **NOT YET PERFORMED** — deployment-validation tasks, not missing server software. Compatibility with older clients is preserved by design.
+> [!NOTE] **Status:** v0.6.0 **IMPLEMENTED** (beta source; split since 2026-11-21 into the `CORE-HOST` + `CORE-CLIENT` repositories — see [systems/core-client.md](core-client.md) for the client and [systems/risarms-host.md](risarms-host.md) for the umbrella). Package version is 0.6.0; wire/protocol compatibility remains 0.4.0. The server release targets **Void Linux x86_64 glibc with runit** (the HP 14-dq1037wm is the **reference deployment machine**, not a hardware gate). Booted Void install, reboot, upgrade/rollback, storage failure, backup restore, physical HP, physical LAN validation (Void CORE host ↔ RISARMS-ui clients on macOS Intel, macOS Apple Silicon, Windows x86_64 and Linux x86_64), and extended 24/7 operational validation are **NOT YET PERFORMED** — deployment-validation tasks, not missing server software. Compatibility with older clients is preserved by design.
 
 ## 1. What C.O.R.E. is
 
@@ -34,8 +34,8 @@ C.O.R.E. is the **central management and control engine** of R.I.S.A.R.M.S. It i
 
 ## 2. Filesystem and project
 
-- Location: `RISARMS/CORE/` — one combined project containing `CORE-HOST/` (server/runtime, package `core`) and `CORE-CLIENT/` (stdlib-only external-device client, package `client`, Option A login), plus `services/`, `deployment/`, `install/`, and `validation/`
-- Git repository: `CORE/` (publishes to the `CORE` GitHub remote; the old standalone `CORE-CLIENT` repo was left untouched)
+- Location: `RISARMS/CORE-HOST/` — the C.O.R.E. host/runtime repository (server, package `core`). The client lives in `RISARMS/CORE-CLIENT/` (stdlib-only external-device client, package `client`, Option A login); umbrella assets (`services/`, `deployment/`, `install/`, `validation/`) live in `RISARMS/RISARMS-HOST/`
+- Git repositories: `CORE-HOST` (remote `Kishir298/CORE-HOST`) and `CORE-CLIENT` (remote `Kishir298/CORE-CLIENT`) — split from the former `CORE` monorepo on 2026-11-21; umbrella `RISARMS-HOST` (remote `Kishir298/RISARMS-HOST`)
 - Language: Python (>= 3.10), package name `core`
 - Runtime requirements: `PyYAML`; optional monitoring extra adds `prometheus-client` + `fastapi`
 - CLI entry point: `core-host` (or `python -m core`); client entry point: `core-client`
@@ -82,10 +82,9 @@ core/
 ├── services/      ServiceManager, ServiceDispatcher
 └── web/           Owner portal gateway, RESCS storage adapter, safe-chat worker
 ```
-Host layout: `CORE/CORE-HOST/core/` + `CORE/CORE-HOST/config/` (`core.yaml` dev, `core.lan.example.yaml` LAN deployment).
-Client: `CORE/CORE-CLIENT/client/core_device_client.py` — minimal stdlib external-device client with Option A login semantics (never imports `core`).
-Combined project also carries `services/{ASIS,ASCS,RESCS,TIVISS}`, `deployment/void/` (the v0.6.0 installer/services; legacy Pi deployment assets retained historically), `install/` wheels, and `validation/` release evidence.
-```
+Host layout: `CORE-HOST/core/` + `CORE-HOST/config/` (`core.yaml` dev, `core.lan.example.yaml` LAN deployment).
+Client: `CORE-CLIENT/client/core_device_client.py` — minimal stdlib external-device client with Option A login semantics (never imports `core`).
+Umbrella repository also carries `services/{ASIS,ASCS,RESCS,TIVISS}` (in `RISARMS-HOST/`), `deployment/void/` (the v0.6.0 installer/services; legacy Pi deployment assets retained historically), `install/` wheels, and `validation/` release evidence — see [systems/risarms-host.md](risarms-host.md).
 
 ### 4.1 Purpose of each subsystem (highlights beyond the v0.1 foundation)
 
@@ -133,21 +132,21 @@ External TCP requires TLS 1.2+, token authentication, validated protocol version
 These are deployment-validation items, not missing software:
 
 - **Physical LAN validation — Void CORE host ↔ RISARMS-ui clients on macOS Intel, macOS Apple Silicon, Windows x86_64 and Linux x86_64 — has NOT YET BEEN PERFORMED.** (Historical two-machine Windows-host ↔ Mac tests retain their original dates/context elsewhere and do not satisfy this matrix.) All external-transport behavior is covered by automated localhost tests (TLS, handshake, framing, identity, persistence, timeouts).
-- **Launcher-owned `ollama serve` lifecycle: PERFORMED 2026-09-19** (tray quit → owned autostart → owned stop → tray restored; pre-existing servers untouched). See CORE's `docs/serve-autostart-manual-test.md`.
+- **Launcher-owned `ollama serve` lifecycle: PERFORMED 2026-09-19** (tray quit → owned autostart → owned stop → tray restored; pre-existing servers untouched). See CORE-HOST's `docs/serve-autostart-manual-test.md`.
 - **Extended 24/7 physical-host validation has not been performed** (Task Scheduler autostart and NSSM service configuration are documented but not endurance-validated).
-- The development configuration (`transport: local`, `network.enabled: false`, `security.enforce_authorization: false`) is intentionally *not* the deployment configuration; see `config/core.lan.example.yaml` and CORE's own `docs/lan-readiness.md`.
+- The development configuration (`transport: local`, `network.enabled: false`, `security.enforce_authorization: false`) is intentionally *not* the deployment configuration; see `config/core.lan.example.yaml` and CORE-HOST's own `docs/lan-readiness.md`.
 
 ## 5. Test coverage
 
-- **75 host test files; 911 passed / 4 skipped on macOS Python 3.14 (2026-11-16).** Client: **20 test files, 225 passed / 1 skipped**. Void deployment assets add static tests for the installer, runit scripts, storage guard, backup/restore, upgrade/rollback, diagnostics, manifest and workflow. Public-origin proxy checks ignore `X-Forwarded-Host`; partial control frames are covered across read timeouts.
+- **CORE-HOST: 888 passed / 4 skipped on macOS Python 3.14 (2026-11-21, post-split).** CORE-CLIENT: **225 passed / 1 skipped** (2026-11-21; the skip is the `tkinter` GUI test, environment-dependent). Pre-split the combined suite reported 911 passed / 4 skipped — the 23 deployment/manifest asset tests moved with `deployment/` to `RISARMS-HOST/` (see [systems/risarms-host.md](risarms-host.md), 57 tests). Public-origin proxy checks ignore `X-Forwarded-Host`; partial control frames are covered across read timeouts.
 - Coverage includes application orchestration, communication/TLS/framing, protocol negotiation, authentication, device registration/persistence/reconnect, discovery, presence, routing, services, resources, organization/reconciliation, R.E.S.C.S. adapters, scheduler, data distribution, health, events, integration behavior, Pi policy, and legacy compatibility.
 
 ## 5b. Web portals (v0.6.0)
 
 Localhost-only presentation planes (no new authorities):
 
-- **Host portal** (`CORE/CORE-HOST/core/portal/`, default `http://127.0.0.1:8765`, configurable via the `web:` config section): 16 sections — Overview, Devices, Network, Resources, Services, Agents, R.E.S.C.S., Health, Events, Routing, Data Distribution, Sessions, Security, Configuration, Logs, Diagnostics. Starts with the host (`core-host` prints the URL); CLI remains fully available.
-- **Client portal** (`CORE/CORE-CLIENT/client/portal/`, default `http://127.0.0.1:8766`): 8 sections — Dashboard, Devices, R.E.S.C.S., Services, AI, Network, Session, Settings. Works offline (remote sections report `C.O.R.E. HOST OFFLINE`); starts with the client CLI unless `--no-portal`.
+- **Host portal** (`CORE-HOST/core/portal/`, default `http://127.0.0.1:8765`, configurable via the `web:` config section): 16 sections — Overview, Devices, Network, Resources, Services, Agents, R.E.S.C.S., Health, Events, Routing, Data Distribution, Sessions, Security, Configuration, Logs, Diagnostics. Starts with the host (`core-host` prints the URL); CLI remains fully available.
+- **Client portal** (`CORE-CLIENT/client/portal/`, default `http://127.0.0.1:8766`): 8 sections — Dashboard, Devices, R.E.S.C.S., Services, AI, Network, Session, Settings. Works offline (remote sections report `C.O.R.E. HOST OFFLINE`); starts with the client CLI unless `--no-portal`.
 - **Capability detection** is deterministic (HIGH/MEDIUM/LOW/UNKNOWN from RAM + CPU cores; Qwen model profiles centralized in one policy module; no LLM involved).
 - **AI offload** routes through the existing `AgentScheduler` (`agent` service `infer` operation): placement truthfully returned, never fabricated model output.
 - **Security**: recursive response redaction (credentials, session tokens shown only as `ACTIVE`, TLS keys, RESCS/S3 secrets never leave the backend); localhost binding default; location is opt-in manual/device-reported with precision controls; Haversine distance only with both coordinates.
@@ -199,7 +198,7 @@ The 13-phase v0.2 build order was completed; the phase definitions (objectives, 
 
 | Capability | Status |
 |---|---|
-| Combined `CORE-HOST` + `CORE-CLIENT` repository and root CI | IMPLEMENTED |
+| Combined `CORE-HOST` + `CORE-CLIENT` repository and root CI | IMPLEMENTED (v0.6.0 release; split 2026-11-21 into separate `CORE-HOST`, `CORE-CLIENT` and `RISARMS-HOST` repositories, each with its own CI) |
 | Void x86_64 installer, versioned venvs, storage guard, Caddy/nftables, runit services and svlogd rotation | IMPLEMENTED (static tests only; booted Void pending) |
 | Backup/restore, upgrade/rollback, diagnostics and install-state snapshots | IMPLEMENTED (static tests only; runtime drill pending) |
 | Historical Pi deployment scripts, wheels, and validation evidence | RETAINED (not a 0.6.0 server target) |

@@ -23,7 +23,7 @@ RISARMS-ui/
 
 ```bash
 python3 -m venv .venv
-.venv/bin/python -m pip install -e ../CORE/CORE-CLIENT
+.venv/bin/python -m pip install -e ../CORE-CLIENT
 .venv/bin/python -m pip install -e ".[test]"
 .venv/bin/python -m pytest -q
 .venv/bin/python -m risarms_ui --doctor

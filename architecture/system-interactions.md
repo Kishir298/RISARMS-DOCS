@@ -90,7 +90,7 @@ sequenceDiagram
 
 ### C.O.R.E. ↔ A.S.I.S.
 
-- **Current (opt-in):** A.S.I.S. runs standalone by default. Its `integrations/core` package provides `RealCoreAdapter` + `CoreConnectionManager` over `CORE/CORE-CLIENT/CoreDeviceClient` (TCP+TLS handshake → auth → `DEVICE_REGISTER` → online), plus a mock adapter. Enable with `ASIS_CORE_ENABLED=true`; local operation survives host loss and reconnects are bounded. **Offline-tested; no live LAN traffic.**
+- **Current (opt-in):** A.S.I.S. runs standalone by default. Its `integrations/core` package provides `RealCoreAdapter` + `CoreConnectionManager` over `CORE-CLIENT/CoreDeviceClient` (TCP+TLS handshake → auth → `DEVICE_REGISTER` → online), plus a mock adapter. Enable with `ASIS_CORE_ENABLED=true`; local operation survives host loss and reconnects are bounded. **Offline-tested; no live LAN traffic.**
 - **Remaining:** physical LAN deployment validation and a fuller C.O.R.E.-mediated service contract. C.O.R.E.'s scheduler reserves `asis-local`/`asis-offload` profiles.
 
 ### C.O.R.E. ↔ External Devices
@@ -127,7 +127,7 @@ sequenceDiagram
 
 ### C.O.R.E. ↔ T.I.V.I.S.S.
 
-- **Current:** No connected code (T.I.V.I.S.S. foundation is cloned locally at `TIVISS/` but still foundation-only; its adapters are local/mock interfaces).
+- **Current:** No connected code (T.I.V.I.S.S. foundation is cloned locally at `TIVISS-HOST/` but still foundation-only; its adapters are local/mock interfaces).
 - **Future:** T.I.V.I.S.S. requests through C.O.R.E.; C.O.R.E. respects T.I.V.I.S.S. identity/ownership model.
 
 ### A.S.I.S. ↔ R.E.S.C.S.

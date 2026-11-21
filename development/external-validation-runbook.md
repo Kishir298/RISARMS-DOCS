@@ -188,12 +188,12 @@ RISALIVE=1 .venv/bin/python -m pytest tests/integration/test_ollama_live.py -q -
 
 ### Prerequisites
 - Internet access
-- Fresh clone of upstream (not the local `RISARMS/TIVISS/` clone)
+- Fresh clone of upstream (not the local `RISARMS/TIVISS-HOST/` clone)
 
 ### Procedure
 ```bash
-git clone https://github.com/Kishir298/TIVISS
-cd TIVISS
+git clone https://github.com/Kishir298/TIVISS-HOST
+cd TIVISS-HOST
 python3 -m pytest -q -v
 ```
 
@@ -238,7 +238,7 @@ cd ASCS && RISALIVE=1 .venv/bin/python -m pytest tests/integration/test_ollama_l
 cd RESCS && RESCS_ENDURANCE_SECONDS=86400 .venv/bin/python -m pytest tests/integration/test_reliability.py -q
 
 # 6. TIVISS upstream
-git clone https://github.com/Kishir298/TIVISS && cd TIVISS && python3 -m pytest -q
+git clone https://github.com/Kishir298/TIVISS-HOST && cd TIVISS-HOST && python3 -m pytest -q
 ```
 
 ---
@@ -252,17 +252,17 @@ git clone https://github.com/Kishir298/TIVISS && cd TIVISS && python3 -m pytest 
 ### Prerequisites
 - Raspberry Pi 4/5 (ARM64), Raspberry Pi OS 64-bit, cgroup v2, systemd
 - Dedicated SSD mounted at `/srv/core`
-- Release artifacts from `CORE/install/` and `RESCS/`
+- Release artifacts from `RISARMS-HOST/install/` and `RESCS/`
 
 ### Procedure
 ```bash
 # On the Pi
-sudo bash CORE/deployment/pi/install.sh
+sudo bash RISARMS-HOST/deployment/pi/install.sh
 # Verify services and boot persistence
 systemctl status core-host rescs
 curl http://127.0.0.1:8081/health
-# From CORE/CORE-HOST, exercise the real loopback
-.venv/bin/python ../../RESCS/scripts/validate_core_loopback.py
+# From CORE-HOST, exercise the real loopback
+.venv/bin/python ../RESCS/scripts/validate_core_loopback.py
 ```
 
 ### Validation Checklist
@@ -297,5 +297,5 @@ Store results in `validation-results/<date>-<validation>/` for audit trail.
 
 - [Testing](testing.md) — Local test suite status
 - [Hardware-Gated Validation](hw-gated-validation.md) — Original blocker matrix
-- [LAN Readiness](https://github.com/Kishir298/CORE/blob/main/CORE-HOST/docs/lan-readiness.md) — Host-side preflight
+- [LAN Readiness](https://github.com/Kishir298/CORE-HOST/blob/main/docs/lan-readiness.md) — Host-side preflight
 - [ADR 0007](../decisions/0007-ascs-standalone-coding-agent.md) — ASIS↔ASCS local-tool exception

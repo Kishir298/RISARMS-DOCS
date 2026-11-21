@@ -12,7 +12,7 @@ Its declared long-term role in R.I.S.A.R.M.S. is as a coding capability that A.S
 
 ## 2. Project facts
 
-- Location: `RISARMS/ASCS/` (sibling of `CORE/`, `RESCS/`, `ASIS/`, `TIVISS/`, `RISARMS-DOCS/`); mirrored at `CORE/services/ASCS/` for the combined release
+- Location: `RISARMS/ASCS/` (sibling of `CORE-HOST/`, `RESCS/`, `ASIS/`, `TIVISS-HOST/`, `RISARMS-DOCS/`); mirrored at `RISARMS-HOST/services/ASCS/` for the combined release
 - Own git repository (origin `https://github.com/Kishir298/ASCS.git`, branch `main`)
 - Package: `agent` (distribution name `coding-agent`), version `0.3.0`; console scripts `ascs`, `risa`
 - Entry point: `risa` (e.g. `risa --auto "…"`, `risa --tasks "…"`, `risa --ui`, `risa --tui`, `risa --doctor`, `risa --pi`)

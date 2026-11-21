@@ -1,7 +1,7 @@
 # R.I.S.A.R.M.S. documentation and packaging toolchain.
 #
 # Runtime dependencies are declared by the project that owns them:
-#   CORE/CORE-HOST/requirements.txt, ASCS/, RESCS/, TIVISS/, RISARMS-ui/pyproject.toml
+#   CORE-HOST/requirements.txt, ASCS/, RESCS/, TIVISS-HOST/, RISARMS-ui/pyproject.toml
 # Duplicating them here caused drift, so this file only lists what is needed to
 # test and package the ecosystem from the documentation workspace.
 #

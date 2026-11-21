@@ -1,6 +1,6 @@
 # A.S.I.S. — A Smart Intelligence System
 
-> [!NOTE] **Status:** **IN DEVELOPMENT** — rebuilt `asis` package (v0.1.0) ships CLI, Ollama provider, inference/conversation/context engines, local SQLite memory, tool system, permissions, events, voice pipeline, and the Pi policy/worker/handoff update. Verified: **948 passed / 24 skipped** (macOS Python 3.12, 2026-11-15). Legacy `core/` + `02_voice/` trees deprecated. C.O.R.E. uplink is a real optional adapter via `CORE/CORE-CLIENT`, standalone by default; physical LAN validation NOT PERFORMED. R.E.S.C.S. remains future/placeholder. A.S.I.S. is an **independent project**. Dangerous local confirmations include sanitized tool arguments and broker session approvals are scoped to those arguments.
+> [!NOTE] **Status:** **IN DEVELOPMENT** — rebuilt `asis` package (v0.1.0) ships CLI, Ollama provider, inference/conversation/context engines, local SQLite memory, tool system, permissions, events, voice pipeline, and the Pi policy/worker/handoff update. Verified: **948 passed / 24 skipped** (macOS Python 3.12, 2026-11-15). Legacy `core/` + `02_voice/` trees deprecated. C.O.R.E. uplink is a real optional adapter via `CORE-CLIENT`, standalone by default; physical LAN validation NOT PERFORMED. R.E.S.C.S. remains future/placeholder. A.S.I.S. is an **independent project**. Dangerous local confirmations include sanitized tool arguments and broker session approvals are scoped to those arguments.
 
 ## 1. What A.S.I.S. is
 
@@ -26,7 +26,7 @@ A.S.I.S. **does not directly own** C.O.R.E.'s responsibilities: message routing,
 
 > [!IMPORTANT] A.S.I.S. is an independent project. It must **never** be placed inside CORE. It uses C.O.R.E. through interfaces. Rationale: ADR [0002](../decisions/0002-asis-independent-from-core.md).
 
-- Location: `RISARMS/ASIS/` (sibling of `CORE/`, `RESCS/`, `ASCS/`, `TIVISS/`, `RISARMS-DOCS/`); mirrored at `CORE/services/ASIS/` for the combined release
+- Location: `RISARMS/ASIS/` (sibling of `CORE-HOST/`, `RESCS/`, `ASCS/`, `TIVISS-HOST/`, `RISARMS-DOCS/`); mirrored at `RISARMS-HOST/services/ASIS/` for the combined release
 - Own git repository (origin `https://github.com/Kishir298/ASIS.git`, branch `main`; `legacy-before-rebuild` branch preserves the pre-rebuild state)
 - Stack: Python ≥ 3.11, setuptools package `asis`; extras for AI (`ollama`, `requests`), voice (`faster-whisper`, `silero-vad`, `sounddevice`, torch stack, openwakeword), dev (pytest/ruff/black)
 - Entry points: `asis` console script (`asis.cli.main:entry`) and `python -m asis`
@@ -63,7 +63,7 @@ Pre-rebuild Forza-era trees (`core/`, `02_voice/`, `monitoring/`) are **deprecat
 
 ## 5. A.S.I.S. ↔ C.O.R.E. ↔ R.E.S.C.S. integration (CORE real-optional, RESCS future)
 
-- `integrations/core` — `RealCoreAdapter` + `CoreConnectionManager` over `CORE/CORE-CLIENT/CoreDeviceClient` (TCP+TLS, `CORE_HANDSHAKE`→auth→`DEVICE_REGISTER`→online). Opt-in via `ASIS_CORE_ENABLED=true`; standalone by default. Local operation survives host loss; reconnect bounded/stop-aware; `CORE_UNAVAILABLE` on failure. Physical LAN validation NOT PERFORMED.
+- `integrations/core` — `RealCoreAdapter` + `CoreConnectionManager` over `CORE-CLIENT/CoreDeviceClient` (TCP+TLS, `CORE_HANDSHAKE`→auth→`DEVICE_REGISTER`→online). Opt-in via `ASIS_CORE_ENABLED=true`; standalone by default. Local operation survives host loss; reconnect bounded/stop-aware; `CORE_UNAVAILABLE` on failure. Physical LAN validation NOT PERFORMED.
 - `integrations/rescs` — placeholder adapter (`available()->False`); future storage flows via C.O.R.E., never direct.
 
 ```text

@@ -30,8 +30,8 @@ A version is only coherent when these agree:
 | **R.E.S.C.S.** | `0.4.0` | Consistent (pyproject + CHANGELOG + package) |
 | **A.S.I.S.** | `0.1.0` | Consistent for `asis` package; Pi policy/worker update |
 | **A.S.C.S.** | `0.3.0` | Consistent; distribution name `coding-agent` vs package `agent` vs command `risa` |
-| **T.I.V.I.S.S.** | `0.2.0` | Local clone at `TIVISS/` (CLI, export/import, logging, voice, core_tcp/rescs_http offline-tested) |
-| **Portals** | `v0.6.0` | Browser portal ships in `CORE/`; desktop portal ships as RISARMS-ui `0.6.0` |
+| **T.I.V.I.S.S.** | `0.2.0` | Local clone at `TIVISS-HOST/` (CLI, export/import, logging, voice, core_tcp/rescs_http offline-tested) |
+| **Portals** | `v0.6.0` | Browser portal ships in `CORE-HOST/`; desktop portal ships as RISARMS-ui `0.6.0` |
 | **Radar** | — | Code-free |
 
 ## 4. Known, accepted quirks (tracked)

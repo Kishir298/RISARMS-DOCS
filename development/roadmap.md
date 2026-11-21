@@ -79,7 +79,7 @@ R.E.S.C.S. documents its own history in `RESCS/CHANGELOG.md` and `docs/architect
 
 ## 6. T.I.V.I.S.S.
 
-Agent **IN DEVELOPMENT** (v0.2.0), local clone present (`TIVISS/`): OllamaProvider, SQLiteMemoryStore (dual SQLite), CLI, export/import, logging, voice abstraction, and stdlib-only C.O.R.E./R.E.S.C.S. transports tested offline. Verified: 299 passed. The defining open question — the handover model — is unresolved; see [systems/tiviss.md](../systems/tiviss.md).
+Agent **IN DEVELOPMENT** (v0.2.0), local clone present (`TIVISS-HOST/`): OllamaProvider, SQLiteMemoryStore (dual SQLite), CLI, export/import, logging, voice abstraction, and stdlib-only C.O.R.E./R.E.S.C.S. transports tested offline. Verified: 299 passed. The defining open question — the handover model — is unresolved; see [systems/tiviss.md](../systems/tiviss.md).
 
 ## 7. A.S.C.S.
 

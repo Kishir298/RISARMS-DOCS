@@ -60,9 +60,9 @@ The arrows are explained precisely in [System Interactions](architecture/system-
 ## 4. Each subsystem at a glance
 
 - **C.O.R.E.** is the central control engine. It owns communication, message protocols, routing, organization, resources, services, runtime/lifecycle, events, dependencies, configuration, health, logging and security infrastructure. It is **not** the primary AI. CORE 0.6.0 server releases target **Void Linux x86_64 glibc with runit; HP 14 is the reference deployment machine**; Windows, macOS, Raspberry Pi/ARM64 and systemd server deployments are historical or unsupported for this release. RISARMS-ui remains the supported desktop client. The canonical target is documented in [Void Linux host](development/void-linux.md). → [systems/core.md](systems/core.md)
-- **R.E.S.C.S.** is the cloud/data storage system: persistent records, file/object storage, retrieval, lifecycle/governance and cloud-backed data. It is an **independent project** (`RESCS/` next to `CORE/`); `CORE/services/RESCS/` is a release mirror. → [systems/rescs.md](systems/rescs.md)
-- **A.S.I.S.** is the primary AI/intelligence layer: natural-language understanding, reasoning, response generation and voice. It is an **independent project** (`ASIS/` next to `CORE/`). It uses C.O.R.E. (and storage through C.O.R.E.) rather than owning C.O.R.E. responsibilities. → [systems/asis.md](systems/asis.md)
-- **T.I.V.I.S.S.** is a separate AI agent with its own identity, configuration, memory, permissions and ownership model — intended to eventually be handed over to another person. It must **not** become a renamed copy of A.S.I.S. Its v0.2.0 foundation is cloned locally at `TIVISS/` and remains foundation-only (no live traffic, no real handover). → [systems/tiviss.md](systems/tiviss.md)
+- **R.E.S.C.S.** is the cloud/data storage system: persistent records, file/object storage, retrieval, lifecycle/governance and cloud-backed data. It is an **independent project** (`RESCS/` next to `CORE-HOST/`); `RISARMS-HOST/services/RESCS/` is a release mirror. → [systems/rescs.md](systems/rescs.md)
+- **A.S.I.S.** is the primary AI/intelligence layer: natural-language understanding, reasoning, response generation and voice. It is an **independent project** (`ASIS/` next to `CORE-HOST/`). It uses C.O.R.E. (and storage through C.O.R.E.) rather than owning C.O.R.E. responsibilities. → [systems/asis.md](systems/asis.md)
+- **T.I.V.I.S.S.** is a separate AI agent with its own identity, configuration, memory, permissions and ownership model — intended to eventually be handed over to another person. It must **not** become a renamed copy of A.S.I.S. Its v0.2.0 foundation lives locally at `TIVISS-HOST/` and remains foundation-only (no live traffic, no real handover). → [systems/tiviss.md](systems/tiviss.md)
 - **RadarS.A.R.D.** is the security/anomaly sensor layer. It detects and reports; C.O.R.E. coordinates the resulting events, logging, health state and responses. → [systems/radar-sard.md](systems/radar-sard.md)
 - **A.S.C.S.** is a local autonomous coding agent (multi-provider: Ollama, OpenAI, Anthropic, Grok, Google, DeepSeek — LiteLLM/OpenCode opt-in). It is fully implemented as a **standalone** tool (`requires_core: false`) on Windows/macOS/Linux x86_64+arm64, Python 3.12+, with **optional** C.O.R.E. integration (protocol 0.3.0/0.4.0 via `ASCS_CORE_CREDENTIAL` / `ASCS_CORE_ENABLED`, offline fallback) and a Linux/Pi headless generation-only path; full A.S.I.S./T.I.V.I.S.S. integration through C.O.R.E. remains future intent. → [systems/asc.md](systems/asc.md)
 - **RISARMS-UI** is the canonical cross-platform desktop application. It presents C.O.R.E., ASIS, ASCS, RESCS and TIVISS, keeps local profiles/history/records/files usable offline, and consumes CORE-HOST over HTTPS/WSS. It is a presentation client, not a new integration layer. → [systems/risarms-ui.md](systems/risarms-ui.md)
@@ -77,7 +77,7 @@ The arrows are explained precisely in [System Interactions](architecture/system-
 | **RISARMS-UI** | v0.6.0 **IMPLEMENTED** (source) | Canonical Tkinter desktop app with local profiles, offline SQLite store, keychain device credentials, explicit record/file sync, ASIS/ASCS/TIVISS workspaces, owner administration, loopback local-action approvals, signed update checks, verified update download, PyInstaller/native installer packaging and draft-only release validation. Verified: **286 UI tests passed**. Physical Apple Silicon, Windows, Linux and Void smoke runs, signed/notarized installers and public signed auto-updates remain **NOT YET PERFORMED** or gated. iOS TestFlight and Android beta are future work. |
 | **R.E.S.C.S.** | v0.4.0 **IMPLEMENTED** | Pi storage foundation: signed CORE owner scope (`X-RESCS-Signature`), required `/srv/core` mount guard, systemd/installer, real CORE loopback validation. Verified: 318 passed / 4 skipped. Live PostgreSQL/Supabase, real S3, deployed C.O.R.E. ↔ R.E.S.C.S. interop, and real Pi/ARM64 remain external validation. The local 0.3.1 line is archived separately; namespace/key uniqueness is unchanged. |
 | **A.S.I.S.** | **IN DEVELOPMENT** | Rebuilt `asis` package with Pi policy/worker/handoff support. Verified: 948 passed / 24 skipped (macOS Python 3.12). **ASCS integration IMPLEMENTED** via `ascs_integration` toolset (subprocess + API modes), `ascs_handover`, `ascs_status` — direct local-tool exception documented in ADR 0007; C.O.R.E.-mediated path is FUTURE. C.O.R.E. uplink optional; R.E.S.C.S. future. |
-| **T.I.V.I.S.S.** | **IN DEVELOPMENT** (v0.2.0) | v0.2.0 capabilities: **OllamaProvider** (real Ollama HTTP API with streaming, tool calling, thinking tag stripping), **SQLiteMemoryStore** (dual DB: `conversation_logs.db` + `semantic_memory.db`), Web/Calculator/Translation/Voice config mirroring ASIS. Foundation (identity, ownership, runtime, memory, permissions, handover). Verified: 299 passed. Local clone at `TIVISS/`; real handover intentionally not implemented. |
+| **T.I.V.I.S.S.** | **IN DEVELOPMENT** (v0.2.0) | v0.2.0 capabilities: **OllamaProvider** (real Ollama HTTP API with streaming, tool calling, thinking tag stripping), **SQLiteMemoryStore** (dual DB: `conversation_logs.db` + `semantic_memory.db`), Web/Calculator/Translation/Voice config mirroring ASIS. Foundation (identity, ownership, runtime, memory, permissions, handover). Verified: 299 passed. Local clone at `TIVISS-HOST/`; real handover intentionally not implemented. |
 | **RadarS.A.R.D.** | **PLANNED / FUTURE** | No code exists anywhere. |
 | **A.S.C.S.** | **IMPLEMENTED** (standalone) | v0.3.0 coding agent, **standalone** (`requires_core: false`), Python 3.12+, Windows/macOS/Linux x86_64+arm64, multi-provider (ollama, openai, anthropic, grok, google, deepseek; LiteLLM/OpenCode opt-in). **C.O.R.E. integration DECLARED, NOT IMPLEMENTED**: `compatibility.json` marks it optional (protocol 0.3.0/0.4.0, `ASCS_CORE_CREDENTIAL` / `ASCS_CORE_ENABLED`) but no runtime client code exists — ASCS runs standalone with offline fallback. Evidence: 996 passed / 16 skipped (macOS Python 3.14, recorded 2026-11-15, re-verified 2026-11-20). Desktop UI/TUI runtime remains Windows-primary; Pi mode has no tools or TUI. **ASIS integration IMPLEMENTED**: `export_handover_state()` for session continuity — direct local-tool exception in ADR 0007; C.O.R.E.-mediated use is future intent. |
 
@@ -164,9 +164,9 @@ The ecosystem the documentation governs:
 
 ```text
 RISARMS/
-├── CORE/           <- https://github.com/Kishir298/CORE (combined project)
-│   ├── CORE-HOST/  <- server/runtime, package `core`
-│   ├── CORE-CLIENT/<- stdlib-only external-device client, package `client`
+├── CORE-HOST/      <- https://github.com/Kishir298/CORE-HOST (server/runtime, package `core`, v0.6.0)
+├── CORE-CLIENT/    <- https://github.com/Kishir298/CORE-CLIENT (stdlib-only external-device client, package `client`)
+├── RISARMS-HOST/   <- https://github.com/Kishir298/RISARMS-HOST (umbrella: services/, deployment/, install/, validation/, risarms-host CLI)
 │   ├── services/   <- ASIS, ASCS, RESCS, TIVISS service copies
 │   ├── deployment/ <- Void installer/services (Pi assets retained historically)
 │   ├── install/    <- release wheels (core, core-client, rescs)
@@ -174,16 +174,19 @@ RISARMS/
 ├── RESCS/          <- https://github.com/Kishir298/RESCS (0.4.0)
 ├── ASIS/           <- https://github.com/Kishir298/ASIS
 ├── ASCS/           <- https://github.com/Kishir298/ASCS
-├── TIVISS/         <- https://github.com/Kishir298/TIVISS (v0.2.0)
+├── TIVISS-HOST/    <- https://github.com/Kishir298/TIVISS-HOST (v0.2.0 host runtime)
+├── TIVISS-CLIENT/  <- https://github.com/Kishir298/TIVISS-CLIENT (v0.1.0 client scaffold)
 ├── RISARMS-ui/     <- https://github.com/Kishir298/RISARMS-ui (canonical desktop app)
 ├── old-versions/   <- local archive (CORE 0.4.0, RESCS 0.3.1); not a git repository
 ├── RISARMS-DOCS/   <- this repository (remote: Kishir298/RISARMS-DOCS)
 └── Flavora/        <- excluded sibling; not an ecosystem member
 ```
 
+> [!NOTE] **2026-11-21 split:** the former combined `CORE/` and `TIVISS/` monorepo directories were split into the repositories above (`CORE` → `CORE-HOST`, `CORE-CLIENT`, `RISARMS-HOST`; `TIVISS` → `TIVISS-HOST`, `TIVISS-CLIENT`). Dated historical documents may still reference the old paths.
+
 > [!NOTE] **Excluded sibling:** `Flavora/` is an independent repository and is outside this workspace's in-scope repositories. It does not participate in C.O.R.E. routing or R.E.S.C.S. storage.
 
-> [!IMPORTANT] **Independence rule:** R.E.S.C.S., A.S.I.S., A.S.C.S. and T.I.V.I.S.S. are independent projects whose owning repos live *beside* C.O.R.E. `CORE/services/*` contains release mirrors for combined deployment only. Integration happens through defined interfaces and communication contracts, never through shared source ownership.
+> [!IMPORTANT] **Independence rule:** R.E.S.C.S., A.S.I.S., A.S.C.S. and T.I.V.I.S.S. are independent projects whose owning repos live as separate repositories beside C.O.R.E. `RISARMS-HOST/services/*` contains release mirrors for combined deployment only. Integration happens through defined interfaces and communication contracts, never through shared source ownership.
 
 ## 8. How to use this documentation
 

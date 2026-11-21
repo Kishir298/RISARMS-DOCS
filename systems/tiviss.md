@@ -1,6 +1,6 @@
 # T.I.V.I.S.S. — Though I'm Vanquished, I'm Still Stronger
 
-> [!NOTE] **Status:** Agent **IN DEVELOPMENT** (package v0.2.0 on GitHub: `https://github.com/Kishir298/TIVISS`, cloned locally at `RISARMS/TIVISS/`). Verified: **299 passed** (2026-11-15). Beyond the foundation (identity, ownership, runtime, memory, permissions, handover state model), TIVISS has: an interactive CLI (`tiviss` REPL + `--message`, `python -m tiviss`), **OllamaProvider**, **SQLiteMemoryStore** (dual databases), versioned secret-free state export/import, structured JSON-lines logging, provider timeouts, a replaceable voice abstraction, and stdlib-only `core_tcp` / `rescs_http` transports tested offline against fakes. Dangerous tool permissions fail closed through the desktop loopback approval broker when that broker is configured. New configuration for Web/Calculator/Translation/Voice pipelines mirrors ASIS. No live traffic is claimed until exercised against real C.O.R.E./R.E.S.C.S. hosts. The real-world handover mechanism is intentionally not implemented yet.
+> [!NOTE] **Status:** Agent **IN DEVELOPMENT** (host package v0.2.0 on GitHub: `https://github.com/Kishir298/TIVISS-HOST`, checked out locally at `RISARMS/TIVISS-HOST/`; client scaffold v0.1.0 at `https://github.com/Kishir298/TIVISS-CLIENT` / `RISARMS/TIVISS-CLIENT/`). Verified: **299 passed** (2026-11-15). Beyond the foundation (identity, ownership, runtime, memory, permissions, handover state model), TIVISS has: an interactive CLI (`tiviss` REPL + `--message`, `python -m tiviss`), **OllamaProvider**, **SQLiteMemoryStore** (dual databases), versioned secret-free state export/import, structured JSON-lines logging, provider timeouts, a replaceable voice abstraction, and stdlib-only `core_tcp` / `rescs_http` transports tested offline against fakes. Dangerous tool permissions fail closed through the desktop loopback approval broker when that broker is configured. New configuration for Web/Calculator/Translation/Voice pipelines mirrors ASIS. No live traffic is claimed until exercised against real C.O.R.E./R.E.S.C.S. hosts. The real-world handover mechanism is intentionally not implemented yet.
 
 ## 1. What T.I.V.I.S.S. is
 
@@ -44,8 +44,9 @@ Until these are resolved, T.I.V.I.S.S. remains in its remote foundation phase an
 
 ## 5. Where the code lives
 
-- GitHub: `https://github.com/Kishir298/TIVISS` (v0.2 capabilities)
-- Local workspace: present at `RISARMS/TIVISS/` (full clone, stdlib-only runtime, offline deterministic tests). Live transports exist but are unexercised against real hosts.
+- GitHub (host): `https://github.com/Kishir298/TIVISS-HOST` (v0.2 capabilities — renamed from `Kishir298/TIVISS` at the 2026-11-21 split)
+- GitHub (client): `https://github.com/Kishir298/TIVISS-CLIENT` (v0.1.0 scaffold: `tiviss-client` CLI shell, `version`/`doctor`; transport/protocol/security layers PLANNED — see [systems/tiviss-client.md](tiviss-client.md))
+- Local workspace: present at `RISARMS/TIVISS-HOST/` (full clone, stdlib-only runtime, offline deterministic tests) and `RISARMS/TIVISS-CLIENT/` (fresh scaffold). Live transports exist but are unexercised against real hosts.
 - Transports: `tiviss/integrations/core_tcp.py` (real wire protocol, session token RAM-only) and `tiviss/integrations/rescs_http.py` (`X-API-Key`, confined to `tiviss.*` namespaces) sit beside the local/mock adapters; mocks remain the default for tests.
 - Storage: TIVISS cloud data lives under `tiviss.*` RESCS namespaces (see `../..`-repo `RESCS/docs/storage-domains.md`); `asis.*` and `personal.*` are never touched.
 
