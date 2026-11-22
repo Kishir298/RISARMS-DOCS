@@ -64,8 +64,45 @@ through CI secrets and are never committed.
 
 ## 5. Current validation state
 
-Installer generation is **implemented but unverified**. The recovery host has
-no Tk-enabled Python, so no DMG was produced locally. Treat the first successful
-CI draft run as the verification event and record draft artifact hashes here.
-macOS remains ad-hoc signed and unnotarized; Windows remains unsigned; public
-distribution stays gated on signing credentials.
+Installer generation is **implemented and produced in CI**. The recovery host
+has no Tk-enabled Python, so nothing is built locally; the workflow is the
+verification environment.
+
+Validation run: [RISARMS-ui desktop-release 45010261720](https://github.com/Kishir298/RISARMS-ui/actions/runs/45010261720)
+(`main` @ `050c68a` + follow-ups, `workflow_dispatch` with
+`validation_build=true`). All five jobs passed.
+
+| Platform | Artifacts produced | Checksums |
+|---|---|---|
+| macOS Intel | `RISARMS-Portal-0.6.0-macos-x86_64.zip`, `.dmg` | `sha256sum -c` OK |
+| macOS Apple Silicon | `RISARMS-Portal-0.6.0-macos-arm64.zip`, `.dmg` | `sha256sum -c` OK |
+| Windows x86_64 | `.zip`, `-setup.exe` (Inno Setup 6.7), `.msi` (WiX 3.14) | `sha256sum -c` OK |
+| Linux x86_64 | `.tar.gz`, `risarms-portal_0.6.0_amd64.deb` | `sha256sum -c` OK |
+
+Each platform also uploaded `sbom-<platform>.cdx.json` (CycloneDX 1.5) and a
+`SHA256SUMS-<platform>` file; the aggregate checksums were verified locally by
+downloading the artifacts and re-running `sha256sum -c`.
+
+The desktop workflow found four real packaging defects on its first runs, all
+now fixed and covered by unit tests: the PyInstaller spec resolved
+`launcher.py` outside `packaging/`; the WiX build compiled only the harvested
+fragment; Inno Setup 6 wrote to `dist/Output` instead of `dist/`; and checksum
+files were written with CRLF line endings, which broke `sha256sum -c` elsewhere.
+The Windows job had also reported success while `build.py` crashed, because a
+`pwsh` step propagates only the last command's exit code; the build step now
+runs under `bash` with `pipefail`.
+
+### Signing status (deliberately unsigned)
+
+- **Update signing is separate from OS code signing.** The workflow signs
+  `update.json` with `UPDATE_SIGNING_KEY`; no such secret is configured, so no
+  update manifest is produced and nothing claims signed auto-updates.
+- `UPDATE_PUBLIC_KEY` is not configured either. This validation run therefore
+  used an ephemeral Ed25519 key (fingerprint
+  `f68e30260bf7927776abf9ab26031d2cd73ad5dc4674c3b1a0e3f88328401320`), and every
+  artifact set carries a `RISARMS-Portal-VALIDATION-ONLY-<platform>.txt` notice
+  saying it must not be distributed.
+- macOS builds are ad-hoc signed only (no Developer ID, not notarized);
+  Windows builds are unsigned. These are Apple/Microsoft OS-signing gaps, not
+  update-key gaps, and neither has been resolved.
+- Nothing from this run was published: the release job is tag-gated and skipped.

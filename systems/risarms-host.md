@@ -1,6 +1,6 @@
 # RISARMS-HOST — the umbrella repository
 
-> [!NOTE] **Status:** v0.6.0 **IMPLEMENTED** (fresh repository created 2026-11-21, remote `Kishir298/RISARMS-HOST`). The `risarms-host` operator CLI, layout/compat/bundle checks, Void asset tests, pinned-revision staging, deterministic archive assembly, provenance generation and the server release workflow are **IMPLEMENTED**; physical-Void runtime validation remains **NOT YET PERFORMED**. Verified: **72 passed** (macOS Python 3.14, 2026-11-22) and CI green for Python 3.10–3.14.
+> [!NOTE] **Status:** v0.6.0 **IMPLEMENTED** (fresh repository created 2026-11-21, remote `Kishir298/RISARMS-HOST`). The `risarms-host` operator CLI, layout/compat/bundle checks, Void asset tests, pinned-revision staging, deterministic archive assembly, provenance generation and the server release workflow are **IMPLEMENTED**; physical-Void runtime validation remains **NOT YET PERFORMED**. Verified: **72 passed** (macOS Python 3.14, 2026-11-22) and CI green for Python 3.10–3.14. The release workflow was exercised end to end in [run 45010512014](https://github.com/Kishir298/RISARMS-HOST/actions/runs/45010512014): pinned staging, byte-identical re-assembly, and a container install with both runit services running.
 
 - **Repository:** `RISARMS/RISARMS-HOST/` — remote `https://github.com/Kishir298/RISARMS-HOST`
 - **Distribution:** `risarms-host` (version `0.6.0`, lockstep with `compatibility.json`), `requires-python >= 3.10`

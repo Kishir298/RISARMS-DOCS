@@ -40,7 +40,7 @@
 | Release ownership after the split | Complete / verified | `RISARMS-HOST/.github/workflows/release.yml`; CORE-HOST only runs test CI |
 | Pinned component revisions | Complete / verified | `components.lock.json` pins CORE-HOST, CORE-CLIENT, RESCS, ASCS, ASIS and TIVISS-HOST to 40-character commits; `risarms-host stage` fetches exactly those commits |
 | Reproducible assembly | Complete / verified locally | Sorted entries, normalised ownership and `SOURCE_DATE_EPOCH`; two assemblies of the same staged tree were byte-identical (`cmp`) |
-| Verification from the assembled bundle | Implemented / CI-only | `deployment/void/tests/container-install.sh` runs the shipped installer in `ghcr.io/void-linux/void-glibc-full`; this is container evidence, not hardware |
+| Verification from the assembled bundle | Complete / **verified in CI** | [Run 45010512014](https://github.com/Kishir298/RISARMS-HOST/actions/runs/45010512014) staged the pinned components, assembled, re-assembled byte-identically, and ran the shipped installer in `ghcr.io/void-linux/void-glibc-full` (`sha256:e98f8c…`). 21 install assertions passed and `risarms-core` + `risarms-rescs` reported `run:` under runit. Container evidence only, not hardware |
 | Checksums, provenance, SBOM | Complete / verified locally | `SHA256SUMS`, unsigned SLSA-shaped `provenance.json`, CycloneDX SBOM (`cyclonedx-bom` 9.0.0) |
 | Draft-only publishing | Complete / verified (code) | Publish job is gated on a `v*` tag and always passes `--draft`; no tag has been created for this work |
 
@@ -65,19 +65,31 @@
 | Loopback local-action approvals | Complete / verified (logic) | `tests/test_approvals.py`; broker denies on timeout, close or transport error |
 | Informed owner-action review | Complete / verified (logic) | `tests/test_owner_actions_view.py`; full payload shown before password re-auth and confirmation |
 | Signed update check | Complete / verified (logic) | `tests/test_updates.py`; verified download and explicit OS-installer handoff; unattended install/rollback remains open |
-| Installer creation | Implemented / **validated in CI** | `packaging/installers.py`; see §3.1 for the dispatched validation run and per-platform results |
+| Installer creation (DMG, EXE, MSI, DEB, archives) | Complete / **validated in CI** | All four platforms built and verified in [run 45010261720](https://github.com/Kishir298/RISARMS-ui/actions/runs/45010261720); see §3.1 and [installers.md](installers.md#5-current-validation-state) |
 | Release tag/version validation, beta metadata, SBOM merge, draft-only CI | Complete / verified | 286 tests; ruff clean; workflow YAML parsed |
 | Signed/notarized artifacts | Blocked | No Apple Developer ID or Windows code-signing certificate; macOS beta is ad-hoc, Windows unsigned |
 | Public signed auto-updates | Blocked | Repository variables and secrets contain no `UPDATE_PUBLIC_KEY` or `UPDATE_SIGNING_KEY` (verified by listing names only). Production builds still fail closed; an explicit `validation_build=true` dispatch generates an ephemeral key and marks artifacts non-publishable so installers can be exercised |
 
 ### 3.1 Desktop installer validation run
 
-Dispatched `desktop-release.yml` on `main` at `3d51f80` with
-`validation_build=true`: [run 45007319913](https://github.com/Kishir298/RISARMS-ui/actions/runs/45007319913).
-The first dispatch ([run 45006893360](https://github.com/Kishir298/RISARMS-ui/actions/runs/45006893360))
-failed on every platform because the PyInstaller spec resolved `launcher.py`
-from the repository root; that is fixed and covered by a spec-evaluation test.
-Results are recorded in [installers.md](installers.md#5-current-validation-state).
+`desktop-release.yml` was dispatched with `validation_build=true` because no
+production update keys exist. Iterations found four packaging defects that
+ordinary CI could not catch (see [installers.md](installers.md#5-current-validation-state));
+the final run [45010261720](https://github.com/Kishir298/RISARMS-ui/actions/runs/45010261720)
+passed all jobs:
+
+| Platform | Artifacts | Checksums |
+|---|---|---|
+| macOS Intel (`macos-15-intel`) | zip + dmg | verified |
+| macOS Apple Silicon (`macos-15`) | zip + dmg | verified |
+| Windows x86_64 (`windows-2022`) | zip + Inno Setup `-setup.exe` + WiX `.msi` | verified |
+| Linux x86_64 (`ubuntu-24.04`) | tar.gz + `.deb` | verified |
+
+Artifacts were downloaded and `sha256sum -c` re-run locally. Every set is marked
+`VALIDATION-ONLY` because the build used an ephemeral update key; nothing was
+published (the release job is tag-gated and skipped). macOS is ad-hoc signed
+and unnotarized, Windows is unsigned — OS code signing remains blocked, and
+that is a different gate from update-manifest signing.
 
 ## 4. Subsystems
 
@@ -103,16 +115,14 @@ Results are recorded in [installers.md](installers.md#5-current-validation-state
 
 ## 6. Open items carried forward
 
-1. Produce and inspect real installers on GitHub runners. The release workflow
-   builds Linux from a Tk-enabled distribution interpreter, verifies the
-   Windows installer toolchain before building, and can honour
-   `workflow_dispatch`, so this is a missing *run*, not missing code. No
-   authenticated `gh` client is available here to trigger it.
-2. Provision the production Ed25519 public key as `UPDATE_PUBLIC_KEY` for the
-   release workflow. Packaging now fails closed without a valid key, embeds it
-   into frozen builds, and performs signed-manifest plus SHA-256 download
-   verification with an explicit OS-installer handoff. Unattended
-   install/rollback and post-install health verification do not exist.
+1. ~~Produce and inspect real installers on GitHub runners.~~ **Done
+   2026-11-22** — see §3.1. Remaining: OS-sign the artifacts (Apple Developer
+   ID + notarization, Windows code-signing certificate); none are configured.
+2. Provision the production Ed25519 public key as `UPDATE_PUBLIC_KEY` and
+   `UPDATE_SIGNING_KEY` for the release workflow. Both are absent from
+   repository variables and secrets, so packaging fails closed for production
+   and only the explicit validation path works. Unattended install/rollback and
+   post-install health verification still do not exist.
 3. Validate the Void installer on the physical HP 14: runit, Caddy, nftables,
    lid-close behavior, first-owner setup and backup/restore.
 4. Run the ASIS suite through a PR because its CI workflow does not trigger on
@@ -122,7 +132,22 @@ Results are recorded in [installers.md](installers.md#5-current-validation-state
 7. Burn down the pre-existing full-ruff debt in ASIS and TIVISS; changed-file
    lint is clean today.
 
-## 7. Repository sync and hygiene (2026-11-17)
+## 7. Runtime checks executed (2026-11-22)
+
+Only checks the available environment could actually run are marked passed.
+
+| Check | Environment | Command | Result |
+|---|---|---|---|
+| Installed CORE command | macOS 14.6 x86_64, Python 3.14 | `core-host --help`, `core-host doctor --data /tmp/risarms-core-doctor` | Passed, exit 0 |
+| CORE ↔ RESCS loopback | macOS, sibling `RESCS/` checkout | `pytest tests/integration/test_real_rescs_contract.py -q` | 1 passed in 12.24 s against the real RESCS app on throwaway SQLite |
+| Desktop dependency self-check | macOS, no `_tkinter` | `python -m risarms_ui --doctor` | `not ready: tkinter` — window startup blocked on this host |
+| Void install + runit start | `void-glibc-full` container, CI | run 45010512014 | Passed: installer completed, both services `run:` |
+| Caddy/TLS, nftables, reboot persistence, storage failure, backup/restore, upgrade/rollback, physical LAN, 24/7 | — | — | **BLOCKED**: no Void host, no `caddy`, `nft`, `xbps`, `docker` or `qemu` in this workspace, and only one machine |
+
+Untested items stay untested: nothing in this document treats the container run
+as hardware certification.
+
+## 8. Repository sync and hygiene (2026-11-17)
 
 Fast-forward-only sync was run for every remote-backed repository; all were
 already at their remote branch tips. HEADs below are the sync point, before the
