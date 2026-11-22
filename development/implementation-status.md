@@ -66,7 +66,7 @@
 | Informed owner-action review | Complete / verified (logic) | `tests/test_owner_actions_view.py`; full payload shown before password re-auth and confirmation |
 | Signed update check | Complete / verified (logic) | `tests/test_updates.py`; verified download and explicit OS-installer handoff; unattended install/rollback remains open |
 | Installer creation (DMG, EXE, MSI, DEB, archives) | Complete / **validated in CI** | All four platforms built in [run 45012833473](https://github.com/Kishir298/RISARMS-ui/actions/runs/45012833473); the Linux set was installed and launched in [smoke run 45013788806](https://github.com/Kishir298/RISARMS-ui/actions/runs/45013788806); see §3.1 and [installers.md](installers.md#5-current-validation-state) |
-| Release tag/version validation, beta metadata, SBOM merge, draft-only CI | Complete / verified | 295 tests; ruff clean; workflow YAML parsed |
+| Release tag/version validation, beta metadata, SBOM merge, draft-only CI | Complete / verified | 300 tests; ruff clean; workflow YAML parsed |
 | Signed/notarized artifacts | Blocked | No Apple Developer ID or Windows code-signing certificate; macOS beta is ad-hoc, Windows unsigned |
 | Public signed auto-updates | Blocked | Repository variables and secrets contain no `UPDATE_PUBLIC_KEY` or `UPDATE_SIGNING_KEY` (verified by listing names only). Production builds still fail closed; an explicit `validation_build=true` dispatch generates an ephemeral key and marks artifacts non-publishable so installers can be exercised |
 

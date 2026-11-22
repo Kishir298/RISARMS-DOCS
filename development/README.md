@@ -11,6 +11,7 @@ Roadmap, contribution, testing, and versioning guides.
 - [Desktop installer creation](./installers.md)
 - [Implementation status](./implementation-status.md)
 - [Release evidence 2026-11-22](./release-evidence-2026-11-22.md)
+- [Audit / fix to-do 2026-11-22](./audit-todo-2026-11-22.md)
 - [Recovery and completion report 2026-11-13](./recovery-2026-11-13.md)
 - [Release-readiness progress log 2026-11-13](./progress-2026-11-13-release-readiness.md)
 - [Pi release 2026-11-06](./pi-release-2026-11-06.md)
