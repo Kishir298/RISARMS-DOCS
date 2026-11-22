@@ -20,7 +20,13 @@ websockets>=12.0
 # Ed25519 update-manifest verification in RISARMS-UI.
 cryptography>=42.0
 
-# T.I.V.I.S.S. security protocol (stdlib-only; local path — run pip from the
-# RISARMS workspace root). Later waves add tiviss-security-ipc /
-# tiviss-security-host (TIVISS-HOST) and tiviss-security-client (TIVISS-CLIENT).
+# T.I.V.I.S.S. security distributions (stdlib-only; local paths — run pip
+# from the RISARMS workspace root). Published from TIVISS-HOST:
+#   tiviss-security-protocol  (wire contract: framing, tokens, PDP schema)
+#   tiviss-security-ipc       (Unix-domain-socket transport)
+#   tiviss-security-host      (fail-closed PDP engine + local daemon)
+#   tiviss-security-client    (client for the local PDP daemon)
 -e TIVISS-HOST/security/protocol
+-e TIVISS-HOST/security/ipc
+-e TIVISS-HOST/security/host
+-e TIVISS-HOST/security/client
