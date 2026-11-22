@@ -68,29 +68,42 @@ Installer generation is **implemented and produced in CI**. The recovery host
 has no Tk-enabled Python, so nothing is built locally; the workflow is the
 verification environment.
 
-Validation run: [RISARMS-ui desktop-release 45010261720](https://github.com/Kishir298/RISARMS-ui/actions/runs/45010261720)
-(`main` @ `4cd4d1d`, `workflow_dispatch` with `validation_build=true`). All five
+Build run: [RISARMS-ui desktop-release 45012833473](https://github.com/Kishir298/RISARMS-ui/actions/runs/45012833473)
+(`main` @ `18c38aa`, `workflow_dispatch` with `validation_build=true`). All five
 jobs passed.
+
+Install verification: [desktop-smoke 45013788806](https://github.com/Kishir298/RISARMS-ui/actions/runs/45013788806).
+The published checksums re-verified, the `.deb` installed with its dependencies,
+the installed binary reported `Tk 8.6` with a real display under Xvfb, the GUI
+stayed up for the full 20 s timeout, and the messaging end-to-end test passed
+against a real CORE server at the pinned revision. The runner has no
+SecretService, so `--doctor` correctly reports `not ready: keyring` there.
 
 | Platform | Artifacts produced | Checksums |
 |---|---|---|
-| macOS Intel | `RISARMS-Portal-0.6.0-macos-x86_64.zip`, `.dmg` | `sha256sum -c` OK |
-| macOS Apple Silicon | `RISARMS-Portal-0.6.0-macos-arm64.zip`, `.dmg` | `sha256sum -c` OK |
-| Windows x86_64 | `.zip`, `-setup.exe` (Inno Setup 6.7), `.msi` (WiX 3.14) | `sha256sum -c` OK |
-| Linux x86_64 | `.tar.gz`, `risarms-portal_0.6.0_amd64.deb` | `sha256sum -c` OK |
+| macOS Intel | `RISARMS-Portal-0.6.0-macos-x86_64.zip`, `.dmg` | `SHA256SUMS-macos-x86_64` written |
+| macOS Apple Silicon | `RISARMS-Portal-0.6.0-macos-arm64.zip`, `.dmg` | `SHA256SUMS-macos-arm64` written |
+| Windows x86_64 | `.zip`, `-setup.exe` (Inno Setup 6.7), `.msi` (WiX 3.14) | `SHA256SUMS-windows-x86_64` written |
+| Linux x86_64 | `.tar.gz`, `risarms-portal_0.6.0_amd64.deb` | `sha256sum -c` OK in CI |
 
 Each platform also uploaded `sbom-<platform>.cdx.json` (CycloneDX 1.5) and a
-`SHA256SUMS-<platform>` file; the aggregate checksums were verified locally by
-downloading the artifacts and re-running `sha256sum -c`.
+`SHA256SUMS-<platform>` file. The Linux set was re-verified in CI by the smoke
+run; installing the macOS and Windows installers remains unverified.
 
-The desktop workflow found four real packaging defects on its first runs, all
-now fixed and covered by unit tests: the PyInstaller spec resolved
+The desktop workflow found five real packaging defects across its runs, all
+now fixed (four covered by unit tests): the PyInstaller spec resolved
 `launcher.py` outside `packaging/`; the WiX build compiled only the harvested
 fragment; Inno Setup 6 wrote to `dist/Output` instead of `dist/`; and checksum
 files were written with CRLF line endings, which broke `sha256sum -c` elsewhere.
 The Windows job had also reported success while `build.py` crashed, because a
 `pwsh` step propagates only the last command's exit code; the build step now
-runs under `bash` with `pipefail`.
+runs under `bash` with `pipefail`. The fifth was found only by installing the
+Linux artifact: it died with `No module named '_struct'` because
+`actions/setup-python` exported `LD_LIBRARY_PATH` to its own libpython while the
+Linux build created its venv from `/usr/bin/python3` for Tk support, so
+PyInstaller mixed two Python 3.12 toolchains. Linux now uses only the
+distribution Python, and `build.py` runs the frozen executable with `--version`
+so an unstartable bundle fails the build.
 
 ### Signing status (deliberately unsigned)
 

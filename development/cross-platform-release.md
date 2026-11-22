@@ -1,6 +1,6 @@
 # Cross-Platform Standalone Release Engineering
 
-Status as of 2026-11-16. CORE 0.6.0 releases a Void Linux x86_64 server bundle;
+Status as of 2026-11-22. CORE 0.6.0 releases a Void Linux x86_64 server bundle;
 RISARMS-ui releases desktop artifacts for macOS Intel/Apple Silicon, Windows
 x86_64 and Linux x86_64. R.E.S.C.S., A.S.I.S., A.S.C.S. and T.I.V.I.S.S. retain
 their own pipelines.
@@ -23,7 +23,8 @@ Shared rules:
 
 | Repository | Commands | Setup / diagnostics |
 | --- | --- | --- |
-| CORE | `core-host`, `core-client` | `core-host setup`, `core-host doctor`, `core-client setup`, `core-client doctor` |
+| CORE-HOST | `core-host` | `core-host setup`, `core-host doctor` |
+| CORE-CLIENT | `core-client` | `core-client setup`, `core-client doctor` |
 | RESCS | `rescs` | `rescs setup`, `rescs doctor` |
 | ASIS | `asis`, `asis-tui` | `asis setup`, `asis doctor` |
 | ASCS | `ascs`, `risa` (alias) | `ascs setup`, `ascs doctor`, `--doctor`, `--check` |
@@ -56,8 +57,12 @@ publishes server releases; it only runs its own test CI.
   (sorted entries, normalised ownership, `SOURCE_DATE_EPOCH`) and re-assembles
   it to prove the bytes are identical.
 - Installs the archive with the shipped Void installer in a
-  `ghcr.io/void-linux/void-glibc-full` container and asserts the installed
-  venvs import. This is container evidence, not hardware certification.
+  `ghcr.io/void-linux/void-glibc-full` container, asserts the installed venvs
+  import and both services `run:`, then serves the portal through the installed
+  Caddy configuration (TLS over the internal CA), round-trips a backup, and
+  upgrades to and rolls back from a synthetic newer version. Report and run ids:
+  [release evidence 2026-11-22](release-evidence-2026-11-22.md). This is
+  container evidence, not hardware certification.
 - Emits `SHA256SUMS`, an unsigned SLSA-shaped `provenance.json` and a
   CycloneDX SBOM of the build environment.
 - Creates a **draft** GitHub release for tags, prerelease for beta, without
@@ -75,6 +80,11 @@ RISARMS-ui `.github/workflows/desktop-release.yml`:
   `validation_build=true` generates an ephemeral update key and marks its
   artifacts non-publishable so installers can still be validated.
 - Creates a **draft** release for tags, and never publishes automatically.
+
+`desktop-smoke.yml` verifies an existing desktop-release artifact set: it
+re-verifies the published checksums, installs the Linux `.deb` with its
+dependencies, launches the installed GUI under Xvfb, and runs the messaging
+e2e test against CORE-HOST at the revision the server release pins.
 
 Other repositories retain their own release workflows; do not assume the CORE
 Void bundle is a cross-platform server binary.
@@ -94,7 +104,7 @@ Formats: `.zip` (Windows), `.tar.gz` (macOS/Linux/source), `.dmg`, `.exe`, `.msi
 | CORE server | Void Linux | x86_64, glibc, runit | HP 14 reference machine; release target |
 | RISARMS-ui | macOS | x86_64, arm64 | Ad-hoc signed, unnotarized beta |
 | RISARMS-ui | Windows | x86_64 | Unsigned beta |
-| RISARMS-ui | Linux | x86_64 | Includes a pending Void glibc smoke test |
+| RISARMS-ui | Linux | x86_64 | `.deb` install, GUI launch under Xvfb and the messaging e2e are verified in CI; a Void glibc desktop smoke is still pending |
 
 CORE-CLIENT remains a legacy protocol client on Windows/macOS/Linux; it is not a
 CORE 0.6.0 server release target. iOS TestFlight and Android beta distribution
@@ -112,10 +122,15 @@ Windows Terminal, winget and Bash are not required.
    installer completes in a Void glibc container and the installed venvs import.
 6. **Hardware validated** — actually exercised on that OS/architecture.
 
-Claims in subsystem docs must state which level applies. This workspace can
-only verify levels 1–4 for macOS locally; levels 2–4 for Windows/Linux are CI
-claims; level 5 is **not** claimed anywhere except the Pi deployments that
-already documented hardware runs.
+Claims in subsystem docs must state which level applies. This workspace verifies
+levels 1–4 for macOS locally; levels 2–4 for Windows/Linux are CI claims. Level 5
+is claimed for the CORE server on container evidence: release run
+[45010512014](https://github.com/Kishir298/RISARMS-HOST/actions/runs/45010512014)
+installed the assembled bundle in `void-glibc-full` and both runit services
+reported `run:`; run 45013778229 additionally covers Caddy TLS, backup/restore
+and upgrade/rollback. Level 6 is claimed only by the Pi deployments that already
+documented hardware runs; the HP 14 reference machine remains level 5 at most
+until it is validated on real hardware.
 
 ## Known limitations
 
@@ -139,5 +154,5 @@ already documented hardware runs.
   authenticated `gh` client; CI success is not the same as artifact or runtime
   evidence, so record the run id and result for any claim.
 - `macos-13` and `macos-14` runners are retired/retiring; the desktop workflow
-  uses `macos-15-intel` for Intel and `macos-15` for Apple Silicon. These labels
-  still need confirmation from the first real CI run.
+  uses `macos-15-intel` for Intel and `macos-15` for Apple Silicon, and both
+  labels completed green in desktop-release run 45010261720.

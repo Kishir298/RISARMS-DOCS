@@ -38,9 +38,9 @@
 | Capability | Status | Evidence / note |
 |---|---|---|
 | Release ownership after the split | Complete / verified | `RISARMS-HOST/.github/workflows/release.yml`; CORE-HOST only runs test CI |
-| Pinned component revisions | Complete / verified | `components.lock.json` pins CORE-HOST, CORE-CLIENT, RESCS, ASCS, ASIS and TIVISS-HOST to 40-character commits; `risarms-host stage` fetches exactly those commits |
+| Pinned component revisions | Complete / verified | `components.lock.json` pins CORE-HOST, CORE-CLIENT, RESCS, ASCS, ASIS and TIVISS-HOST to 40-character commits, each with a passing CI run in its own repository; `risarms-host stage` fetches exactly those commits. Revisions and run ids: [release evidence](release-evidence-2026-11-22.md) |
 | Reproducible assembly | Complete / verified locally | Sorted entries, normalised ownership and `SOURCE_DATE_EPOCH`; two assemblies of the same staged tree were byte-identical (`cmp`) |
-| Verification from the assembled bundle | Complete / **verified in CI** | [Run 45010512014](https://github.com/Kishir298/RISARMS-HOST/actions/runs/45010512014) staged the pinned components, assembled, re-assembled byte-identically, and ran the shipped installer in `ghcr.io/void-linux/void-glibc-full` (`sha256:e98f8c…`). 21 install assertions passed and `risarms-core` + `risarms-rescs` reported `run:` under runit. Container evidence only, not hardware |
+| Verification from the assembled bundle | Complete / **verified in CI** | [Run 45013778229](https://github.com/Kishir298/RISARMS-HOST/actions/runs/45013778229) staged the pinned components, assembled, re-assembled byte-identically, and ran the shipped installer in `ghcr.io/void-linux/void-glibc-full` (`sha256:e98f8c…`). 30 assertions passed: both services `run:`, Caddy TLS over the internal CA (HTTP→HTTPS 308), backup/restore round-trip, upgrade and rollback healthy, `risarms-doctor` clean. Container evidence only, not hardware |
 | Checksums, provenance, SBOM | Complete / verified locally | `SHA256SUMS`, unsigned SLSA-shaped `provenance.json`, CycloneDX SBOM (`cyclonedx-bom` 9.0.0) |
 | Draft-only publishing | Complete / verified (code) | Publish job is gated on a `v*` tag and always passes `--draft`; no tag has been created for this work |
 
@@ -65,17 +65,17 @@
 | Loopback local-action approvals | Complete / verified (logic) | `tests/test_approvals.py`; broker denies on timeout, close or transport error |
 | Informed owner-action review | Complete / verified (logic) | `tests/test_owner_actions_view.py`; full payload shown before password re-auth and confirmation |
 | Signed update check | Complete / verified (logic) | `tests/test_updates.py`; verified download and explicit OS-installer handoff; unattended install/rollback remains open |
-| Installer creation (DMG, EXE, MSI, DEB, archives) | Complete / **validated in CI** | All four platforms built and verified in [run 45010261720](https://github.com/Kishir298/RISARMS-ui/actions/runs/45010261720); see §3.1 and [installers.md](installers.md#5-current-validation-state) |
-| Release tag/version validation, beta metadata, SBOM merge, draft-only CI | Complete / verified | 286 tests; ruff clean; workflow YAML parsed |
+| Installer creation (DMG, EXE, MSI, DEB, archives) | Complete / **validated in CI** | All four platforms built in [run 45012833473](https://github.com/Kishir298/RISARMS-ui/actions/runs/45012833473); the Linux set was installed and launched in [smoke run 45013788806](https://github.com/Kishir298/RISARMS-ui/actions/runs/45013788806); see §3.1 and [installers.md](installers.md#5-current-validation-state) |
+| Release tag/version validation, beta metadata, SBOM merge, draft-only CI | Complete / verified | 295 tests; ruff clean; workflow YAML parsed |
 | Signed/notarized artifacts | Blocked | No Apple Developer ID or Windows code-signing certificate; macOS beta is ad-hoc, Windows unsigned |
 | Public signed auto-updates | Blocked | Repository variables and secrets contain no `UPDATE_PUBLIC_KEY` or `UPDATE_SIGNING_KEY` (verified by listing names only). Production builds still fail closed; an explicit `validation_build=true` dispatch generates an ephemeral key and marks artifacts non-publishable so installers can be exercised |
 
 ### 3.1 Desktop installer validation run
 
 `desktop-release.yml` was dispatched with `validation_build=true` because no
-production update keys exist. Iterations found four packaging defects that
+production update keys exist. Iterations found five packaging defects that
 ordinary CI could not catch (see [installers.md](installers.md#5-current-validation-state));
-the final run [45010261720](https://github.com/Kishir298/RISARMS-ui/actions/runs/45010261720)
+the final build run [45012833473](https://github.com/Kishir298/RISARMS-ui/actions/runs/45012833473)
 passed all jobs:
 
 | Platform | Artifacts | Checksums |
@@ -83,9 +83,12 @@ passed all jobs:
 | macOS Intel (`macos-15-intel`) | zip + dmg | verified |
 | macOS Apple Silicon (`macos-15`) | zip + dmg | verified |
 | Windows x86_64 (`windows-2022`) | zip + Inno Setup `-setup.exe` + WiX `.msi` | verified |
-| Linux x86_64 (`ubuntu-24.04`) | tar.gz + `.deb` | verified |
+| Linux x86_64 (`ubuntu-24.04`) | tar.gz + `.deb` | re-verified in CI |
 
-Artifacts were downloaded and `sha256sum -c` re-run locally. Every set is marked
+That artifact set was then installed by desktop-smoke run 45013788806: the
+`.deb` was installed with its dependencies, the installed binary reported
+`Tk 8.6` with a real display under Xvfb, the GUI stayed up for the 20 s timeout,
+and the messaging e2e test passed against a real CORE server. Every set is marked
 `VALIDATION-ONLY` because the build used an ephemeral update key; nothing was
 published (the release job is tag-gated and skipped). macOS is ad-hoc signed
 and unnotarized, Windows is unsigned — OS code signing remains blocked, and
@@ -141,11 +144,13 @@ Only checks the available environment could actually run are marked passed.
 | Installed CORE command | macOS 14.6 x86_64, Python 3.14 | `core-host --help`, `core-host doctor --data /tmp/risarms-core-doctor` | Passed, exit 0 |
 | CORE ↔ RESCS loopback | macOS, sibling `RESCS/` checkout | `pytest tests/integration/test_real_rescs_contract.py -q` | 1 passed in 12.24 s against the real RESCS app on throwaway SQLite |
 | Desktop dependency self-check | macOS, no `_tkinter` | `python -m risarms_ui --doctor` | `not ready: tkinter` — window startup blocked on this host |
-| Void install + runit start | `void-glibc-full` container, CI | run 45010512014 | Passed: installer completed, both services `run:` |
-| Caddy/TLS, nftables, reboot persistence, storage failure, backup/restore, upgrade/rollback, physical LAN, 24/7 | — | — | **BLOCKED**: no Void host, no `caddy`, `nft`, `xbps`, `docker` or `qemu` in this workspace, and only one machine |
+| Installed desktop binary (Linux) | ubuntu-24.04 + Xvfb, CI | desktop-smoke 45013788806 | `.deb` installed; `Tk 8.6`, display available, `not ready: keyring` (no SecretService on the runner); GUI stayed up 20 s; messaging e2e 2 passed |
+| Void install, runit start, Caddy TLS, backup/restore, upgrade/rollback | `void-glibc-full` container, CI | run 45013778229 | Passed: 30/30 assertions, both services `run:`, TLS via internal CA, HTTP→HTTPS 308, backup round-trip, upgrade+rollback healthy, doctor clean |
+| nftables load, reboot persistence, runtime storage exhaustion, physical LAN, 24/7 | — | — | **BLOCKED**: the container lacks `NET_ADMIN`, there is no Void host, and only one machine |
 
 Untested items stay untested: nothing in this document treats the container run
-as hardware certification.
+as hardware certification. Per-run detail, artifact digests and the evidence
+classes are recorded in [release evidence 2026-11-22](release-evidence-2026-11-22.md).
 
 ## 8. Repository sync and hygiene (2026-11-17)
 
