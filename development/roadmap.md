@@ -16,8 +16,8 @@ The ecosystem matures in this order (current position in brackets):
 2. ~~**R.E.S.C.S. v0.1 completion**~~ — **IMPLEMENTED** (now v0.4.0 with full API, enforced auth, signed CORE owner scope, and Pi mount foundation).
 3. **C.O.R.E. ↔ R.E.S.C.S. integration** — **IMPLEMENTED in software** (adapter + signed scope + real loopback validation); deployed cross-host interop is the remaining validation step.
 4. **Deployment validation** — booted Void Linux on the HP 14 (install, reboot, upgrade/rollback, backup/restore, storage failure), physical HP, physical LAN (Void CORE host ↔ RISARMS-ui clients: macOS Intel, macOS Apple Silicon, Windows x86_64, Linux x86_64 — NOT YET PERFORMED), and 24/7 endurance for C.O.R.E.; live PostgreSQL/Supabase + real S3 for R.E.S.C.S. ← *current frontier*
-5. **A.S.I.S. completion + integration** — wire voice into the chat loop, remove legacy `core/` + `02_voice/` trees (deprecated, pending removal), then connect A.S.I.S. to C.O.R.E. (**IN DEVELOPMENT**). **ASIS ↔ ASCS integration IMPLEMENTED** (`ascs_integration` toolset + `export_handover_state()` handover protocol). Pi policy/worker path added.
-6. **A.S.I.S. ↔ C.O.R.E. contract** — the intelligence layer operates through the control engine (**PLANNED**).
+5. **A.S.I.S. completion + integration** — **voice is IMPLEMENTED and wired into the interactive chat loop** (`asis voice`, TAB text↔voice switching, `session.voice_turn` = STT → `app.chat` → TTS); the optional C.O.R.E. uplink adapter is **IMPLEMENTED** and standalone by default. Remaining work (IN DEVELOPMENT): delete the legacy `core/` + `02_voice/` trees (deprecated, pending removal) and verify a live A.S.I.S. ↔ C.O.R.E. session — no provisioned CORE exists, so that run has not happened. **ASIS ↔ ASCS integration IMPLEMENTED** (`ascs_integration` toolset + `export_handover_state()` handover protocol). Pi policy/worker path added.
+6. **A.S.I.S. ↔ C.O.R.E. contract** — the intelligence layer operates *through* the control engine (**PLANNED**). The client-side uplink transport already exists (item 5); what is missing is the CORE-mediated contract where CORE routes A.S.I.S. work.
 7. **T.I.V.I.S.S.** — v0.2.0 local agent: OllamaProvider, SQLiteMemoryStore (dual SQLite), CLI, export/import, logging, voice abstraction, stdlib-only transports offline-tested (**IN DEVELOPMENT**; handover model unresolved).
 8. **A.S.C.S. ecosystem role** — ASIS integration **IMPLEMENTED** (`export_handover_state()` + `ascs_integration` toolset). Pi headless generation-only path added. C.O.R.E.-mediated use by A.S.I.S./T.I.V.I.S.S. is **FUTURE**.
 9. **RadarS.A.R.D.** — detection/reporting into C.O.R.E. (**FUTURE**).
@@ -72,7 +72,7 @@ R.E.S.C.S. documents its own history in `RESCS/CHANGELOG.md` and `docs/architect
 | Test suite (948 passed / 24 skipped, v0.1.0) | IMPLEMENTED |
 | Voice wired into the chat loop | IMPLEMENTED |
 | Legacy tree removal (`core/`, `02_voice/`, `monitoring/`) | DEPRECATED, pending removal |
-| Real C.O.R.E. uplink (opt-in adapter) | IMPLEMENTED (standalone by default) |
+| Real C.O.R.E. uplink (opt-in adapter) | IMPLEMENTED (standalone by default); live session against a provisioned CORE **NOT YET PERFORMED** |
 | **ASCS integration (`ascs_integration` toolset: subprocess + API modes, `ascs_handover`, `ascs_status`)** | **IMPLEMENTED** |
 | **ASCS handover protocol (`export_handover_state()` + `ascs_handover` tool)** | **IMPLEMENTED** |
 | **Pi policy/worker path (no tools/voice on Pi)** | **IMPLEMENTED** |

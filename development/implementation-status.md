@@ -2,9 +2,11 @@
 
 > [!IMPORTANT] Status reflects evidence gathered on **2026-11-16** on the
 > macOS recovery host; the repository sync and hygiene section was updated
-> **2026-11-17**. "Verified" means a command was run in this session and
-> its result is quoted. "Unverified" means the code exists but no run supports
-> the claim. Never read this table as a release approval.
+> **2026-11-17**, and the release/CI/desktop sections were updated
+> **2026-11-22** from dispatched GitHub Actions runs. "Verified" means a
+> command or CI run was executed and its result is quoted. "Unverified" means
+> the code exists but no run supports the claim. Never read this table as a
+> release approval.
 
 ## Legend
 
@@ -20,7 +22,8 @@
 
 | Capability | Status | Evidence / note |
 |---|---|---|
-| HTTPS API, sessions, CSRF, approvals | Complete / verified | 911 passed / 4 skipped |
+| HTTPS API, sessions, CSRF, approvals | Complete / verified | 917 passed / 4 skipped (macOS Python 3.14, 2026-11-22); CI green on 3.10–3.14 plus the full Windows job |
+| Authorization PDP adapter (embedded parity, T.I.V.I.S.S. daemon delegation, fail-closed) | Complete / verified | `tests/security/test_pdp.py` 16 tests. The daemon transport is AF_UNIX-only by design, so the two listening-daemon tests skip only on platforms without `socket.AF_UNIX`; embedded and fail-closed coverage runs everywhere and daemon mode raises an actionable `PDPUnavailableError` instead of `AttributeError` |
 | Device credentials, single-use WSS tickets, session renewal | Complete / verified | `test_desktop_control.py`, merged from the feature branch |
 | Revocation events | Complete / verified | Messaging + device revocation tests |
 | Job idempotency | Complete / verified | Existing contract tests |
@@ -30,7 +33,18 @@
 | CORE 0.6.0 Void release assets (versioned venvs, storage guard, Caddy/nftables, backup/restore, upgrade/rollback, doctor) | Implemented / **unverified** at runtime | Static tests only; no booted Void host or physical HP |
 | CORE 0.6.0 runtime validation (install, reboot, runit, rollback, storage failure) | Blocked | Requires the reference HP 14 (HP 14-dq1037wm) with Void installed |
 
-## 2. RISARMS-ui desktop application
+## 2. CORE server release orchestration (RISARMS-HOST)
+
+| Capability | Status | Evidence / note |
+|---|---|---|
+| Release ownership after the split | Complete / verified | `RISARMS-HOST/.github/workflows/release.yml`; CORE-HOST only runs test CI |
+| Pinned component revisions | Complete / verified | `components.lock.json` pins CORE-HOST, CORE-CLIENT, RESCS, ASCS, ASIS and TIVISS-HOST to 40-character commits; `risarms-host stage` fetches exactly those commits |
+| Reproducible assembly | Complete / verified locally | Sorted entries, normalised ownership and `SOURCE_DATE_EPOCH`; two assemblies of the same staged tree were byte-identical (`cmp`) |
+| Verification from the assembled bundle | Implemented / CI-only | `deployment/void/tests/container-install.sh` runs the shipped installer in `ghcr.io/void-linux/void-glibc-full`; this is container evidence, not hardware |
+| Checksums, provenance, SBOM | Complete / verified locally | `SHA256SUMS`, unsigned SLSA-shaped `provenance.json`, CycloneDX SBOM (`cyclonedx-bom` 9.0.0) |
+| Draft-only publishing | Complete / verified (code) | Publish job is gated on a `v*` tag and always passes `--draft`; no tag has been created for this work |
+
+## 3. RISARMS-ui desktop application
 
 | Capability | Status | Evidence / note |
 |---|---|---|
@@ -51,12 +65,21 @@
 | Loopback local-action approvals | Complete / verified (logic) | `tests/test_approvals.py`; broker denies on timeout, close or transport error |
 | Informed owner-action review | Complete / verified (logic) | `tests/test_owner_actions_view.py`; full payload shown before password re-auth and confirmation |
 | Signed update check | Complete / verified (logic) | `tests/test_updates.py`; verified download and explicit OS-installer handoff; unattended install/rollback remains open |
-| Installer creation | Implemented / **unverified** | `packaging/installers.py`; local build refuses without Tk; first CI draft run pending |
+| Installer creation | Implemented / **validated in CI** | `packaging/installers.py`; see §3.1 for the dispatched validation run and per-platform results |
 | Release tag/version validation, beta metadata, SBOM merge, draft-only CI | Complete / verified | 286 tests; ruff clean; workflow YAML parsed |
 | Signed/notarized artifacts | Blocked | No Apple Developer ID or Windows code-signing certificate; macOS beta is ad-hoc, Windows unsigned |
-| Public signed auto-updates | Blocked | No production `UPDATE_PUBLIC_KEY` fingerprint or `UPDATE_SIGNING_KEY` |
+| Public signed auto-updates | Blocked | Repository variables and secrets contain no `UPDATE_PUBLIC_KEY` or `UPDATE_SIGNING_KEY` (verified by listing names only). Production builds still fail closed; an explicit `validation_build=true` dispatch generates an ephemeral key and marks artifacts non-publishable so installers can be exercised |
 
-## 3. Subsystems
+### 3.1 Desktop installer validation run
+
+Dispatched `desktop-release.yml` on `main` at `3d51f80` with
+`validation_build=true`: [run 45007319913](https://github.com/Kishir298/RISARMS-ui/actions/runs/45007319913).
+The first dispatch ([run 45006893360](https://github.com/Kishir298/RISARMS-ui/actions/runs/45006893360))
+failed on every platform because the PyInstaller spec resolved `launcher.py`
+from the repository root; that is fixed and covered by a spec-evaluation test.
+Results are recorded in [installers.md](installers.md#5-current-validation-state).
+
+## 4. Subsystems
 
 | Project | Status | Evidence |
 |---|---|---|
@@ -65,7 +88,7 @@
 | RESCS | Complete / verified | 318 passed / 4 skipped; CLI configuration errors actionable; live tests report unavailable services instead of failing the run |
 | TIVISS | Complete / verified | 299 passed; full ruff still reports pre-existing style debt |
 
-## 4. Cross-cutting
+## 5. Cross-cutting
 
 | Item | Status |
 |---|---|
@@ -78,7 +101,7 @@
 | Branch CI on pushed commits | CORE, RISARMS-UI, ASCS, RESCS and TIVISS green (2026-11-15). CORE and RESCS regressed on 2026-11-20 and were fixed and pushed the same day: CORE [`b5ba79f`](https://github.com/Kishir298/CORE-HOST/actions/runs/44775446911) 15/15 jobs green incl. `core-host (Windows, full)`; RESCS [`6b8e780`](https://github.com/Kishir298/RESCS/actions/runs/44767993130) green; RISARMS-UI [`24ce7a6`](https://github.com/Kishir298/RISARMS-ui/actions/runs/44030726524) green. ASIS CI only runs on `main`/PR; RISARMS-DOCS has no code CI |
 | Documentation drift review | Partial — current pages refreshed; historical reports intentionally retain their original evidence |
 
-## 5. Open items carried forward
+## 6. Open items carried forward
 
 1. Produce and inspect real installers on GitHub runners. The release workflow
    builds Linux from a Tk-enabled distribution interpreter, verifies the
@@ -99,7 +122,7 @@
 7. Burn down the pre-existing full-ruff debt in ASIS and TIVISS; changed-file
    lint is clean today.
 
-## 6. Repository sync and hygiene (2026-11-17)
+## 7. Repository sync and hygiene (2026-11-17)
 
 Fast-forward-only sync was run for every remote-backed repository; all were
 already at their remote branch tips. HEADs below are the sync point, before the

@@ -12,6 +12,10 @@ pytest-cov>=5.0
 ruff>=0.6
 pyinstaller>=6.6
 
+# CycloneDX SBOM generation for the RISARMS-HOST server release pipeline
+# (`cyclonedx-py environment`).
+cyclonedx-bom>=7.0
+
 # Needed to exercise the desktop client headlessly (secure credential storage
 # and the WSS event channel).
 keyring>=24.0
