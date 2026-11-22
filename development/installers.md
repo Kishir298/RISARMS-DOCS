@@ -69,8 +69,8 @@ has no Tk-enabled Python, so nothing is built locally; the workflow is the
 verification environment.
 
 Validation run: [RISARMS-ui desktop-release 45010261720](https://github.com/Kishir298/RISARMS-ui/actions/runs/45010261720)
-(`main` @ `050c68a` + follow-ups, `workflow_dispatch` with
-`validation_build=true`). All five jobs passed.
+(`main` @ `4cd4d1d`, `workflow_dispatch` with `validation_build=true`). All five
+jobs passed.
 
 | Platform | Artifacts produced | Checksums |
 |---|---|---|
