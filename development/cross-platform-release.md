@@ -50,9 +50,10 @@ publishes server releases; it only runs its own test CI.
 - Triggers on `vX.Y.Z` / `vX.Y.Z-beta.N` tags and manual dispatch.
 - Validates tag/version/`compatibility.json`/`components.lock.json` agreement
   and the Void x86_64 target before building.
-- Stages `CORE-HOST`, `CORE-CLIENT`, `RESCS`, `ASCS`, `ASIS` and `TIVISS-HOST`
-  from their owning repositories at the exact commits pinned in
-  `components.lock.json`, then runs the umbrella and deployment suites.
+- Stages `CORE-HOST`, `CORE-CLIENT`, `RESCS`, `ASCS`, `ASIS`, `TIVISS-HOST`
+  and `TIVISS-CLIENT` from their owning repositories at the exact commits
+  pinned in `components.lock.json`, then runs the umbrella and deployment
+  suites.
 - Assembles `CORE-Server-<version>-void-x86_64.tar.gz` deterministically
   (sorted entries, normalised ownership, `SOURCE_DATE_EPOCH`) and re-assembles
   it to prove the bytes are identical.
@@ -67,6 +68,14 @@ publishes server releases; it only runs its own test CI.
   CycloneDX SBOM of the build environment.
 - Creates a **draft** GitHub release for tags, prerelease for beta, without
   publishing automatically. Manual runs upload artifacts only.
+
+RISARMS-HOST `.github/workflows/ubuntu-candidate.yml` — additive Ubuntu
+Server 24.04 candidate, manual dispatch only: lints (`ruff` + `pytest`), shell
+syntax, git exec modes, LF enforcement, then builds
+`CORE-Server-<version>-ubuntu24.04-x86_64.tar.gz` (with
+`TIVISS-CLIENT/pyproject.toml` among the staged components) and asserts the
+archive inventory. Never installs, never publishes, never signs — see
+[Ubuntu 24.04 candidate](ubuntu-24.04.md).
 
 RISARMS-ui `.github/workflows/desktop-release.yml`:
 

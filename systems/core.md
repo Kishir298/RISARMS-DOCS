@@ -1,6 +1,6 @@
 # C.O.R.E. — Communication, Organization and Resource Engine
 
-> [!NOTE] **Status:** v0.6.0 **IMPLEMENTED** (beta source; split since 2026-11-21 into the `CORE-HOST` + `CORE-CLIENT` repositories — see [systems/core-client.md](core-client.md) for the client and [systems/risarms-host.md](risarms-host.md) for the umbrella). Package version is 0.6.0; wire/protocol compatibility remains 0.4.0. The server release targets **Void Linux x86_64 glibc with runit** (the HP 14-dq1037wm is the **reference deployment machine**, not a hardware gate). Booted Void install, reboot, upgrade/rollback, storage failure, backup restore, physical HP, physical LAN validation (Void CORE host ↔ RISARMS-ui clients on macOS Intel, macOS Apple Silicon, Windows x86_64 and Linux x86_64), and extended 24/7 operational validation are **NOT YET PERFORMED** — deployment-validation tasks, not missing server software. Compatibility with older clients is preserved by design.
+> [!NOTE] **Status:** v0.6.0 **IMPLEMENTED** (beta source; split since 2026-11-21 into the `CORE-HOST` + `CORE-CLIENT` repositories — see [systems/core-client.md](core-client.md) for the client and [systems/risarms-host.md](risarms-host.md) for the umbrella). Package version is 0.6.0; wire/protocol compatibility remains 0.4.0. The server release targets **Void Linux x86_64 glibc with runit** (the HP 14-dq1037wm is the **reference deployment machine**, not a hardware gate). An additive **Ubuntu Server 24.04 systemd candidate** exists in the RISARMS-HOST umbrella (`deployment/ubuntu/`): static checks only, **not boot-validated and not a release target** ([Ubuntu 24.04 candidate](../development/ubuntu-24.04.md)). Booted Void install, reboot, upgrade/rollback, storage failure, backup restore, physical HP, physical LAN validation (Void CORE host ↔ RISARMS-ui clients on macOS Intel, macOS Apple Silicon, Windows x86_64 and Linux x86_64), and extended 24/7 operational validation are **NOT YET PERFORMED** — deployment-validation tasks, not missing server software. Compatibility with older clients is preserved by design.
 
 ## 1. What C.O.R.E. is
 
@@ -214,6 +214,8 @@ The 13-phase v0.2 build order was completed; the phase definitions (objectives, 
 
 ## 7. Related documentation
 
+- [Void Linux host](../development/void-linux.md) — canonical 0.6.0 server target
+- [Ubuntu 24.04 candidate](../development/ubuntu-24.04.md) — additive systemd candidate, not a release target
 - [System Boundaries](../architecture/system-boundaries.md) — C.O.R.E.'s responsibility ownership
 - [Communication Flow](../architecture/communication-flow.md) — the message path
 - [Lifecycle](../architecture/lifecycle.md) — C.O.R.E. runtime semantics

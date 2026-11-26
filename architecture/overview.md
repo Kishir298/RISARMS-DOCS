@@ -133,10 +133,10 @@ The full ownership table is in [System Boundaries](system-boundaries.md#1-respon
 
 | System | Now | Next |
 |---|---|---|
-| **C.O.R.E.** | v0.6.0 beta source (CORE-HOST 888 + CORE-CLIENT 225 tests passed on macOS 3.14, 2026-11-21 post-split): Void x86_64 glibc/runit server release with versioned venvs, storage guard, Caddy/nftables, backup/restore, upgrade/rollback and diagnostics; desktop control channel, signed R.E.S.C.S. scope, `/api/ai-status`, safe-chat worker, portals, TLS device transport, agent scheduling | Booted Void install/reboot/rollback/storage-failure/backup-restore on HP 14; physical HP; LAN; 24/7 validation |
+| **C.O.R.E.** | v0.6.0 beta source (CORE-HOST 888 + CORE-CLIENT 225 tests passed on macOS 3.14, 2026-11-21 post-split): Void x86_64 glibc/runit server release with versioned venvs, storage guard, Caddy/nftables, backup/restore, upgrade/rollback and diagnostics; desktop control channel, signed R.E.S.C.S. scope, `/api/ai-status`, safe-chat worker, portals, TLS device transport, agent scheduling; additive Ubuntu 24.04 systemd candidate (static checks only, in the RISARMS-HOST umbrella) | Booted Void install/reboot/rollback/storage-failure/backup-restore on HP 14; physical HP; LAN; 24/7 validation; Ubuntu candidate install/boot validation |
 | **R.E.S.C.S.** | v0.4.0 (318 passed / 4 skipped): versioned HTTP API, signed CORE owner scope, mount guard, Pi installer/systemd, records/files, uploads, lifecycle/governance, C.O.R.E. contract | Live PostgreSQL/Supabase + real S3; deployed C.O.R.E. ↔ R.E.S.C.S.; real Pi/ARM64 |
 | **A.S.I.S.** | Rebuilt `asis` package (948 passed / 24 skipped): CLI, Ollama provider, memory, calculator, translation, web tools, coding mode, permissions, voice, Pi policy/worker | Physical Pi/ARM64 and LAN validation; R.E.S.C.S. via C.O.R.E. (future) |
-| **T.I.V.I.S.S.** | Local agent at `TIVISS-HOST/` (v0.2.0; 299 passed): OllamaProvider, SQLite memory, CLI, export/import, logging, voice abstraction, stdlib transports offline-tested; still no live traffic | Resolve the handover model |
+| **T.I.V.I.S.S.** | Local agent at `TIVISS-HOST/` (v0.2.0; 299 passed): OllamaProvider, SQLite memory, CLI, export/import, logging, voice abstraction, stdlib transports offline-tested; client library `TIVISS-CLIENT/` (v0.1.0 scaffold) pinned in the RISARMS-HOST release lock; still no live traffic | Resolve the handover model |
 | **RadarS.A.R.D.** | — | Define sensor/detection scope |
 | **A.S.C.S.** | Standalone v0.3.0 coding agent (996 passed / 16 skipped, macOS Python 3.14 recorded 2026-11-15, re-verified 2026-11-20): multi-provider (Ollama default + OpenAI/Anthropic/Grok/Google/DeepSeek opt-in), Windows/macOS/Linux x86_64+arm64, Python 3.12+, CORE integration **declared only** (`compatibility.json`, no runtime client code — runs standalone with offline fallback); Linux/Pi headless generation-only; ASIS direct integration implemented | C.O.R.E.-mediated integration (future); real Pi/ARM64 |
 
@@ -146,24 +146,25 @@ The documentation governs these directories:
 
 ```text
 RISARMS/
-├── CORE/           <- combined C.O.R.E. project
-│   ├── CORE-HOST/  <- server/runtime (package `core`)
-│   ├── CORE-CLIENT/<- external-device client (package `client`, stdlib-only)
-│   ├── services/   <- ASIS, ASCS, RESCS, TIVISS copies
-│   ├── deployment/ <- Void installer/services (Pi assets historical)
-│   ├── install/    <- release wheels
-│   └── validation/ <- release evidence
+├── CORE-HOST/      <- host-only C.O.R.E. server runtime, package `core` (remote: CORE-HOST)
+│   ├── core/       <- server/runtime package
+│   ├── tests/      <- host suite
+│   ├── docs/       <- host docs (lan-readiness, portals, ...)
+│   └── deploy/     <- legacy linux systemd assets
+├── CORE-CLIENT/    <- external-device client, package `client`, stdlib-only
 ├── RESCS/
 ├── ASIS/
 ├── ASCS/
-├── TIVISS/
-├── old-versions/   <- local archive, not a git repository
-└── RISARMS-DOCS/   <- this repository (remote: RISARMS-DOCS)
+├── TIVISS-HOST/    <- T.I.V.I.S.S. agent host (remote: TIVISS-HOST)
+├── TIVISS-CLIENT/  <- device-side client library (remote: TIVISS-CLIENT)
+├── RISARMS-HOST/   <- umbrella: deployment/{pi,void,ubuntu}, install/, validation/, services mirrors, release lock, workflows (local folder `RISARMS-HO/`)
+├── RISARMS-ui/     <- canonical desktop client
+└── DOCS/           <- this repository (remote: Kishir298/RISARMS-DOCS)
 ```
 
 > [!NOTE] **Out-of-scope sibling:** `Flavora/` (local-first food companion) may sit beside these directories on disk. It is not an ecosystem member and is not governed by this architecture.
 
-> [!IMPORTANT] **Independence rule:** R.E.S.C.S., A.S.I.S., A.S.C.S. and T.I.V.I.S.S. are independent projects whose owning repos live beside CORE. `CORE/services/*` holds release mirrors for combined deployment; the standalone repos remain the source of truth. Integration occurs through interfaces and communication contracts, governed by [Integration Contracts](../interfaces/integration-contracts.md). Referenced in ADR [0001](../decisions/0001-rescs-independent-from-core.md), [0002](../decisions/0002-asis-independent-from-core.md) and [0007](../decisions/0007-ascs-standalone-coding-agent.md).
+> [!IMPORTANT] **Independence rule:** R.E.S.C.S., A.S.I.S., A.S.C.S. and T.I.V.I.S.S. are independent projects whose owning repos live as separate repositories beside `CORE-HOST` and `CORE-CLIENT`. `RISARMS-HOST/services/*` holds release mirrors for combined deployment; the standalone repos remain the source of truth. Integration occurs through interfaces and communication contracts, governed by [Integration Contracts](../interfaces/integration-contracts.md). Referenced in ADR [0001](../decisions/0001-rescs-independent-from-core.md), [0002](../decisions/0002-asis-independent-from-core.md) and [0007](../decisions/0007-ascs-standalone-coding-agent.md).
 
 ## Next steps
 

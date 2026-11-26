@@ -15,6 +15,7 @@ Roadmap, contribution, testing, and versioning guides.
 - [Release-readiness progress log 2026-11-13](./progress-2026-11-13-release-readiness.md)
 - [Pi release 2026-11-06](./pi-release-2026-11-06.md)
 - [Void Linux host](./void-linux.md)
+- [Ubuntu Server 24.04 candidate](./ubuntu-24.04.md)
 - [Update supply chain](./update-supply-chain.md)
 - [CORE/RESCS host updater](./core-updater.md)
 - [Hardware-gated validation](./hw-gated-validation.md)

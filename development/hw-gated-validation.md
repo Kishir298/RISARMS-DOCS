@@ -50,7 +50,7 @@ re-open only when the listed resource exists.
 ## 0b. Historical physical Raspberry Pi / ARM64 deployment (CORE + RESCS)
 
 | Preconditions | Raspberry Pi 4/5 (ARM64), Raspberry Pi OS 64-bit, cgroup v2, systemd, dedicated SSD mounted at `/srv/core` |
-| Source of truth | `RISARMS-HOST/deployment/pi/README.md`, `RISARMS-HOST/deployment/pi/install.sh`, `RESCS/deploy/pi/` |
+| Source of truth | `RISARMS-HOST/deployment/pi/install.sh`, `RESCS/deploy/pi/` (no Pi README exists in the umbrella yet) |
 | Procedure | Run the CORE Pi installer on clean hardware; verify systemd units, `/srv/core` guard, service health, and reboot persistence; then exercise CORE ↔ RESCS loopback |
 | Acceptance | Services start on boot, `/srv/core` is enforced, loopback passes, no secrets in logs, clean restart after power loss |
 | Do NOT | Treat macOS x86_64 unit tests as Pi/ARM64 validation; commit device certs or provisioning tokens. Pi is not a CORE 0.6.0 server target |

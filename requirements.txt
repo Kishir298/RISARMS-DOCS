@@ -16,6 +16,9 @@ pyinstaller>=6.6
 # (`cyclonedx-py environment`).
 cyclonedx-bom>=7.0
 
+# PEP 517 wheel/sdist builder used by the RISARMS-HOST packaging scripts.
+build>=1.2
+
 # Needed to exercise the desktop client headlessly (secure credential storage
 # and the WSS event channel).
 keyring>=24.0
