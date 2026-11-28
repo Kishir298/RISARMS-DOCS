@@ -1,131 +1,91 @@
-# T.I.V.I.S.S. — Though I'm Vanquished, I'm Still Stronger
+# T.I.V.I.S.S. — security subsystem
 
-> [!NOTE] **Status:** Agent **IN DEVELOPMENT** (host package v0.2.0 on GitHub: `https://github.com/Kishir298/TIVISS-HOST`, checked out locally at `RISARMS/TIVISS-HOST/`; client scaffold v0.1.0 at `https://github.com/Kishir298/TIVISS-CLIENT` / `RISARMS/TIVISS-CLIENT/`). Verified: **299 passed** (2026-11-15). Beyond the foundation (identity, ownership, runtime, memory, permissions, handover state model), TIVISS has: an interactive CLI (`tiviss` REPL + `--message`, `python -m tiviss`), **OllamaProvider**, **SQLiteMemoryStore** (dual databases), versioned secret-free state export/import, structured JSON-lines logging, provider timeouts, a replaceable voice abstraction, and stdlib-only `core_tcp` / `rescs_http` transports tested offline against fakes. Dangerous tool permissions fail closed through the desktop loopback approval broker when that broker is configured. New configuration for Web/Calculator/Translation/Voice pipelines mirrors ASIS. No live traffic is claimed until exercised against real C.O.R.E./R.E.S.C.S. hosts. The real-world handover mechanism is intentionally not implemented yet.
+> [!NOTE] **Status:** **IN DEVELOPMENT → security-only (2026-11-28).**
+> T.I.V.I.S.S. is the **security subsystem** of R.I.S.A.R.M.S. Its previous
+> independent AI-agent role — personality, conversation, voice, model
+> provider and ownership handover — is **retired**. Security policy,
+> enforcement, integrity checking and security reporting remain and are
+> **IMPLEMENTED** across `TIVISS-HOST` (policy engine, capability tokens, local
+> PDP) and `TIVISS-CLIENT` v0.2.0 (device security client, 72 tests).
+>
+> Legacy AI modules still exist in `TIVISS-HOST/tiviss/` for history and were
+> not deleted. They are **not** wired into CORE or RISARMS-ui, have no launch
+> path in the desktop client, and must not be described as the TIVISS role.
+> Removing them is tracked as follow-up work; no user data is deleted by this
+> change.
 
-## 1. What T.I.V.I.S.S. is
+## 1. Role and ownership
 
-T.I.V.I.S.S. is a **separate AI agent** in the R.I.S.A.R.M.S. ecosystem.
+| Aspect | Owner | Notes |
+| --- | --- | --- |
+| Security policy evaluation | `TIVISS-HOST` | `tiviss_security_host.engine.PolicyEngine` — deny-wins, fail-closed default |
+| Capability tokens | `TIVISS-HOST` | `tiviss_security_protocol.tokens` — HMAC-SHA256, expiry, constant-time compare |
+| Local PDP daemon / IPC | `TIVISS-HOST` | `tiviss_security_host`, `tiviss_security_ipc` |
+| Device security client | `TIVISS-CLIENT` | policy retrieval/revocation, offline events, verified transfers, scanning, quarantine |
+| Security status UI | `RISARMS-ui` | Security page: posture, pending devices, events. No chat or model controls |
+| Security API surface | `CORE-HOST` | `GET /api/security` (read-only posture), device approval routes |
 
-Its defining long-term purpose: **T.I.V.I.S.S. may eventually be handed over to another person.** That requires T.I.V.I.S.S. to be a genuinely independent entity — not just another instance of A.S.I.S.
+T.I.V.I.S.S. connects through documented interfaces (JSON over authenticated
+HTTPS/Unix sockets). It does not import another subsystem's private internals.
 
-## 2. Design intent
+## 2. Implemented behaviour
 
-T.I.V.I.S.S. must eventually have its own:
+### Host
 
-- Identity
-- Configuration
-- Memory
-- Permissions
-- Ownership model
-- Agent architecture
-- Handover mechanism
+- `PolicyEngine` with explicit allow/deny rules, action-pattern grammar and a
+  deny-by-default posture.
+- Capability tokens with required minimum secret length, expiry and tamper
+  rejection.
+- PDP framing and decision schema (`allow` / `deny`, request ids, obligations).
+- Local PDP daemon reachable over a Unix-domain socket; unsupported platforms
+  fail with an actionable message and never fall back to permissive mode.
 
-## 3. The hard rule
+### Client (`TIVISS-CLIENT` v0.2.0)
 
-> [!IMPORTANT] **T.I.V.I.S.S. must NOT simply become a renamed copy of A.S.I.S.**
+- Authenticated HTTPS transport with TLS verification on by default; plain
+  HTTP requires an explicit opt-out.
+- Versioned policy retrieval (`schema_version: 1`), durable cache and
+  revocation handling. Missing/expired/malformed policy is a denial.
+- Bounded, durable SQLite security-event queue: stable event ids (idempotent
+  delivery), bounded capacity with honest dropped counts, dead-lettering,
+  secret redaction before storage.
+- Transfers verified against authenticated size + SHA-256 metadata, staged in
+  `.part` files; incomplete or mismatched downloads never reach the download
+  directory.
+- Optional ClamAV integration with four outcomes: `CLEAN`, `DETECTED`,
+  `ERROR`, `NOT_SCANNED`. Unavailable scanning is **never** treated as clean.
+- Quarantine store with metadata and release that requires an explicit policy
+  authorization and re-verifies the payload hash.
 
-The distinction is architectural:
+### Enforcement in protected operations
 
-| Aspect | A.S.I.S. | T.I.V.I.S.S. |
-|---|---|---|
-| Role | Primary assistant / ecosystem intelligence | Personal agent, transferable to a new owner |
-| Ownership | R.I.S.A.R.M.S. ecosystem | Its own ownership model (design pending) |
-| Handover | N/A | A defined, safe handover mechanism |
-| Boundary | Uses C.O.R.E. for coordination | Same boundaries apply, plus identity isolation |
+Authorization checks fail closed when the policy service is unavailable. An
+explicitly configured embedded policy is supported; there is no silent
+fallback from a failed remote fetch to a permissive default.
 
-## 4. Open questions (to resolve before development)
+## 3. Explicit non-claims
 
-- What does "handover" mean operationally? (Transfer of memory, of permissions, of configuration?)
-- How is T.I.V.I.S.S.'s identity stored and guaranteed unique/non-fungible with A.S.I.S.?
-- Who administers T.I.V.I.S.S.'s permissions after handover, and how do they degrade if unmanaged?
-- Does T.I.V.I.S.S. use C.O.R.E. services, the device transport, and R.E.S.C.S. the same way A.S.I.S. does — but with its own identity profile?
+- No invented cryptography and no distributed encryption offloading.
+- Transport encryption (TLS), integrity checking (SHA-256) and encryption at
+  rest are separate properties, described separately.
+- No claim that a device cannot be affected by server compromise.
+- No end-to-end encryption claim.
 
-Until these are resolved, T.I.V.I.S.S. remains in its remote foundation phase and must not be scaffolded as a copy of A.S.I.S. Track decisions under [Decisions](../decisions/README.md).
+## 4. Configuration
 
-## 5. Where the code lives
+| Variable | Purpose |
+| --- | --- |
+| `TIVISS_CORE_URL` | C.O.R.E. base URL |
+| `TIVISS_DEVICE_ID` | Registered device id (issued by CORE after approval) |
+| `TIVISS_DEVICE_CREDENTIAL` / `TIVISS_CREDENTIAL_FILE` | Device credential (secret) |
+| `TIVISS_STATE_DIR` | Local state directory (default `~/.tiviss`) |
+| `TIVISS_TLS_VERIFY` | `0` only for explicit test endpoints |
+| `TIVISS_CA_FILE` | Optional private CA bundle |
+| `CORE_SECURITY_MODE` | `embedded` (default) or `daemon` for the CORE PDP |
 
-- GitHub (host): `https://github.com/Kishir298/TIVISS-HOST` (v0.2 capabilities — renamed from `Kishir298/TIVISS` at the 2026-11-21 split)
-- GitHub (client): `https://github.com/Kishir298/TIVISS-CLIENT` (v0.1.0 scaffold: `tiviss-client` CLI shell, `version`/`doctor`; transport/protocol/security layers PLANNED — see [systems/tiviss-client.md](tiviss-client.md))
-- Local workspace: present at `RISARMS/TIVISS-HOST/` (full clone, stdlib-only runtime, offline deterministic tests) and `RISARMS/TIVISS-CLIENT/` (fresh scaffold). Live transports exist but are unexercised against real hosts.
-- Transports: `tiviss/integrations/core_tcp.py` (real wire protocol, session token RAM-only) and `tiviss/integrations/rescs_http.py` (`X-API-Key`, confined to `tiviss.*` namespaces) sit beside the local/mock adapters; mocks remain the default for tests.
-- Storage: TIVISS cloud data lives under `tiviss.*` RESCS namespaces (see `../..`-repo `RESCS/docs/storage-domains.md`); `asis.*` and `personal.*` are never touched.
+## 5. Repositories
 
-> [!IMPORTANT] T.I.V.I.S.S. must not be confused with A.S.I.S. or with [A.S.C.S.](asc.md): three distinct systems with distinct identities.
-
-## 6. Implemented Features (v0.2.0)
-
-### 6.1 OllamaProvider (Real Model Provider)
-
-`OllamaProvider` implements the `ModelProvider` interface with real Ollama HTTP API integration:
-
-- **Endpoint**: Configurable via `TIVISS_OLLAMA_ENDPOINT` (default `http://127.0.0.1:11434`)
-- **Model**: Configurable via `TIVISS_MODEL_ID` (default `qwen3:14b`)
-- **Streaming**: Native streaming support via `/api/chat`
-- **Tool Calling**: Native function calling when model supports it
-- **Thinking Tag Stripping**: Automatic removal of `&#8203;...&#8203;` tags for qwen3-class models
-- **Timeout**: Configurable per-request timeout via `TIVISS_OLLAMA_TIMEOUT`
-- **Parameters**: Temperature, `num_predict`, `keep_alive` configurable
-
-Switch providers via `TIVISS_MODEL_PROVIDER=ollama` (default: `mock`).
-
-### 6.2 SQLiteMemoryStore (Dual SQLite Databases)
-
-`SQLiteMemoryStore` implements the `MemoryBackend` interface with **two separate SQLite databases**:
-
-| Database | Purpose | Table |
-|----------|---------|-------|
-| `conversation_logs.db` | Append-only conversation history | `conversation_logs` (request_id, request_content, response_content, metadata, created_at) |
-| `semantic_memory.db` | Structured long-term memory | `semantic_memory` (record_id, content, category, memory_type, importance, confidence, source, evidence, metadata, created_at, updated_at) |
-
-**Conversation Logs:**
-- `append_conversation(request_id, request, response, metadata)` — append exchange
-- `get_conversation_history(limit, session_id)` — retrieve recent history
-- `search_conversation(query, limit)` — full-text search
-
-**Semantic Memory (implements `MemoryBackend`):**
-- `store(record)` — store with category, type, importance, confidence
-- `retrieve(record_id)` — retrieve by ID
-- `update(record_id, content, metadata)` — update content/metadata
-- `delete(record_id)` — delete record
-- `search(query, limit, category, memory_type, min_importance)` — filtered search
-- `clear()` — clear all memories
-- `metadata()` — backend statistics
-
-**Configuration:**
-- `memory.backend=sqlite` (new backend option alongside `local` and `rescs`)
-- `memory.conversation_db` — path to conversation logs DB
-- `memory.semantic_db` — path to semantic memory DB
-- Env vars: `TIVISS_MEMORY_CONVERSATION_DB`, `TIVISS_MEMORY_SEMANTIC_DB`
-
-### 6.3 New Configuration Options
-
-TIVISS configuration now mirrors ASIS for Web/Calculator/Translation/Voice:
-
-| Section | Settings (Env Vars) |
-|---------|---------------------|
-| **Web** | `TIVISS_WEB_ENABLED`, `TIVISS_WEB_SEARCH_PROVIDER`, `TIVISS_WEB_TIMEOUT`, `TIVISS_WEB_MAX_RESULTS`, `TIVISS_WEB_MAX_CHARS` |
-| **Calculator** | `TIVISS_CALCULATOR_ENABLED`, `TIVISS_CALCULATOR_MAX_EXPRESSION_CHARS`, `TIVISS_CALCULATOR_MAX_MATRIX_SIZE`, `TIVISS_CALCULATOR_TIMEOUT`, `TIVISS_CALCULATOR_PRECISION`, `TIVISS_CALCULATOR_ANGLE_MODE` |
-| **Translation** | `TIVISS_TRANSLATION_ENABLED`, `TIVISS_TRANSLATION_PROVIDER`, `TIVISS_TRANSLATION_MODEL`, `TIVISS_TRANSLATION_MODEL_PATH`, `TIVISS_TRANSLATION_DEVICE`, `TIVISS_TRANSLATION_CACHE_ENABLED`, `TIVISS_TRANSLATION_CACHE_SIZE`, `TIVISS_TRANSLATION_DEFAULT_SOURCE`, `TIVISS_TRANSLATION_DEFAULT_TARGET`, `TIVISS_TRANSLATION_MAX_CHARS` |
-| **Voice** | `TIVISS_VOICE_ENABLED`, `TIVISS_VOICE_STT_ENGINE`, `TIVISS_VOICE_STT_MODEL`, `TIVISS_VOICE_STT_DEVICE`, `TIVISS_VOICE_STT_COMPUTE_TYPE`, `TIVISS_VOICE_STT_LANGUAGE`, `TIVISS_VOICE_TTS_ENGINE`, `TIVISS_VOICE_TTS_VOICE`, `TIVISS_VOICE_TTS_SAMPLE_RATE`, `TIVISS_VOICE_SPEAKER_ENGINE`, `TIVISS_VOICE_SPEAKER_MODEL`, `TIVISS_VOICE_SPEAKER_DEVICE`, `TIVISS_VOICE_SPEAKER_CONFIDENCE`, `TIVISS_VOICE_SPEAKER_THRESHOLD`, `TIVISS_VOICE_SPEAKER_METRIC`, `TIVISS_VOICE_WAKE_ENGINE`, `TIVISS_VOICE_WAKE_THRESHOLD`, `TIVISS_VOICE_WAKE_MODEL`, `TIVISS_VOICE_VAD_ENGINE`, `TIVISS_VOICE_VAD_THRESHOLD`, `TIVISS_VOICE_MAX_UTTERANCE_S`, `TIVISS_VOICE_SILENCE_S` |
-
-All settings load from `TIVISS_*` environment variables via `TIVISSConfig.load_env()`.
-
-### 6.4 Provider & Memory Factory Updates
-
-```python
-# TIVISSConfig.build_provider()
-if provider_id == "ollama":
-    return OllamaProvider(endpoint=..., model_id=..., timeout_s=..., ...)
-
-# TIVISSConfig.build_memory()
-if backend == "sqlite":
-    return SQLiteMemoryStore(conversation_db=..., semantic_db=...)
-```
-
----
-
-## 7. Where the code lives
-
-- [System Boundaries](../architecture/system-boundaries.md) — identity/memory/permissions ownership
-- [Trust Boundaries](../security/trust-boundaries.md) — per-agent identity isolation
-- [Development Roadmap](../development/roadmap.md)
+- `https://github.com/Kishir298/TIVISS-HOST` — host security packages (and
+  legacy AI modules pending removal).
+- `https://github.com/Kishir298/TIVISS-CLIENT` — device security client
+  (`tiviss-client` 0.2.0).

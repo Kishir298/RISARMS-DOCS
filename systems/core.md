@@ -224,3 +224,22 @@ The 13-phase v0.2 build order was completed; the phase definitions (objectives, 
 - [Security Overview](../security/overview.md) — what is enforced vs config-gated
 - [Development Roadmap](../development/roadmap.md) — the consolidated, cross-system roadmap
 - ADR: [0003](../decisions/0003-core-is-integration-layer.md), [0004](../decisions/0004-communication-abstraction.md)
+
+
+## Per-device approval and supervision contract (2026-11-28)
+
+- **Device approval is separate from account approval.** New enrollments are
+  `pending`; the credential exists but is inert. Owner approval/rejection
+  requires a recent reauthentication and is audited. Revocation deletes bound
+  sessions immediately. The first owner device is the only bootstrap
+  exception. See `CORE-HOST/core/web/accounts.py` and
+  `tests/test_device_enrollment.py` (9 tests).
+- **Security posture surface.** `GET /api/security` reports PDP mode,
+  enforcement state, device approval counts and recent security events for
+  RISARMS-ui. It exposes no chat or model controls.
+- **Supervision contract.** `CORE-HOST/core/health/contract.py` defines a
+  versioned health report, measured resource sample (`None` = not measured),
+  bounded deduplicated alerts, a bounded restart policy and measured-resource
+  job admission. `tests/health/test_supervision_contract.py` (11 tests).
+- Full CORE-HOST suite: **929 passed, 10 skipped** (2026-11-28, Windows Python
+  3.14; booted Void/Ubuntu validation still blocked).

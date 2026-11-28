@@ -158,3 +158,19 @@ The cross-system view lives in [Development Roadmap](../development/roadmap.md).
 - [Integration Contracts](../interfaces/integration-contracts.md) — now reflecting the implemented contract
 - [Trust Boundaries](../security/trust-boundaries.md)
 - ADR [0001](../decisions/0001-rescs-independent-from-core.md), [0005](../decisions/0005-storage-integration-via-adapter.md)
+
+
+## Authoritative quota and provisioning (2026-11-28)
+
+- `rescs.provisioning.StorageProvisioner` creates/repairs the three logical
+  account areas (`user_storage`, `chat_logs`, `ai_memory`) idempotently with a
+  `provision.json` manifest. The brief's "four areas" names only three; a
+  fourth is not invented. Failures raise and never report a partial account as
+  ready.
+- `rescs.quota` is the authoritative byte-denominated policy: budget minus
+  reserved headroom, equal shares, administrator overrides (clamping reported),
+  per-area limits, and the AI-memory cap 20 GB → 15 GB at five active users.
+  Admission is serialised under one lock; over-quota blocks growth and never
+  deletes data; the CORE report uses `null` for unavailable I/O measurements.
+- RESCS suite: **338 passed, 4 skipped** (PostgreSQL/S3 live checks skipped —
+  not configured).
